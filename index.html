@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root{
     --bg:#0d1117;--panel:#171f2b;--panel-2:#1d2735;--line:#27303d;--line-soft:#202a37;
@@ -55,22 +56,15 @@
   .fx .use:disabled{background:var(--panel);color:var(--ink-faint);cursor:default}
 
   .resumo{background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
-  .rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .rhead{margin-bottom:10px}
   .rhead .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem}
-  .moedaToggle{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;overflow:hidden}
-  .moedaToggle button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;
-    font-weight:700;font-size:.82rem;padding:8px 15px;cursor:pointer;transition:.12s}
-  .moedaToggle button.on{color:#06251b;background:var(--accent)}
-  .rrow{display:flex;align-items:baseline;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line-soft)}
-  .rrow .lbl{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
-  .rrow .v{font-family:'IBM Plex Mono',monospace;font-size:1.15rem;font-weight:500;font-variant-numeric:tabular-nums}
-  .rrow.diff{border-bottom:0;padding-bottom:2px}
-  .rrow.diff .lbl{color:var(--ink)}
-  .rrow.diff .v{font-size:1.7rem;font-weight:600}
-  .rrow.diff.sup .v{color:var(--accent)} .rrow.diff.def .v{color:var(--danger)}
-  .bar{height:8px;border-radius:6px;background:var(--panel-2);overflow:hidden;margin-top:14px;border:1px solid var(--line)}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent));transition:width .35s ease}
-  .barlbl{display:flex;justify-content:space-between;font-size:.68rem;color:var(--ink-faint);margin-top:7px;letter-spacing:.04em}
+  .rrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+  .rrow:last-child{border-bottom:0}
+  .rrow .lbl{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-dim);font-weight:600;flex:none}
+  .rrow .v{flex:1;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cseg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
+  .cseg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.62rem;padding:5px 7px;cursor:pointer;transition:.12s}
+  .cseg button.on{color:#06251b;background:var(--accent)}
 
   .xp{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:11px}
   .xp .head{display:flex;align-items:center;gap:8px;margin-bottom:11px}
@@ -98,6 +92,22 @@
   .actbar .btn:active{filter:brightness(1.1)}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#06251b;font-weight:700;font-size:.85rem;padding:11px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:40}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* cartão para gerar imagem (fica fora da tela) */
+  #shareCard{position:fixed;left:-9999px;top:0;width:420px;background:#0d1117;color:var(--ink);
+    padding:28px 30px;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line)}
+  #shareCard .sct{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;margin:0}
+  #shareCard .sct b{color:var(--pyg)}
+  #shareCard .sdate{color:var(--ink-faint);font-size:.8rem;margin:2px 0 18px}
+  #shareCard .sxp{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:.9rem}
+  #shareCard .sxp .nm{color:var(--ink-dim)}
+  #shareCard .sxp .vl{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+  #shareCard .stot{display:flex;justify-content:space-between;padding:9px 0;font-size:1rem}
+  #shareCard .stot.first{margin-top:14px;border-top:2px solid var(--line)}
+  #shareCard .stot .lbl{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:.78rem;font-weight:700}
+  #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums}
+  #shareCard .stot.diff .vl{color:var(--accent)}
+  #shareCard .stot.diff.neg .vl{color:var(--danger)}
 </style>
 </head>
 <body>
@@ -107,12 +117,12 @@
 
   <div class="sec"><span>Cotação &amp; Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
   <div class="params">
+    <div class="pcard full"><label>Salário (em dólar)</label><div class="row"><span class="tag" style="color:var(--usd)">US$</span>
+      <input class="num" id="salary" inputmode="numeric" value="3605"></div></div>
     <div class="pcard"><label>USD → Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
       <input class="num" id="usdBrl" inputmode="decimal" value="5.05"></div></div>
     <div class="pcard"><label>USD → Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
       <input class="num" id="usdPyg" inputmode="numeric" value="6060"></div></div>
-    <div class="pcard full"><label>Salário (em dólar)</label><div class="row"><span class="tag" style="color:var(--usd)">US$</span>
-      <input class="num" id="salary" inputmode="numeric" value="3605"></div></div>
     <div class="fx" id="fxBanner">
       <span class="dot"></span>
       <span class="txt" id="fxTxt">Buscando cotação oficial do dia…</span>
@@ -122,18 +132,13 @@
 
   <div class="sec">Resumo</div>
   <div class="resumo">
-    <div class="rhead">
-      <span class="ttl">Balanço do mês</span>
-      <div class="moedaToggle" id="moedaToggle">
-        <button data-view="BRL" class="on">R$</button>
-        <button data-view="USD">US$</button>
-      </div>
-    </div>
-    <div class="rrow"><span class="lbl">Total despesas</span><span class="v" id="rTot"></span></div>
-    <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span></div>
-    <div class="rrow diff sup" id="rDiffRow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span></div>
-    <div class="bar"><i id="bar" style="width:0%"></i></div>
-    <div class="barlbl"><span>Fixos vs. salário</span><span class="num" id="commit">0%</span></div>
+    <div class="rhead"><span class="ttl">Balanço do mês</span></div>
+    <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
+      <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
+    <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span>
+      <div class="cseg" data-sv="sal"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
+    <div class="rrow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span>
+      <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
   </div>
 
   <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="clearBtn" id="clearBtn">Limpar</button></div>
@@ -142,10 +147,12 @@
 </main>
 
 <div class="actbar">
-  <button class="btn" id="resetBtn">Restaurar</button>
-  <button class="btn primary" id="copyBtn">Copiar resumo</button>
+  <button class="btn" id="copyBtn">Copiar</button>
+  <button class="btn primary" id="shareBtn">📷 Imagem p/ WhatsApp</button>
 </div>
 <div class="toast" id="toast"></div>
+
+<div id="shareCard"></div>
 
 <script>
 const DEFAULTS=[
@@ -158,7 +165,7 @@ const DEFAULTS=[
 ];
 const KEY="contas-py-v1";
 let rows=structuredClone(DEFAULTS);
-let view="BRL";
+let sv={tot:"BRL",sal:"BRL",diff:"BRL"};
 let liveRates=null; // {brl,pyg,date}
 const $=s=>document.querySelector(s);
 const rate=()=>({brl:parseFloat($("#usdBrl").value)||0,pyg:parseFloat($("#usdPyg").value)||0});
@@ -184,14 +191,15 @@ const fmtSal=()=>{$("#salary").value=salNum()?salNum().toLocaleString("pt-BR"):"
 
 /* ---- salvar / carregar ---- */
 function save(){
-  try{localStorage.setItem(KEY,JSON.stringify({rows,view,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
+  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
     const h=$("#saveHint");h.classList.add("show");clearTimeout(window._st);window._st=setTimeout(()=>h.classList.remove("show"),1200);
   }catch(e){}
 }
 function load(){
   try{const s=JSON.parse(localStorage.getItem(KEY));if(s){
     if(Array.isArray(s.rows))rows=s.rows;
-    if(s.view)view=s.view;
+    if(s.sv)sv=Object.assign(sv,s.sv);
+    else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
     if(s.salary!=null)$("#salary").value=s.salary;
     if(s.usdBrl!=null)$("#usdBrl").value=s.usdBrl;
     if(s.usdPyg!=null)$("#usdPyg").value=s.usdPyg;
@@ -268,26 +276,19 @@ function calc(){
     const set=(k,v)=>{const e=document.querySelector(`[data-c="${k}-${i}"]`);if(e)e.innerHTML=`<span class="k">${k}</span>${fmt[k](v).replace(/^[^\d-]+/,"")}`;};
     set("USD",u);set("PYG",p);set("BRL",b);
   });
-  const sU=salNum(),sB=sU*r.brl;
-  const totView=view==="USD"?tU:tB, salView=view==="USD"?sU:sB, diffView=salView-totView, sup=diffView>=0;
-  $("#rTot").textContent=fmt[view](totView);
-  $("#rSal").textContent=fmt[view](salView);
-  $("#rDiff").textContent=(sup?"+ ":"− ")+fmt[view](Math.abs(diffView));
-  const dr=$("#rDiffRow");dr.classList.toggle("sup",sup);dr.classList.toggle("def",!sup);
-  const com=sB>0?tB/sB*100:0;
-  $("#bar").style.width=Math.min(com,100)+"%";
-  $("#bar").style.background=com>100?"linear-gradient(90deg,#b32d2d,var(--danger))":"linear-gradient(90deg,var(--accent-deep),var(--accent))";
-  $("#commit").textContent=com.toFixed(1)+"%";
+  const sU=salNum(),sB=sU*r.brl,sP=sU*r.pyg;
+  const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:sU,PYG:sP,BRL:sB};
+  $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
+  $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
+  const d=SAL[sv.diff]-TOT[sv.diff];
+  $("#rDiff").textContent=(d>=0?"+ ":"− ")+fmt[sv.diff](Math.abs(d));
   save();
 }
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700);}
 
 /* ---- eventos ---- */
-$("#moedaToggle").querySelectorAll("button").forEach(b=>b.onclick=e=>{
-  view=e.target.dataset.view;
-  e.target.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===e.target));
-  calc();
-});
+function markSv(){document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===sv[k]));});}
+document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sv[k]=b.dataset.c;markSv();calc();});});
 $("#fxUse").onclick=()=>{
   if(!liveRates)return;
   $("#usdBrl").value=liveRates.brl;$("#usdPyg").value=liveRates.pyg;
@@ -300,9 +301,6 @@ $("#clearBtn").onclick=()=>{
   }
 };
 $("#addRow").onclick=()=>{rows.push({name:"Nova despesa",amt:0,cur:"PYG"});renderRows();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});};
-$("#resetBtn").onclick=()=>{rows=structuredClone(DEFAULTS);$("#usdBrl").value=5.05;$("#usdPyg").value=6060;$("#salary").value=3605;fmtSal();view="BRL";
-  $("#moedaToggle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.view==="BRL"));
-  renderRows();toast("Restaurado");};
 ["#usdBrl","#usdPyg"].forEach(s=>$(s).oninput=calc);
 $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}calc();};
 $("#copyBtn").onclick=()=>{
@@ -314,10 +312,48 @@ $("#copyBtn").onclick=()=>{
   navigator.clipboard.writeText(L.join("\n")).then(()=>toast("Copiado ✓"),()=>toast("Falha ao copiar"));
 };
 
+/* ---- imagem para WhatsApp ---- */
+function fillShareCard(){
+  const r=rate();let tU=0,tP=0,tB=0,xp="";
+  rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tP+=u*r.pyg;tB+=u*r.brl;
+    xp+=`<div class="sxp"><span class="nm">${(row.name||"—")}</span><span class="vl">${fmt.BRL(u*r.brl)}</span></div>`;});
+  const sU=salNum(),sB=sU*r.brl,sP=sU*r.pyg;
+  const TOT={USD:tU,PYG:tP,BRL:tB},SAL={USD:sU,PYG:sP,BRL:sB},d=SAL[sv.diff]-TOT[sv.diff];
+  const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+  $("#shareCard").innerHTML=`
+    <p class="sct">Contas Fixas <b>Paraguai</b></p>
+    <p class="sdate">${dt}</p>
+    ${xp}
+    <div class="stot first"><span class="lbl">Total despesas</span><span class="vl">${fmt[sv.tot](TOT[sv.tot])}</span></div>
+    <div class="stot"><span class="lbl">Salário</span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
+    <div class="stot diff ${d<0?"neg":""}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"+ ":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>`;
+}
+async function makeBlob(){
+  fillShareCard();
+  const node=$("#shareCard");
+  const canvas=await html2canvas(node,{backgroundColor:"#0d1117",scale:2,logging:false});
+  return new Promise(res=>canvas.toBlob(b=>res(b),"image/png"));
+}
+$("#shareBtn").onclick=async()=>{
+  if(typeof html2canvas==="undefined"){toast("Abra o arquivo no navegador");return;}
+  toast("Gerando imagem…");
+  try{
+    const blob=await makeBlob();
+    const file=new File([blob],"contas-paraguai.png",{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:"Contas Fixas Paraguai",text:"Resumo do mês"});
+    }else{
+      const url=URL.createObjectURL(blob);const a=document.createElement("a");
+      a.href=url;a.download="contas-paraguai.png";a.click();URL.revokeObjectURL(url);
+      toast("Imagem salva ✓");
+    }
+  }catch(e){toast("Não foi possível gerar");}
+};
+
 /* ---- init ---- */
 load();
 fmtSal();
-$("#moedaToggle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.view===view));
+markSv();
 renderRows();
 fetchRates();
 </script>
