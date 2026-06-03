@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -21,23 +20,9 @@
     font-family:'Hanken Grotesk',sans-serif;color:var(--ink);
     background:radial-gradient(900px 500px at 90% -10%,rgba(55,214,160,.10),transparent 55%),var(--bg);
     -webkit-font-smoothing:antialiased;
-    padding:0 0 calc(env(safe-area-inset-bottom) + 90px);
+    padding:calc(env(safe-area-inset-top) + 6px) 0 calc(env(safe-area-inset-bottom) + 90px);
   }
   .num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
-
-  /* RESULTADO FIXO NO TOPO */
-  .topbar{position:sticky;top:0;z-index:30;background:rgba(13,17,23,.86);backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top) + 12px) 16px 12px}
-  .topbar .kk{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700}
-  .resline{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:4px}
-  .resline .big{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
-  .resline .state{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
-  .sup .big,.sup .state{color:var(--accent)} .def .big,.def .state{color:var(--danger)}
-  .mini{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);text-align:right;line-height:1.5}
-  .mini .usd{color:var(--usd)} .mini .pyg{color:var(--pyg)}
-  .bar{height:7px;border-radius:6px;background:var(--panel-2);overflow:hidden;margin-top:11px;border:1px solid var(--line)}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent));transition:width .35s ease}
-  .barlbl{display:flex;justify-content:space-between;font-size:.66rem;color:var(--ink-faint);margin-top:6px;letter-spacing:.04em}
 
   main{padding:16px;max-width:540px;margin:0 auto}
   h1{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;margin:6px 0 2px;letter-spacing:-.01em}
@@ -55,6 +40,25 @@
   .pcard .tag{font-size:.78rem;font-weight:700}
   .pcard input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;
     font-size:1.15rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:2px 0}
+
+  /* RESUMO */
+  .resumo{background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+  .rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .rhead .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem}
+  .moedaToggle{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  .moedaToggle button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;
+    font-weight:700;font-size:.82rem;padding:8px 15px;cursor:pointer;transition:.12s}
+  .moedaToggle button.on{color:#06251b;background:var(--accent)}
+  .rrow{display:flex;align-items:baseline;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .rrow .lbl{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+  .rrow .v{font-family:'IBM Plex Mono',monospace;font-size:1.15rem;font-weight:500;font-variant-numeric:tabular-nums}
+  .rrow.diff{border-bottom:0;padding-bottom:2px}
+  .rrow.diff .lbl{color:var(--ink)}
+  .rrow.diff .v{font-size:1.7rem;font-weight:600}
+  .rrow.diff.sup .v{color:var(--accent)} .rrow.diff.def .v{color:var(--danger)}
+  .bar{height:8px;border-radius:6px;background:var(--panel-2);overflow:hidden;margin-top:14px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent));transition:width .35s ease}
+  .barlbl{display:flex;justify-content:space-between;font-size:.68rem;color:var(--ink-faint);margin-top:7px;letter-spacing:.04em}
 
   /* CARTÃO DE DESPESA */
   .xp{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:11px}
@@ -97,19 +101,6 @@
 </head>
 <body>
 
-<div class="topbar" id="topbar">
-  <div class="kk" id="topState">Superávit</div>
-  <div class="resline" id="resline">
-    <div class="big" id="diffBrl">R$ 0,00</div>
-    <div class="mini">
-      <div class="usd" id="diffUsd"></div>
-      <div class="pyg" id="diffPyg"></div>
-    </div>
-  </div>
-  <div class="bar"><i id="bar" style="width:0%"></i></div>
-  <div class="barlbl"><span>Fixos vs. salário</span><span class="num" id="commit">0%</span></div>
-</div>
-
 <main>
   <h1>Contas Fixas <span class="py">Paraguai</span></h1>
   <p class="sub">Toque para editar. Recalcula em USD, Guarani e Real na hora.</p>
@@ -122,6 +113,22 @@
       <input class="num" id="usdPyg" inputmode="numeric" value="6060"></div></div>
     <div class="pcard full"><label>Salário (em dólar)</label><div class="row"><span class="tag" style="color:var(--usd)">US$</span>
       <input class="num" id="salary" inputmode="numeric" value="3605"></div></div>
+  </div>
+
+  <div class="sec">Resumo</div>
+  <div class="resumo">
+    <div class="rhead">
+      <span class="ttl">Balanço do mês</span>
+      <div class="moedaToggle" id="moedaToggle">
+        <button data-view="BRL" class="on">R$</button>
+        <button data-view="USD">US$</button>
+      </div>
+    </div>
+    <div class="rrow"><span class="lbl">Total despesas</span><span class="v" id="rTot"></span></div>
+    <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span></div>
+    <div class="rrow diff sup" id="rDiffRow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span></div>
+    <div class="bar"><i id="bar" style="width:0%"></i></div>
+    <div class="barlbl"><span>Fixos vs. salário</span><span class="num" id="commit">0%</span></div>
   </div>
 
   <div class="sec">Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></div>
@@ -145,6 +152,7 @@ const DEFAULTS=[
   {name:"Cartão de crédito",amt:4530000,cur:"PYG"},
 ];
 let rows=structuredClone(DEFAULTS);
+let view="BRL";
 const $=s=>document.querySelector(s);
 const rate=()=>({brl:parseFloat($("#usdBrl").value)||0,pyg:parseFloat($("#usdPyg").value)||0});
 const toUSD=(a,c,r)=>c==="USD"?a:c==="PYG"?(r.pyg?a/r.pyg:0):(r.brl?a/r.brl:0);
@@ -198,19 +206,28 @@ function calc(){
     const set=(k,v)=>{const e=document.querySelector(`[data-c="${k}-${i}"]`);if(e)e.innerHTML=`<span class="k">${k}</span>${fmt[k](v).replace(/^[^\d-]+/,"")}`;};
     set("USD",u);set("PYG",p);set("BRL",b);
   });
-  const sU=parseFloat($("#salary").value)||0,sB=sU*r.brl,sP=sU*r.pyg;
-  const dU=sU-tU,dP=sP-tP,dB=sB-tB,sup=dB>=0;
-  $("#topbar").className="topbar "+(sup?"sup":"def");
-  $("#topState").textContent=sup?"Superávit":"Déficit";
-  $("#diffBrl").textContent=(sup?"+ ":"− ")+fmt.BRL(Math.abs(dB));
-  $("#diffUsd").textContent=(sup?"+":"−")+fmt.USD(Math.abs(dU));
-  $("#diffPyg").textContent=(sup?"+":"−")+fmt.PYG(Math.abs(dP));
+  const sU=parseFloat($("#salary").value)||0,sB=sU*r.brl;
+  // valores conforme a moeda escolhida no resumo
+  const totView = view==="USD" ? tU : tB;
+  const salView = view==="USD" ? sU : sB;
+  const diffView = salView - totView;
+  const sup = diffView>=0;
+  $("#rTot").textContent = fmt[view](totView);
+  $("#rSal").textContent = fmt[view](salView);
+  $("#rDiff").textContent = (sup?"+ ":"− ")+fmt[view](Math.abs(diffView));
+  const dr=$("#rDiffRow");dr.classList.toggle("sup",sup);dr.classList.toggle("def",!sup);
   const com=sB>0?tB/sB*100:0;
   $("#bar").style.width=Math.min(com,100)+"%";
   $("#bar").style.background=com>100?"linear-gradient(90deg,#b32d2d,var(--danger))":"linear-gradient(90deg,var(--accent-deep),var(--accent))";
   $("#commit").textContent=com.toFixed(1)+"%";
 }
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700);}
+
+$("#moedaToggle").querySelectorAll("button").forEach(b=>b.onclick=e=>{
+  view=e.target.dataset.view;
+  e.target.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===e.target));
+  calc();
+});
 $("#addRow").onclick=()=>{rows.push({name:"Nova despesa",amt:0,cur:"PYG"});renderRows();
   window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});};
 $("#resetBtn").onclick=()=>{rows=structuredClone(DEFAULTS);$("#usdBrl").value=5.05;$("#usdPyg").value=6060;$("#salary").value=3605;renderRows();toast("Restaurado");};
@@ -220,7 +237,7 @@ $("#copyBtn").onclick=()=>{
   rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tB+=u*r.brl;tP+=u*r.pyg;
     L.push(`${row.name}: ${fmt.BRL(u*r.brl)} | ${fmt.PYG(u*r.pyg)}`);});
   const sU=parseFloat($("#salary").value)||0,dB=sU*r.brl-tB;
-  L.push("",`TOTAL: ${fmt.BRL(tB)} | ${fmt.USD(tU)}`,`SALÁRIO: ${fmt.BRL(sU*r.brl)}`,`DIFERENÇA: ${dB>=0?"+":"−"}${fmt.BRL(Math.abs(dB))}`);
+  L.push("",`TOTAL: ${fmt.BRL(tB)} | ${fmt.USD(tU)}`,`SALÁRIO: ${fmt.BRL(sU*r.brl)} | ${fmt.USD(sU)}`,`DIFERENÇA: ${dB>=0?"+":"−"}${fmt.BRL(Math.abs(dB))}`);
   navigator.clipboard.writeText(L.join("\n")).then(()=>toast("Copiado ✓"),()=>toast("Falha ao copiar"));
 };
 renderRows();
