@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
     --bg:#0d1117;--panel:#171f2b;--panel-2:#1d2735;--line:#27303d;--line-soft:#202a37;
@@ -108,9 +109,73 @@
   #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums}
   #shareCard .stot.diff .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
+
+  /* tela de senha */
+  #lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:radial-gradient(700px 400px at 50% 0%,rgba(55,214,160,.10),transparent 60%),var(--bg)}
+  #lock.hidden{display:none}
+  .lockcard{width:100%;max-width:330px;background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);
+    border-radius:20px;padding:30px 24px;text-align:center;box-shadow:0 30px 70px -30px #000}
+  .lockcard .ico{font-size:1.8rem}
+  .lockcard h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:8px 0 2px}
+  .lockcard .locksub{color:var(--ink-dim);font-size:.84rem;margin:0 0 18px}
+  .pwrow{display:flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:0 4px 0 13px}
+  .pwrow.shake{animation:shk .32s}
+  .pwrow:focus-within{border-color:var(--accent)}
+  .pwrow input{flex:1;border:0;background:transparent;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;padding:13px 0;outline:none}
+  .eye{border:0;background:transparent;font-size:1.15rem;padding:8px 9px;cursor:pointer;line-height:1}
+  .lockbtn{width:100%;margin-top:14px;background:var(--accent);color:#06251b;font-weight:700;border:0;border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:.95rem}
+  .lockbtn:active{filter:brightness(1.08)}
+  .lockerr{color:var(--danger);font-size:.8rem;margin-top:10px;min-height:1.1em}
+  .hint{display:inline-flex;align-items:center;gap:5px;position:relative;cursor:help;color:var(--ink-faint);font-size:.8rem;margin-top:4px}
+  .hint .tip{position:absolute;bottom:135%;left:50%;transform:translateX(-50%);background:#000;color:#fff;border:1px solid var(--line);
+    padding:8px 12px;border-radius:9px;font-size:.78rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+  .hint:hover .tip,.hint:focus .tip{opacity:1}
+  @keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+
+  /* botões importar / top */
+  .impbtns{display:flex;gap:10px;margin-top:10px}
+  .ibtn{flex:1;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;
+    padding:13px 8px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600}
+  .ibtn:active{border-color:var(--accent);color:var(--accent)}
+
+  /* modal top gastos */
+  #topModal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
+  #topModal.hidden{display:none}
+  .topcard{width:100%;max-width:540px;max-height:86vh;display:flex;flex-direction:column;
+    background:var(--bg);border:1px solid var(--line);border-top-left-radius:22px;border-top-right-radius:22px;
+    padding:18px 18px calc(env(safe-area-inset-bottom) + 18px)}
+  .tophead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .topttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem}
+  .topsub{color:var(--ink-dim);font-size:.8rem;margin-top:2px}
+  .topclose{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer}
+  .toplist{overflow-y:auto;padding-top:8px}
+  .ti{padding:11px 2px;border-bottom:1px solid var(--line-soft)}
+  .ti .top1{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .ti .rk{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.78rem;margin-right:8px}
+  .ti .nm{color:var(--ink);font-size:.92rem;font-weight:500}
+  .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.92rem;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ti .tbar{height:5px;border-radius:4px;background:var(--panel-2);margin-top:7px;overflow:hidden}
+  .ti .tbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent))}
+  .ti .pct{color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace;margin-left:6px}
 </style>
 </head>
 <body>
+<div id="lock">
+  <div class="lockcard">
+    <div class="ico">🔒</div>
+    <h2>Acesso restrito</h2>
+    <p class="locksub">Digite a senha para abrir</p>
+    <div class="pwrow" id="pwrow">
+      <input id="pw" type="password" placeholder="Senha" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="eye" id="eye" type="button" aria-label="Mostrar senha">👁️</button>
+    </div>
+    <button class="lockbtn" id="enter">Entrar</button>
+    <div class="lockerr" id="lockErr"></div>
+    <span class="hint" tabindex="0" title="Credencial Claro Casa">💡 Dica<span class="tip">Credencial Claro Casa</span></span>
+  </div>
+</div>
 <main>
   <h1>Contas Fixas <span class="py">Paraguai</span></h1>
   <p class="sub">Toque para editar. Salva sozinho e recalcula em USD, Guarani e Real na hora.</p>
@@ -144,6 +209,11 @@
   <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="clearBtn" id="clearBtn">Limpar</button></div>
   <div id="rows"></div>
   <button class="add" id="addRow">＋ Adicionar despesa</button>
+  <div class="impbtns">
+    <button class="ibtn" id="importBtn">📥 Importar fatura</button>
+    <button class="ibtn" id="topBtn">📊 Ver gastos (top)</button>
+  </div>
+  <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none">
 </main>
 
 <div class="actbar">
@@ -153,6 +223,16 @@
 <div class="toast" id="toast"></div>
 
 <div id="shareCard"></div>
+
+<div id="topModal" class="hidden">
+  <div class="topcard">
+    <div class="tophead">
+      <div><div class="topttl" id="topTitle">Top gastos</div><div class="topsub" id="topSub"></div></div>
+      <button class="topclose" id="topClose">✕</button>
+    </div>
+    <div class="toplist" id="topList"></div>
+  </div>
+</div>
 
 <script>
 const DEFAULTS=[
@@ -166,8 +246,23 @@ const DEFAULTS=[
 const KEY="contas-py-v1";
 let rows=structuredClone(DEFAULTS);
 let sv={tot:"BRL",sal:"BRL",diff:"BRL"};
+let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
 let liveRates=null; // {brl,pyg,date}
 const $=s=>document.querySelector(s);
+
+/* ---- tela de senha ---- */
+const PW="Mariaisabel2802";
+function unlock(){$("#lock").classList.add("hidden");try{sessionStorage.setItem("unlocked","1");}catch(_){}}
+function tryPw(){
+  if($("#pw").value===PW){unlock();}
+  else{$("#lockErr").textContent="Senha incorreta";$("#pwrow").classList.add("shake");
+    setTimeout(()=>$("#pwrow").classList.remove("shake"),320);$("#pw").select();}
+}
+$("#enter").onclick=tryPw;
+$("#pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryPw();});
+$("#eye").onclick=()=>{const i=$("#pw"),show=i.type==="password";i.type=show?"text":"password";$("#eye").textContent=show?"🙈":"👁️";i.focus();};
+try{if(sessionStorage.getItem("unlocked")==="1")$("#lock").classList.add("hidden");else $("#pw").focus();}catch(_){$("#pw").focus();}
+
 const rate=()=>({brl:parseFloat($("#usdBrl").value)||0,pyg:parseFloat($("#usdPyg").value)||0});
 const toUSD=(a,c,r)=>c==="USD"?a:c==="PYG"?(r.pyg?a/r.pyg:0):(r.brl?a/r.brl:0);
 const fmt={
@@ -191,7 +286,7 @@ const fmtSal=()=>{$("#salary").value=salNum()?salNum().toLocaleString("pt-BR"):"
 
 /* ---- salvar / carregar ---- */
 function save(){
-  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
+  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
     const h=$("#saveHint");h.classList.add("show");clearTimeout(window._st);window._st=setTimeout(()=>h.classList.remove("show"),1200);
   }catch(e){}
 }
@@ -200,6 +295,7 @@ function load(){
     if(Array.isArray(s.rows))rows=s.rows;
     if(s.sv)sv=Object.assign(sv,s.sv);
     else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
+    if(s.imp)imp=s.imp;
     if(s.salary!=null)$("#salary").value=s.salary;
     if(s.usdBrl!=null)$("#usdBrl").value=s.usdBrl;
     if(s.usdPyg!=null)$("#usdPyg").value=s.usdPyg;
@@ -349,6 +445,94 @@ $("#shareBtn").onclick=async()=>{
     }
   }catch(e){toast("Não foi possível gerar");}
 };
+
+/* ---- importar fatura (extrato de cartão) ---- */
+const MESES=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const norm=v=>String(v==null?"":v).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+const pNum=v=>{if(typeof v==="number")return v;const s=String(v).replace(/[^\d-]/g,"");return s&&s!=="-"?parseInt(s,10):NaN;};
+
+function parseFatura(arr){
+  // total = "Cargos y Compras"
+  let total=null;
+  for(const row of arr){for(let c=0;c<row.length;c++){
+    if(norm(row[c]).includes("cargos y compras")){
+      for(let k=c+1;k<row.length;k++){const n=pNum(row[k]);if(!isNaN(n)&&n>0){total=n;break;}}
+    }
+  } if(total!=null)break;}
+  // cabeçalho da tabela
+  let hi=-1,colD=-1,colM=-1;
+  for(let i=0;i<arr.length;i++){const h=arr[i].map(norm);
+    if(h.some(x=>x.includes("descripcion"))&&h.some(x=>x.includes("movimientos"))){
+      hi=i;colD=h.findIndex(x=>x.includes("descripcion"));colM=h.findIndex(x=>x.includes("movimientos"));break;}}
+  const txns=[],dateRe=/^\d{2}\/\d{2}\/\d{4}$/,mesCount={};
+  if(hi>=0)for(let i=hi+1;i<arr.length;i++){
+    const row=arr[i],mv=pNum(row[colM]);if(isNaN(mv))continue;
+    const desc=String(row[colD]||"").trim();if(!desc)continue;
+    const dc=(row.find(x=>dateRe.test(String(x).trim()))||"").toString().trim();
+    if(dc){const mm=dc.slice(3,5);mesCount[mm]=(mesCount[mm]||0)+1;}
+    txns.push({desc,val:mv});
+  }
+  // mês predominante
+  let mm=Object.entries(mesCount).sort((a,b)=>b[1]-a[1])[0];
+  const monthLabel=mm?`${MESES[(+mm[0])-1]||""}`.replace(/^\w/,c=>c.toUpperCase()):"";
+  // ranking de gastos (negativos), agrupado por descrição
+  const g={};txns.filter(t=>t.val<0).forEach(t=>{g[t.desc]=(g[t.desc]||0)+Math.abs(t.val);});
+  const ranked=Object.entries(g).map(([desc,val])=>({desc,val})).sort((a,b)=>b.val-a.val);
+  const totalGastos=ranked.reduce((s,x)=>s+x.val,0);
+  return {total,month:monthLabel,count:txns.filter(t=>t.val<0).length,ranked,totalGastos};
+}
+
+function applyImport(res){
+  if(res.total==null&&!res.ranked.length){toast("Não reconheci a fatura");return;}
+  imp=res;
+  // atualiza/cria a despesa "Cartão de crédito" (em Guarani)
+  if(res.total!=null){
+    let i=rows.findIndex(r=>{const n=norm(r.name);return n.includes("cartao")||n.includes("cart")&&n.includes("cred")||n.includes("credito");});
+    if(i<0)i=rows.findIndex(r=>norm(r.name).includes("credito")||norm(r.name).includes("cartao de credito"));
+    if(i>=0){rows[i].amt=res.total;rows[i].cur="PYG";}
+    else{rows.push({name:"Cartão de crédito",amt:res.total,cur:"PYG"});}
+  }
+  renderRows();
+  toast(`Fatura importada${res.month?" · "+res.month:""}`);
+  openTop();
+}
+
+$("#importBtn").onclick=()=>{
+  if(typeof XLSX==="undefined"){toast("Abra o arquivo no navegador");return;}
+  $("#fileInput").click();
+};
+$("#fileInput").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=ev=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array"});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const arr=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:""});
+      applyImport(parseFatura(arr));
+    }catch(err){toast("Erro ao ler o arquivo");}
+    $("#fileInput").value="";
+  };
+  rd.readAsArrayBuffer(f);
+};
+
+/* ---- visão top de gastos ---- */
+function openTop(){
+  if(!imp||!imp.ranked||!imp.ranked.length){toast("Importe uma fatura primeiro");return;}
+  $("#topTitle").textContent="Top gastos"+(imp.month?" · "+imp.month:"");
+  $("#topSub").textContent=`${imp.count} lançamentos · ₲ ${Math.round(imp.totalGastos).toLocaleString("es-PY")} em compras`;
+  const max=imp.ranked[0].val||1;
+  $("#topList").innerHTML=imp.ranked.map((x,n)=>{
+    const pct=imp.totalGastos?(x.val/imp.totalGastos*100):0;
+    return `<div class="ti"><div class="top1"><span><span class="rk">${String(n+1).padStart(2,"0")}</span><span class="nm">${x.desc}</span></span>
+      <span class="vl">₲ ${Math.round(x.val).toLocaleString("es-PY")}<span class="pct">${pct.toFixed(1)}%</span></span></div>
+      <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div></div>`;
+  }).join("");
+  $("#topModal").classList.remove("hidden");
+}
+$("#topBtn").onclick=openTop;
+$("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
+$("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 
 /* ---- init ---- */
 load();
