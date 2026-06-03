@@ -30,6 +30,9 @@
   .sec{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:22px 4px 10px;display:flex;justify-content:space-between;align-items:center}
   .savehint{font-size:.6rem;color:var(--accent);letter-spacing:.08em;opacity:.0;transition:opacity .4s}
   .savehint.show{opacity:.8}
+  .clearBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
+    font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
+  .clearBtn:active{border-color:var(--danger);color:var(--danger)}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .params .full{grid-column:1/-1}
@@ -133,7 +136,7 @@
     <div class="barlbl"><span>Fixos vs. salário</span><span class="num" id="commit">0%</span></div>
   </div>
 
-  <div class="sec">Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></div>
+  <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="clearBtn" id="clearBtn">Limpar</button></div>
   <div id="rows"></div>
   <button class="add" id="addRow">＋ Adicionar despesa</button>
 </main>
@@ -269,6 +272,12 @@ $("#fxUse").onclick=()=>{
   if(!liveRates)return;
   $("#usdBrl").value=liveRates.brl;$("#usdPyg").value=liveRates.pyg;
   calc();toast("Cotação oficial aplicada");
+};
+$("#clearBtn").onclick=()=>{
+  if(!rows.length){toast("Já está vazio");return;}
+  if(confirm("Apagar todas as despesas? O salário e a cotação são mantidos.")){
+    rows=[];renderRows();toast("Despesas apagadas");
+  }
 };
 $("#addRow").onclick=()=>{rows.push({name:"Nova despesa",amt:0,cur:"PYG"});renderRows();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});};
 $("#resetBtn").onclick=()=>{rows=structuredClone(DEFAULTS);$("#usdBrl").value=5.05;$("#usdPyg").value=6060;$("#salary").value=3605;view="BRL";
