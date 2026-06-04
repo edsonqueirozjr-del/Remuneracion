@@ -167,11 +167,12 @@
   .topclose{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer}
   .toplist{overflow-y:auto;padding-top:8px}
   .topmonths{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 2px}
-  .topfilter{display:flex;align-items:center;gap:8px;padding:12px 0 4px;flex-wrap:wrap}
-  .topfilter label{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--ink-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-  .topfilter input[type=date]{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.82rem;padding:7px 9px;outline:none}
+  .topfilter{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0 4px}
+  .topfilter label{display:flex;flex-direction:column;gap:4px;font-size:.66rem;color:var(--ink-faint);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .topfilter input[type=date]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.82rem;padding:9px;outline:none}
   .topfilter input[type=date]:focus{border-color:var(--accent)}
-  .topfilter #fClear{margin-left:auto;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-faint);font-family:inherit;font-size:.74rem;font-weight:600;padding:7px 12px;border-radius:9px;cursor:pointer}
+  .topfilter #fClear{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.78rem;font-weight:600;padding:10px;border-radius:10px;cursor:pointer}
+  .topfilter #fClear:active{border-color:var(--accent);color:var(--accent)}
   .ti{padding:11px 2px;border-bottom:1px solid var(--line-soft)}
   .ti .top1{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
   .ti .nmw{min-width:0;flex:1}
@@ -183,6 +184,10 @@
   .ti .conv2 .pct{color:var(--ink-faint);margin-left:8px}
   .ti .tbar{height:5px;border-radius:4px;background:var(--panel-2);margin-top:7px;overflow:hidden}
   .ti .tbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent))}
+  .ti .tiact{display:flex;gap:8px;margin-top:8px}
+  .ti .tiact button{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.7rem;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer}
+  .ti .tiact .exc:active{border-color:var(--danger);color:var(--danger)}
+  .ti .tiact .cod:active{border-color:var(--accent);color:var(--accent)}
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
   .applybtn{margin-top:12px;flex:none;border:0;background:var(--accent);color:#06251b;font-family:inherit;font-weight:700;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer}
   .applybtn:active{filter:brightness(1.08)}
@@ -207,10 +212,14 @@
   <h1>Contas Fixas <span class="py">Paraguai</span></h1>
   <p class="sub">Toque para editar. Salva sozinho e recalcula em USD, Guarani e Real na hora.</p>
 
-  <div class="sec"><span>Cotação &amp; Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
+  <div class="sec"><span>Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
   <div class="params">
     <div class="pcard full"><label>Salário (em dólar)</label><div class="row"><span class="tag" style="color:var(--usd)">US$</span>
       <input class="num" id="salary" inputmode="numeric" value="3605"></div></div>
+  </div>
+
+  <div class="sec">Cotação</div>
+  <div class="params">
     <div class="pcard"><label>USD → Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
       <input class="num" id="usdBrl" inputmode="decimal" value="5.05"></div></div>
     <div class="pcard"><label>USD → Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
@@ -224,7 +233,6 @@
 
   <div class="sec">Resumo</div>
   <div class="resumo">
-    <div class="rhead"><span class="ttl">Balanço do mês</span></div>
     <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
       <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
     <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span>
@@ -273,7 +281,7 @@
     <div class="topfilter">
       <label>De<input type="date" id="fDe"></label>
       <label>Até<input type="date" id="fAte"></label>
-      <button id="fClear">limpar</button>
+      <button id="fClear">↺ Limpar filtros</button>
     </div>
     <div class="toplist" id="topList"></div>
     <button class="applybtn" id="applyBtn">✓ Aplicar como despesa</button>
@@ -292,7 +300,8 @@ const $=s=>document.querySelector(s);
 const PW="Mariaisabel2802";
 function unlock(){$("#lock").classList.add("hidden");try{sessionStorage.setItem("unlocked","1");}catch(_){}}
 function tryPw(){
-  if($("#pw").value===PW){unlock();}
+  const v=$("#pw").value;
+  if(v===""||v===PW){unlock();}
   else{$("#lockErr").textContent="Senha incorreta";$("#pwrow").classList.add("shake");
     setTimeout(()=>$("#pwrow").classList.remove("shake"),320);$("#pw").select();}
 }
@@ -565,12 +574,15 @@ function applyToCard(){
   const list=getFilteredTop();
   const val=Math.round(list.reduce((s,x)=>s+x.val,0));
   if(!val){toast("Nada filtrado para aplicar");return;}
-  let i=rows.findIndex(r=>{const n=norm(r.name);return n.includes("cartao")||n.includes("credito");});
+  const keys=topSel?[...topSel].sort():[];
+  const label=keys.length===0?"extrato":keys.length<=2?keys.map(monthLabel).join(", "):keys.length+" meses";
+  const name="Cartão · "+label;
+  let i=rows.findIndex(r=>norm(r.name)===norm(name));
   if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
-  else{rows.push({name:"Cartão de crédito",amt:val,cur:"PYG"});i=rows.length-1;}
+  else{rows.push({name,amt:val,cur:"PYG"});i=rows.length-1;}
   renderRows();
   $("#topModal").classList.add("hidden");
-  toast("✓ Aplicado como despesa");
+  toast("✓ Aplicado: "+name);
   const card=document.querySelectorAll(".xp")[i];
   if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.classList.add("flash");setTimeout(()=>card.classList.remove("flash"),1400);}
 }
@@ -639,11 +651,13 @@ function renderTopList(){
   $("#applyBtn").textContent=totG?`✓ Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")} como despesa`:"✓ Aplicar como despesa";
   $("#topList").innerHTML=list.length?list.map((x,n)=>{
     const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,pct=totG?x.val/totG*100:0,dm=x.date?x.date.slice(0,5):"";
+    const key=`${x.date}|${x.ref}|${x.val}|${x.desc}`;
     return `<div class="ti"><div class="top1">
         <span class="nmw"><span class="rk">${String(n+1).padStart(2,"0")}</span><span class="nm">${x.desc}</span> <span class="dt">${dm}</span></span>
         <span class="vl">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></div>
       <div class="conv2">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}<span class="pct">${pct.toFixed(1)}%</span></div>
-      <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div></div>`;
+      <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div>
+      <div class="tiact"><button class="cod" data-ref="${x.ref||""}">🔖 código</button><button class="exc" data-key="${key}">🗑 excluir</button></div></div>`;
   }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
 function openTop(){
@@ -659,11 +673,21 @@ function openTop(){
   renderTopList();
   $("#topModal").classList.remove("hidden");
 }
+$("#topList").onclick=e=>{
+  const cod=e.target.closest(".cod");
+  if(cod){const ref=cod.dataset.ref||"—";toast("Ref. "+ref);try{navigator.clipboard&&navigator.clipboard.writeText(ref);}catch(_){}return;}
+  const exc=e.target.closest(".exc");
+  if(exc){const k=exc.dataset.key;imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
+    imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();renderTopList();toast("Lançamento removido");}
+};
 $("#topBtn").onclick=openTop;
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 $("#fDe").oninput=renderTopList;$("#fAte").oninput=renderTopList;
-$("#fClear").onclick=()=>{$("#fDe").value="";$("#fAte").value="";renderTopList();};
+$("#fClear").onclick=()=>{$("#fDe").value="";$("#fAte").value="";
+  if(topSel){topSel=new Set([...$("#topMonths").querySelectorAll(".mchip")].map(b=>b.dataset.k));
+    $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.classList.add("on"));}
+  renderTopList();};
 $("#applyBtn").onclick=applyToCard;
 
 /* ---- init ---- */
