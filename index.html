@@ -48,6 +48,7 @@
   .salrow input{flex:1;font-size:1.05rem}
   #salSeg{flex:none}
   #salSeg button{font-size:.7rem;padding:6px 9px}
+  .salinfo{margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--ink-dim)}
 
   /* BANNER COTAÇÃO OFICIAL */
   .fx{grid-column:1/-1;display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);
@@ -179,12 +180,14 @@
   .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
   .topfilter input[type=search]:focus{border-color:var(--accent)}
   .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px;outline:none}
-  .topfilter #fClear{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
-  .topfilter #fClear:active{border-color:var(--accent);color:var(--accent)}
-  .topbtns{display:flex;gap:10px;margin-top:12px}
-  .topbtns .applybtn{flex:1;margin-top:0}
+  .topfilter .frow{display:flex;gap:8px}
+  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
+  .topfilter .frow button:active{border-color:var(--accent);color:var(--accent)}
+  .topbtns{display:flex;gap:8px;margin-top:10px}
+  .topbtns .applybtn{flex:1;margin-top:0;font-size:.82rem;padding:11px}
   .applybtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
   .applybtn.alt:active{border-color:var(--accent);color:var(--accent)}
+  .topcard.info .topmonths,.topcard.info .topfilter,.topcard.info .topbtns,.topcard.info .acts .exc{display:none}
   .ti{padding:9px 2px;border-bottom:1px solid var(--line-soft)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1}
@@ -228,11 +231,10 @@
 
   <div class="sec"><span>Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
   <div class="params">
-    <div class="pcard full"><label>Salário</label>
-      <div class="salrow">
-        <input class="num" id="salary" inputmode="numeric" value="3605">
-        <div class="seg" id="salSeg"><button data-sc="USD">U$</button><button data-sc="PYG">₲</button><button data-sc="BRL">R$</button></div>
-      </div>
+    <div class="pcard full"><label>Salário (em dólar)</label>
+      <div class="row"><span class="tag" style="color:var(--usd)">U$</span>
+        <input class="num" id="salary" inputmode="numeric" value="3605"></div>
+      <div class="salinfo" id="salInfo"></div>
     </div>
   </div>
 
@@ -299,7 +301,10 @@
       <div class="topmonths" id="topMonths"></div>
       <div class="topfilter">
         <input type="search" id="fSearch" placeholder="🔎 Buscar despesa…">
-        <button id="fClear">↺ Limpar filtros</button>
+        <div class="frow">
+          <button id="fSort">⇅ Data</button>
+          <button id="fClear">↺ Limpar</button>
+        </div>
       </div>
       <div class="toplist" id="topList"></div>
     </div>
@@ -351,7 +356,7 @@ function parseAmt(str,cur){
   if(!d) return 0;
   return cur==="BRL" ? parseInt(d,10)/100 : parseInt(d,10);
 }
-let salCur="USD";
+const salCur="USD";
 const salNum=()=>parseAmt($("#salary").value,salCur);
 const fmtSal=()=>{$("#salary").value=fmtAmt(salNum(),salCur);};
 
@@ -367,7 +372,6 @@ function load(){
     if(s.sv)sv=Object.assign(sv,s.sv);
     else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
     if(s.imp)imp=s.imp;
-    if(s.salCur)salCur=s.salCur;
     if(s.salary!=null)$("#salary").value=s.salary;
     if(s.usdBrl!=null)$("#usdBrl").value=s.usdBrl;
     if(s.usdPyg!=null)$("#usdPyg").value=s.usdPyg;
@@ -449,7 +453,7 @@ function openTopForRow(name){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
   const after=String(name).split("·")[1]||"";
   const keys=after.split(",").map(s=>labelToKey(s.trim())).filter(Boolean);
-  openTop(keys);
+  openTop(keys,true);
 }
 function calc(){
   const r=rate();let tU=0,tP=0,tB=0;
@@ -460,6 +464,7 @@ function calc(){
   });
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
+  const si=$("#salInfo");if(si)si.textContent=salUsd?`= ${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"";
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
   const d=SAL[sv.diff]-TOT[sv.diff];
@@ -485,8 +490,6 @@ $("#clearBtn").onclick=()=>{
 $("#addRow").onclick=()=>{rows.push({name:"Nova despesa",amt:0,cur:"PYG"});renderRows();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});};
 ["#usdBrl","#usdPyg"].forEach(s=>$(s).oninput=calc);
 $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}calc();};
-function markSalCur(){$("#salSeg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.sc===salCur));}
-$("#salSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{salCur=b.dataset.sc;markSalCur();fmtSal();calc();});
 $("#copyBtn").onclick=()=>{
   const r=rate();let L=["CONTAS FIXAS PARAGUAI",""],tB=0,tU=0,tP=0;
   rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tB+=u*r.brl;tP+=u*r.pyg;
@@ -688,20 +691,24 @@ $("#fileInput").onchange=e=>{
 /* ---- visão top de gastos ---- */
 function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:"";}
 let topSel=null; // Set de "yyyy-mm" selecionados
+let topSort="date"; // "date" ou "val"
 function getFilteredTop(){
   const q=norm($("#fSearch")?$("#fSearch").value:"");
-  return imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
+  const list=imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
     const mk=t.iso?t.iso.slice(0,7):"";
     if(topSel&&!topSel.has(mk))return false;
     if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
     return true;
-  }).sort((a,b)=>b.val-a.val);
+  });
+  if(topSort==="val")list.sort((a,b)=>b.val-a.val);
+  else list.sort((a,b)=>b.iso.localeCompare(a.iso)||b.val-a.val);
+  return list;
 }
 function renderTopList(){
   const r=rate(),list=getFilteredTop();
-  const totG=list.reduce((s,x)=>s+x.val,0),max=list.length?list[0].val:1;
+  const totG=list.reduce((s,x)=>s+x.val,0),max=list.length?Math.max(...list.map(x=>x.val)):1;
   const tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
-  $("#topSub").innerHTML=`${list.length} lançamentos<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  $("#topSub").innerHTML=`${list.length} lançamentos<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   $("#applyBtn").textContent=totG?`✓ Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")} como despesa`:"✓ Aplicar como despesa";
   $("#topList").innerHTML=list.length?list.map((x,n)=>{
     const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,pct=totG?x.val/totG*100:0,dm=x.date?x.date.slice(0,5):"";
@@ -714,13 +721,14 @@ function renderTopList(){
       <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div></div>`;
   }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
-function openTop(pre){
+function openTop(pre,info){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
-  $("#topTitle").textContent="Extrato";
   if($("#fSearch"))$("#fSearch").value="";
   const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
   const preset=(pre&&pre.length)?pre.filter(k=>months.includes(k)):months;
   topSel=new Set(preset.length?preset:months);
+  $(".topcard").classList.toggle("info",!!info);
+  $("#topTitle").textContent=info?("Detalhes · "+[...topSel].sort().map(monthLabel).join(", ")):"Extrato";
   $("#topMonths").innerHTML=months.map(k=>`<button class="mchip ${topSel.has(k)?"on":""}" data-k="${k}">${monthLabel(k)}</button>`).join("");
   $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
     if(topSel.has(k)){topSel.delete(k);b.classList.remove("on");}else{topSel.add(k);b.classList.add("on");}renderTopList();});
@@ -739,7 +747,8 @@ $("#topBtn").onclick=()=>openTop();
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 $("#fSearch").oninput=renderTopList;
-$("#fClear").onclick=()=>{$("#fSearch").value="";
+$("#fSort").onclick=()=>{topSort=topSort==="date"?"val":"date";$("#fSort").textContent=topSort==="date"?"⇅ Data":"⇅ Valor";renderTopList();};
+$("#fClear").onclick=()=>{$("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";
   if(topSel){topSel=new Set([...$("#topMonths").querySelectorAll(".mchip")].map(b=>b.dataset.k));
     $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.classList.add("on"));}
   renderTopList();};
@@ -752,7 +761,6 @@ $("#reportBtn").onclick=()=>{
 /* ---- init ---- */
 load();
 fmtSal();
-markSalCur();
 markSv();
 renderRows();
 fetchRates();
