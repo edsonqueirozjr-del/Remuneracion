@@ -88,7 +88,7 @@
   .add:active{border-color:var(--accent);color:var(--accent)}
 
   .actbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(180deg,transparent,rgba(13,17,23,.92)28%)}
-  .actbar .btn{flex:1;font-family:inherit;font-size:.95rem;font-weight:700;border-radius:13px;padding:15px;cursor:pointer;border:1px solid var(--line);background:var(--panel-2);color:var(--ink)}
+  .actbar .btn{flex:1;font-family:inherit;font-size:.84rem;font-weight:700;border-radius:13px;padding:14px 6px;cursor:pointer;border:1px solid var(--line);background:var(--panel-2);color:var(--ink)}
   .actbar .btn.primary{background:var(--accent);color:#06251b;border-color:var(--accent)}
   .actbar .btn:active{filter:brightness(1.1)}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#06251b;font-weight:700;font-size:.85rem;padding:11px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:40}
@@ -109,6 +109,9 @@
   #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums}
   #shareCard .stot.diff .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
+  #shareCard .sxp .ref{color:var(--ink-faint);font-size:.74em;font-family:'IBM Plex Mono',monospace}
+  .xp.flash{animation:flash 1.4s ease}
+  @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(55,214,160,0)}25%{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}}
 
   /* tela de senha */
   #lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;
@@ -230,6 +233,7 @@
 <div class="actbar">
   <button class="btn" id="copyBtn">Copiar</button>
   <button class="btn primary" id="shareBtn">📷 Imagem</button>
+  <button class="btn" id="acctBtn">🧾 Contábil</button>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -441,26 +445,43 @@ function fillShareCard(){
     <div class="stot"><span class="lbl">Salário</span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
     <div class="stot diff ${d<0?"neg":""}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"+ ":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>`;
 }
-async function makeBlob(){
-  fillShareCard();
-  const node=$("#shareCard");
-  const canvas=await html2canvas(node,{backgroundColor:"#0d1117",scale:2,logging:false});
+function fillAcctCard(){
+  const items=(imp&&imp.txns?imp.txns:[]).filter(t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia");}).sort((a,b)=>b.val-a.val);
+  const total=items.reduce((s,x)=>s+x.val,0);
+  const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+  const li=items.map(t=>`<div class="sxp"><span class="nm">${t.date} · ${t.desc}<br><span class="ref">Ref. ${t.ref||"—"}</span></span><span class="vl">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
+  $("#shareCard").innerHTML=`
+    <p class="sct">Contabilidade — Saúde</p>
+    <p class="sdate">Unimed &amp; Farmácia · ${imp&&imp.month?imp.month+" · ":""}${dt}</p>
+    ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos de Unimed/Farmácia.</p>'}
+    <div class="stot first"><span class="lbl">Total (Guarani)</span><span class="vl">₲ ${Math.round(total).toLocaleString("es-PY")}</span></div>`;
+}
+async function imageFrom(fillFn){
+  fillFn();
+  const canvas=await html2canvas($("#shareCard"),{backgroundColor:"#0d1117",scale:2,logging:false});
   return new Promise(res=>canvas.toBlob(b=>res(b),"image/png"));
 }
-$("#shareBtn").onclick=async()=>{
+async function shareImage(fillFn,fname,title){
   if(typeof html2canvas==="undefined"){toast("Abra o arquivo no navegador");return;}
   toast("Gerando imagem…");
   try{
-    const blob=await makeBlob();
-    const file=new File([blob],"contas-paraguai.png",{type:"image/png"});
+    const blob=await imageFrom(fillFn);
+    const file=new File([blob],fname,{type:"image/png"});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({files:[file],title:"Contas Fixas Paraguai",text:"Resumo do mês"});
+      await navigator.share({files:[file],title});
     }else{
       const url=URL.createObjectURL(blob);const a=document.createElement("a");
-      a.href=url;a.download="contas-paraguai.png";a.click();URL.revokeObjectURL(url);
+      a.href=url;a.download=fname;a.click();URL.revokeObjectURL(url);
       toast("Imagem salva ✓");
     }
   }catch(e){toast("Não foi possível gerar");}
+}
+$("#shareBtn").onclick=()=>shareImage(fillShareCard,"contas-paraguai.png","Contas Fixas Paraguai");
+$("#acctBtn").onclick=()=>{
+  if(!imp||!imp.txns){toast("Importe uma fatura primeiro");return;}
+  const has=imp.txns.some(t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia");});
+  if(!has){toast("Nenhum lançamento Unimed/Farmácia");return;}
+  shareImage(fillAcctCard,"contabilidade.png","Contabilidade — Saúde");
 };
 
 /* ---- importar fatura (extrato de cartão) ---- */
@@ -477,17 +498,18 @@ function parseFatura(arr){
     }
   } if(total!=null)break;}
   // cabeçalho da tabela
-  let hi=-1,colD=-1,colM=-1;
+  let hi=-1,colD=-1,colM=-1,colR=-1;
   for(let i=0;i<arr.length;i++){const h=arr[i].map(norm);
     if(h.some(x=>x.includes("descripcion"))&&h.some(x=>x.includes("movimientos"))){
-      hi=i;colD=h.findIndex(x=>x.includes("descripcion"));colM=h.findIndex(x=>x.includes("movimientos"));break;}}
+      hi=i;colD=h.findIndex(x=>x.includes("descripcion"));colM=h.findIndex(x=>x.includes("movimientos"));colR=h.findIndex(x=>x.includes("referencia"));break;}}
   const txns=[],dateRe=/^\d{2}\/\d{2}\/\d{4}$/,mesCount={};
   if(hi>=0)for(let i=hi+1;i<arr.length;i++){
     const row=arr[i],mv=pNum(row[colM]);if(isNaN(mv))continue;
     const desc=String(row[colD]||"").replace(/\s+/g," ").trim();if(!desc)continue;
     const dc=(row.find(x=>dateRe.test(String(x).trim()))||"").toString().trim();
+    const ref=colR>=0?String(row[colR]||"").trim():"";
     if(dc){const mm=dc.slice(3,5);mesCount[mm]=(mesCount[mm]||0)+1;}
-    if(mv<0)txns.push({date:dc,desc,val:Math.abs(mv)}); // só gastos
+    if(mv<0)txns.push({date:dc,desc,ref,val:Math.abs(mv)}); // só gastos
   }
   // mês predominante (fallback; nome do arquivo tem prioridade)
   let mm=Object.entries(mesCount).sort((a,b)=>b[1]-a[1])[0];
@@ -505,13 +527,18 @@ function applyImport(res){
   openTop();
 }
 function applyToCard(){
-  if(!imp||imp.total==null){toast("Nada para aplicar");return;}
+  if(!imp){toast("Importe uma fatura primeiro");return;}
+  const val=imp.total!=null?imp.total:Math.round(imp.totalGastos||0);
+  if(!val){toast("Sem valor para aplicar");return;}
   let i=rows.findIndex(r=>{const n=norm(r.name);return n.includes("cartao")||n.includes("credito");});
-  if(i>=0){rows[i].amt=imp.total;rows[i].cur="PYG";}
-  else rows.push({name:"Cartão de crédito",amt:imp.total,cur:"PYG"});
+  if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
+  else{rows.push({name:"Cartão de crédito",amt:val,cur:"PYG"});i=rows.length-1;}
   renderRows();
   $("#topModal").classList.add("hidden");
-  toast("Aplicado ao Cartão de crédito");
+  toast("✓ Aplicado ao Cartão de crédito");
+  // destacar a linha aplicada
+  const card=document.querySelectorAll(".xp")[i];
+  if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.classList.add("flash");setTimeout(()=>card.classList.remove("flash"),1400);}
 }
 
 function monthFromName(name){
@@ -553,7 +580,8 @@ function renderTopList(){
   if(ate)list=list.filter(t=>t.iso&&t.iso<=ate);
   list.sort((a,b)=>b.val-a.val);
   const totG=list.reduce((s,x)=>s+x.val,0),max=list.length?list[0].val:1;
-  $("#topSub").textContent=`${list.length} lançamentos · ₲ ${Math.round(totG).toLocaleString("es-PY")}`;
+  const tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
+  $("#topSub").innerHTML=`${list.length} lançamentos<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   $("#topList").innerHTML=list.length?list.map((x,n)=>{
     const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,pct=totG?x.val/totG*100:0,dm=x.date?x.date.slice(0,5):"";
     return `<div class="ti"><div class="top1">
