@@ -26,6 +26,9 @@
   }
   .num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
   main{padding:16px;max-width:540px;margin:0 auto}
+  .hdr{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .hdrbtn{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:700;padding:7px 12px;border-radius:10px;cursor:pointer}
+  .hdrbtn:active{border-color:var(--accent);color:var(--accent)}
   h1{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;margin:6px 0 2px;letter-spacing:-.01em}
   h1 .py{color:var(--pyg)}
   .sub{color:var(--ink-dim);font-size:.86rem;margin:0 0 18px}
@@ -44,22 +47,11 @@
   .pcard .tag{font-size:.74rem;font-weight:700}
   .pcard input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;
     font-size:.98rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:2px 0}
-  .salrow{display:flex;align-items:center;gap:8px}
-  .salrow input{flex:1;font-size:1.05rem}
-  #salSeg{flex:none}
-  #salSeg button{font-size:.7rem;padding:6px 9px}
   .salinfo{margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--ink-dim)}
 
-  /* BANNER COTAÇÃO OFICIAL */
-  .fx{grid-column:1/-1;display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);
-    border-radius:10px;padding:7px 10px;font-size:.72rem}
-  .fx .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);flex:none}
-  .fx.live .dot{background:var(--accent);box-shadow:0 0 8px var(--accent)}
-  .fx .txt{flex:1;min-width:0;color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .fx .txt b{color:var(--ink)}
-  .fx .use{flex:none;border:0;background:var(--accent);color:#06251b;font-weight:700;font-family:inherit;
-    font-size:.72rem;padding:6px 11px;border-radius:8px;cursor:pointer}
-  .fx .use:disabled{background:var(--panel);color:var(--ink-faint);cursor:default}
+  .fxreset{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--accent);
+    font-family:inherit;font-size:.76rem;font-weight:700;padding:9px;border-radius:10px;cursor:pointer}
+  .fxreset:active{filter:brightness(1.1)}
 
   .resumo{background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
   .rhead{margin-bottom:10px}
@@ -147,21 +139,21 @@
   .lockcard .ico{font-size:1.8rem}
   .lockcard h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:8px 0 2px}
   .lockcard .locksub{color:var(--ink-dim);font-size:.84rem;margin:0 0 18px}
-  .pwrow{display:flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:0 4px 0 13px}
-  .pwrow.shake{animation:shk .32s}
-  .pwrow:focus-within{border-color:var(--accent)}
-  .pwrow input{flex:1;border:0;background:transparent;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;padding:13px 0;outline:none}
-  .eye{border:0;background:transparent;font-size:1.15rem;padding:8px 9px;cursor:pointer;line-height:1}
+  .pattern{position:relative;width:240px;height:240px;margin:0 auto;touch-action:none}
+  .patsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .pdot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--panel-2);border:2px solid var(--line);transform:translate(-50%,-50%)}
+  .pdot[data-n="1"]{left:16.66%;top:16.66%}.pdot[data-n="2"]{left:50%;top:16.66%}.pdot[data-n="3"]{left:83.33%;top:16.66%}
+  .pdot[data-n="4"]{left:16.66%;top:50%}.pdot[data-n="5"]{left:50%;top:50%}.pdot[data-n="6"]{left:83.33%;top:50%}
+  .pdot[data-n="7"]{left:16.66%;top:83.33%}.pdot[data-n="8"]{left:50%;top:83.33%}.pdot[data-n="9"]{left:83.33%;top:83.33%}
+  .pdot.on{border-color:var(--usd);background:var(--usd)}
+  .pdot.ok{border-color:var(--accent);background:var(--accent)}
+  .pdot.err{border-color:var(--danger);background:var(--danger)}
   .lockpick{color:var(--ink-dim);font-size:.78rem;margin:16px 0 8px;letter-spacing:.04em}
   .lockbtns{display:flex;gap:10px}
   .lockbtn{flex:1;background:var(--accent);color:#06251b;font-weight:700;border:0;border-radius:12px;padding:14px 10px;cursor:pointer;font-family:inherit;font-size:.92rem}
   .lockbtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
   .lockbtn:active{filter:brightness(1.08)}
   .lockerr{color:var(--danger);font-size:.8rem;margin-top:10px;min-height:1.1em}
-  .hint{display:inline-flex;align-items:center;gap:5px;position:relative;cursor:help;color:var(--ink-faint);font-size:.8rem;margin-top:4px}
-  .hint .tip{position:absolute;bottom:135%;left:50%;transform:translateX(-50%);background:#000;color:#fff;border:1px solid var(--line);
-    padding:8px 12px;border-radius:9px;font-size:.78rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
-  .hint:hover .tip,.hint:focus .tip{opacity:1}
   @keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 
   /* estado vazio */
@@ -231,23 +223,27 @@
   <div class="lockcard">
     <div class="ico">🔒</div>
     <h2>Acesso restrito</h2>
-    <p class="locksub">Digite a senha para abrir</p>
-    <div class="pwrow" id="pwrow">
-      <input id="pw" type="password" placeholder="Senha" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <button class="eye" id="eye" type="button" aria-label="Mostrar senha">👁️</button>
+    <p class="locksub">Desenhe o padrão para desbloquear</p>
+    <div class="pattern" id="pattern">
+      <svg class="patsvg" id="patSvg" viewBox="0 0 300 300" preserveAspectRatio="none"></svg>
+      <div class="pdot" data-n="1"></div><div class="pdot" data-n="2"></div><div class="pdot" data-n="3"></div>
+      <div class="pdot" data-n="4"></div><div class="pdot" data-n="5"></div><div class="pdot" data-n="6"></div>
+      <div class="pdot" data-n="7"></div><div class="pdot" data-n="8"></div><div class="pdot" data-n="9"></div>
     </div>
-    <p class="lockpick">O que deseja ver?</p>
+    <p class="lockpick" id="lockPick">Desenhe o padrão e escolha o que ver</p>
     <div class="lockbtns">
       <button class="lockbtn" id="enterDesp">💸 Despesas</button>
       <button class="lockbtn alt" id="enterIrp">📑 IRP</button>
     </div>
     <div class="lockerr" id="lockErr"></div>
-    <span class="hint" tabindex="0" title="Credencial Claro Casa">💡 Dica<span class="tip">Credencial Claro Casa</span></span>
   </div>
 </div>
 <main>
-  <h1>Contas Fixas <span class="py">Paraguai</span></h1>
-  <p class="sub">Toque para editar. Salva sozinho e recalcula em USD, Guarani e Real na hora.</p>
+  <div class="hdr">
+    <h1>Contas Fixas <span class="py">Paraguai</span></h1>
+    <button class="hdrbtn" id="goIrp" title="Ir para IRP">📑 IRP</button>
+  </div>
+  <p class="sub">Seu painel de contas fixas do Paraguai: acompanhe salário, despesas e saldo em Real, Dólar e Guarani. Tudo recalcula e salva sozinho.</p>
 
   <div class="sec"><span>Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
   <div class="params">
@@ -264,11 +260,7 @@
       <input class="num" id="usdBrl" inputmode="decimal" value="5.05"></div></div>
     <div class="pcard"><label>Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
       <input class="num" id="usdPyg" inputmode="numeric" value="6060"></div></div>
-    <div class="fx" id="fxBanner">
-      <span class="dot"></span>
-      <span class="txt" id="fxTxt">Buscando cotação oficial do dia…</span>
-      <button class="use" id="fxUse" disabled>Usar</button>
-    </div>
+    <button class="fxreset" id="fxReset" style="display:none">↻ Cotação do dia</button>
   </div>
 
   <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="clearBtn" id="clearBtn">Limpar</button></div>
@@ -343,20 +335,40 @@ let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
 let liveRates=null; // {brl,pyg,date}
 const $=s=>document.querySelector(s);
 
-/* ---- tela de senha ---- */
-const PW="Mariaisabel2802";
+/* ---- tela de bloqueio (padrão de deslizar) ---- */
+const PATTERN="1235789";
+let patOk=false;
 function unlock(){$("#lock").classList.add("hidden");try{sessionStorage.setItem("unlocked","1");}catch(_){}}
-function pwOk(){const v=$("#pw").value;
-  if(v===""||v===PW)return true;
-  $("#lockErr").textContent="Senha incorreta";$("#pwrow").classList.add("shake");
-  setTimeout(()=>$("#pwrow").classList.remove("shake"),320);$("#pw").select();return false;}
-$("#enterDesp").onclick=()=>{if(pwOk())unlock();};
-$("#enterIrp").onclick=()=>{if(pwOk()){$("#lockErr").style.color="var(--ink-dim)";$("#lockErr").textContent="📑 IRP — em construção";}};
-$("#pw").addEventListener("keydown",e=>{if(e.key==="Enter"&&pwOk())unlock();});
-$("#eye").onclick=()=>{const i=$("#pw"),show=i.type==="password";i.type=show?"text":"password";$("#eye").textContent=show?"🙈":"👁️";i.focus();};
-try{if(sessionStorage.getItem("unlocked")==="1")$("#lock").classList.add("hidden");else $("#pw").focus();}catch(_){$("#pw").focus();}
+function showChooser(){patOk=false;clearPattern();$("#lockErr").textContent="";$("#lockPick").textContent="Desenhe o padrão e escolha o que ver";try{sessionStorage.removeItem("unlocked");}catch(_){}$("#lock").classList.remove("hidden");}
+(function initPattern(){
+  const grid=$("#pattern"),svg=$("#patSvg");let seq=[],drawing=false;
+  function centers(){const r=grid.getBoundingClientRect();const cs=[];for(let i=0;i<9;i++){const cx=(i%3)*100+50,cy=Math.floor(i/3)*100+50;cs.push({n:i+1,cx,cy,px:r.left+(i%3+0.5)*r.width/3,py:r.top+(Math.floor(i/3)+0.5)*r.height/3});}return cs;}
+  function draw(extra){const cs=centers();let p="";seq.forEach((n,i)=>{const c=cs[n-1];p+=(i?"L":"M")+c.cx+" "+c.cy+" ";});
+    let line=`<polyline points="${seq.map(n=>{const c=cs[n-1];return c.cx+","+c.cy;}).join(" ")}" fill="none" stroke="${patOk?'var(--accent)':'var(--usd)'}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`;
+    if(extra&&seq.length){const c=cs[seq[seq.length-1]-1];line+=`<line x1="${c.cx}" y1="${c.cy}" x2="${extra.x}" y2="${extra.y}" stroke="var(--usd)" stroke-width="4" stroke-linecap="round" opacity=".5"/>`;}
+    svg.innerHTML=line;
+    grid.querySelectorAll(".pdot").forEach(d=>d.classList.toggle("on",seq.includes(+d.dataset.n)));}
+  function clearP(){seq=[];svg.innerHTML="";grid.querySelectorAll(".pdot").forEach(d=>d.classList.remove("on","ok","err"));}
+  window.clearPattern=clearP;
+  function hit(x,y){const cs=centers();for(const c of cs){const dx=x-c.px,dy=y-c.py;if(Math.sqrt(dx*dx+dy*dy)<r()*0.16&&!seq.includes(c.n)){seq.push(c.n);}}}
+  function r(){return grid.getBoundingClientRect().width;}
+  function toVB(x,y){const rc=grid.getBoundingClientRect();return{x:(x-rc.left)/rc.width*300,y:(y-rc.top)/rc.height*300};}
+  function start(x,y){if(patOk)return;drawing=true;seq=[];hit(x,y);draw();}
+  function move(x,y){if(!drawing)return;hit(x,y);draw(toVB(x,y));}
+  function end(){if(!drawing)return;drawing=false;const code=seq.join("");
+    if(code===PATTERN){patOk=true;draw();grid.querySelectorAll(".pdot.on").forEach(d=>d.classList.add("ok"));$("#lockErr").style.color="var(--accent)";$("#lockErr").textContent="✓ Padrão correto — escolha abaixo";$("#lockPick").textContent="Pronto! O que deseja ver?";}
+    else{grid.querySelectorAll(".pdot.on").forEach(d=>d.classList.add("err"));$("#lockErr").style.color="var(--danger)";$("#lockErr").textContent="Padrão incorreto";setTimeout(clearP,500);}}
+  grid.addEventListener("pointerdown",e=>{e.preventDefault();grid.setPointerCapture(e.pointerId);start(e.clientX,e.clientY);});
+  grid.addEventListener("pointermove",e=>move(e.clientX,e.clientY));
+  grid.addEventListener("pointerup",end);
+  grid.addEventListener("pointercancel",end);
+})();
+function requirePat(){if(patOk)return true;$("#lockErr").style.color="var(--danger)";$("#lockErr").textContent="Desenhe o padrão primeiro";return false;}
+$("#enterDesp").onclick=()=>{if(requirePat())unlock();};
+$("#enterIrp").onclick=()=>{if(requirePat()){$("#lockErr").style.color="var(--ink-dim)";$("#lockErr").textContent="📑 IRP — em construção";}};
+try{if(sessionStorage.getItem("unlocked")==="1")$("#lock").classList.add("hidden");}catch(_){}
 
-const rate=()=>({brl:parseFloat($("#usdBrl").value)||0,pyg:parseFloat($("#usdPyg").value)||0});
+const rate=()=>({brl:parseFloat($("#usdBrl").value)||0,pyg:parseInt(($("#usdPyg").value||"").replace(/\D/g,""),10)||0});
 const toUSD=(a,c,r)=>c==="USD"?a:c==="PYG"?(r.pyg?a/r.pyg:0):(r.brl?a/r.brl:0);
 const fmt={
   USD:v=>"U$ "+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),
@@ -398,6 +410,16 @@ function load(){
 }
 
 /* ---- cotação do dia (roda no navegador) ---- */
+const fmtPygRate=v=>Math.round(v||0).toLocaleString("pt-BR");
+function updateFxReset(){
+  const btn=$("#fxReset");if(!btn)return;
+  if(!liveRates){btn.style.display="none";return;}
+  const cb=parseFloat($("#usdBrl").value)||0,cp=parseInt(($("#usdPyg").value||"").replace(/\D/g,""),10)||0;
+  const diff=Math.abs(cb-liveRates.brl)>0.001||cp!==liveRates.pyg;
+  btn.textContent=`↻ Cotação do dia (${liveRates.date})`;
+  btn.style.display=diff?"block":"none";
+}
+function applyLive(){if(!liveRates)return;$("#usdBrl").value=liveRates.brl;$("#usdPyg").value=fmtPygRate(liveRates.pyg);updateFxReset();calc();}
 async function fetchRates(){
   try{
     const res=await fetch("https://open.er-api.com/v6/latest/USD");
@@ -405,14 +427,9 @@ async function fetchRates(){
     if(d&&d.rates&&d.rates.BRL&&d.rates.PYG){
       const dt=d.time_last_update_utc?new Date(d.time_last_update_utc):new Date();
       liveRates={brl:+d.rates.BRL.toFixed(2),pyg:Math.round(d.rates.PYG),date:dt.toLocaleDateString("pt-BR")};
-      const b=$("#fxBanner");b.classList.add("live");
-      $("#fxTxt").innerHTML=`${liveRates.date} · <b>R$ ${liveRates.brl.toLocaleString("pt-BR",{minimumFractionDigits:2})}</b> · <b>₲ ${liveRates.pyg.toLocaleString("es-PY")}</b>`;
-      $("#fxUse").disabled=false;
-    }else throw 0;
-  }catch(e){
-    $("#fxTxt").textContent="Cotação automática indisponível — use os valores manuais.";
-    $("#fxUse").style.display="none";
-  }
+      applyLive(); // padrão = cotação do dia
+    }
+  }catch(e){/* offline: mantém os valores atuais */}
 }
 
 /* ---- render ---- */
@@ -490,7 +507,7 @@ function calc(){
   });
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
-  const si=$("#salInfo");if(si)si.textContent=salUsd?`${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"";
+  const si=$("#salInfo");if(si)si.textContent=salUsd?`${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"Insira o salário para começar a análise";
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
   const d=SAL[sv.diff]-TOT[sv.diff];
@@ -502,19 +519,20 @@ function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");se
 /* ---- eventos ---- */
 function markSv(){document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===sv[k]));});}
 document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sv[k]=b.dataset.c;markSv();calc();});});
-$("#fxUse").onclick=()=>{
+$("#fxReset").onclick=()=>{
   if(!liveRates)return;
-  $("#usdBrl").value=liveRates.brl;$("#usdPyg").value=liveRates.pyg;
-  calc();toast("Cotação oficial aplicada");
+  if(confirm("Voltar à cotação do dia?")){applyLive();toast("Cotação do dia aplicada");}
 };
+$("#goIrp").onclick=showChooser;
 $("#clearBtn").onclick=()=>{
   if(!rows.length){toast("Já está vazio");return;}
-  if(confirm("Apagar todas as despesas? O salário e a cotação são mantidos.")){
+  if(confirm("Tem certeza que deseja limpar todas as despesas? O salário e a cotação são mantidos.")){
     rows=[];renderRows();toast("Despesas apagadas");
   }
 };
 $("#addRow").onclick=()=>{rows.push({name:"Nova despesa",amt:0,cur:"PYG"});renderRows();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});};
-["#usdBrl","#usdPyg"].forEach(s=>$(s).oninput=calc);
+$("#usdBrl").oninput=()=>{updateFxReset();calc();};
+$("#usdPyg").oninput=e=>{const d=(e.target.value||"").replace(/\D/g,"");e.target.value=d?parseInt(d,10).toLocaleString("pt-BR"):"";const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}updateFxReset();calc();};
 $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}calc();};
 $("#copyBtn").onclick=()=>{
   const r=rate();let L=["CONTAS FIXAS PARAGUAI",""],tB=0,tU=0,tP=0;
@@ -774,7 +792,9 @@ $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 $("#fSearch").oninput=renderTopList;
 $("#fSort").onclick=()=>{topSort=topSort==="date"?"val":"date";$("#fSort").textContent=topSort==="date"?"⇅ Data":"⇅ Valor";renderTopList();};
-$("#fClear").onclick=()=>{$("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";
+$("#fClear").onclick=()=>{
+  if(!confirm("Tem certeza que deseja limpar os filtros?"))return;
+  $("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";
   if(topSel){topSel=new Set([...$("#topMonths").querySelectorAll(".mchip")].map(b=>b.dataset.k));
     $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.classList.add("on"));}
   renderTopList();};
@@ -787,6 +807,7 @@ $("#reportBtn").onclick=()=>{
 /* ---- init ---- */
 load();
 fmtSal();
+{const d=($("#usdPyg").value||"").replace(/\D/g,"");if(d)$("#usdPyg").value=parseInt(d,10).toLocaleString("pt-BR");}
 markSv();
 renderRows();
 fetchRates();
