@@ -71,6 +71,12 @@
   .cseg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
   .cseg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.62rem;padding:5px 7px;cursor:pointer;transition:.12s}
   .cseg button.on{color:#06251b;background:var(--accent)}
+  .cseg button[data-c="BRL"],.seg button[data-cur="BRL"]{color:var(--brl)}
+  .cseg button[data-c="USD"],.seg button[data-cur="USD"]{color:var(--usd)}
+  .cseg button[data-c="PYG"],.seg button[data-cur="PYG"]{color:var(--pyg)}
+  .cseg button.on[data-c="BRL"],.seg button.on[data-cur="BRL"]{background:var(--brl);color:#241a00}
+  .cseg button.on[data-c="USD"],.seg button.on[data-cur="USD"]{background:var(--usd);color:#041f3d}
+  .cseg button.on[data-c="PYG"],.seg button.on[data-cur="PYG"]{background:var(--pyg);color:#1f1030}
 
   .xp{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:9px}
   .xp .head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
@@ -146,7 +152,10 @@
   .pwrow:focus-within{border-color:var(--accent)}
   .pwrow input{flex:1;border:0;background:transparent;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;padding:13px 0;outline:none}
   .eye{border:0;background:transparent;font-size:1.15rem;padding:8px 9px;cursor:pointer;line-height:1}
-  .lockbtn{width:100%;margin-top:14px;background:var(--accent);color:#06251b;font-weight:700;border:0;border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:.95rem}
+  .lockpick{color:var(--ink-dim);font-size:.78rem;margin:16px 0 8px;letter-spacing:.04em}
+  .lockbtns{display:flex;gap:10px}
+  .lockbtn{flex:1;background:var(--accent);color:#06251b;font-weight:700;border:0;border-radius:12px;padding:14px 10px;cursor:pointer;font-family:inherit;font-size:.92rem}
+  .lockbtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
   .lockbtn:active{filter:brightness(1.08)}
   .lockerr{color:var(--danger);font-size:.8rem;margin-top:10px;min-height:1.1em}
   .hint{display:inline-flex;align-items:center;gap:5px;position:relative;cursor:help;color:var(--ink-faint);font-size:.8rem;margin-top:4px}
@@ -154,6 +163,13 @@
     padding:8px 12px;border-radius:9px;font-size:.78rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
   .hint:hover .tip,.hint:focus .tip{opacity:1}
   @keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+
+  /* estado vazio */
+  .emptyx{text-align:center;padding:30px 18px;border:1.5px dashed var(--line);border-radius:16px;background:var(--panel)}
+  .emptyx-ico{font-size:2rem}
+  .emptyx-t{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;margin:8px 0 4px}
+  .emptyx-s{color:var(--ink-dim);font-size:.84rem;margin:0;line-height:1.5}
+  .emptyx-s b{color:var(--ink)}
 
   /* botões importar / top */
   .impbtns{display:flex;gap:10px;margin-top:10px}
@@ -220,7 +236,11 @@
       <input id="pw" type="password" placeholder="Senha" autocomplete="off" autocapitalize="off" spellcheck="false">
       <button class="eye" id="eye" type="button" aria-label="Mostrar senha">👁️</button>
     </div>
-    <button class="lockbtn" id="enter">Entrar</button>
+    <p class="lockpick">O que deseja ver?</p>
+    <div class="lockbtns">
+      <button class="lockbtn" id="enterDesp">💸 Despesas</button>
+      <button class="lockbtn alt" id="enterIrp">📑 IRP</button>
+    </div>
     <div class="lockerr" id="lockErr"></div>
     <span class="hint" tabindex="0" title="Credencial Claro Casa">💡 Dica<span class="tip">Credencial Claro Casa</span></span>
   </div>
@@ -240,25 +260,15 @@
 
   <div class="sec">Cotação</div>
   <div class="params">
-    <div class="pcard"><label>U$ → Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
+    <div class="pcard"><label>Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
       <input class="num" id="usdBrl" inputmode="decimal" value="5.05"></div></div>
-    <div class="pcard"><label>U$ → Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
+    <div class="pcard"><label>Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
       <input class="num" id="usdPyg" inputmode="numeric" value="6060"></div></div>
     <div class="fx" id="fxBanner">
       <span class="dot"></span>
       <span class="txt" id="fxTxt">Buscando cotação oficial do dia…</span>
       <button class="use" id="fxUse" disabled>Usar</button>
     </div>
-  </div>
-
-  <div class="sec">Resumo</div>
-  <div class="resumo">
-    <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
-      <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
-    <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span>
-      <div class="cseg" data-sv="sal"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
-    <div class="rrow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span>
-      <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
   </div>
 
   <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="clearBtn" id="clearBtn">Limpar</button></div>
@@ -269,6 +279,16 @@
     <button class="ibtn" id="topBtn">📊 Extrato</button>
   </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
+
+  <div class="sec">Resumo</div>
+  <div class="resumo">
+    <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
+      <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
+    <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span>
+      <div class="cseg" data-sv="sal"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
+    <div class="rrow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span>
+      <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
+  </div>
 </main>
 
 <div class="actbar">
@@ -326,14 +346,13 @@ const $=s=>document.querySelector(s);
 /* ---- tela de senha ---- */
 const PW="Mariaisabel2802";
 function unlock(){$("#lock").classList.add("hidden");try{sessionStorage.setItem("unlocked","1");}catch(_){}}
-function tryPw(){
-  const v=$("#pw").value;
-  if(v===""||v===PW){unlock();}
-  else{$("#lockErr").textContent="Senha incorreta";$("#pwrow").classList.add("shake");
-    setTimeout(()=>$("#pwrow").classList.remove("shake"),320);$("#pw").select();}
-}
-$("#enter").onclick=tryPw;
-$("#pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryPw();});
+function pwOk(){const v=$("#pw").value;
+  if(v===""||v===PW)return true;
+  $("#lockErr").textContent="Senha incorreta";$("#pwrow").classList.add("shake");
+  setTimeout(()=>$("#pwrow").classList.remove("shake"),320);$("#pw").select();return false;}
+$("#enterDesp").onclick=()=>{if(pwOk())unlock();};
+$("#enterIrp").onclick=()=>{if(pwOk()){$("#lockErr").style.color="var(--ink-dim)";$("#lockErr").textContent="📑 IRP — em construção";}};
+$("#pw").addEventListener("keydown",e=>{if(e.key==="Enter"&&pwOk())unlock();});
 $("#eye").onclick=()=>{const i=$("#pw"),show=i.type==="password";i.type=show?"text":"password";$("#eye").textContent=show?"🙈":"👁️";i.focus();};
 try{if(sessionStorage.getItem("unlocked")==="1")$("#lock").classList.add("hidden");else $("#pw").focus();}catch(_){$("#pw").focus();}
 
@@ -399,6 +418,13 @@ async function fetchRates(){
 /* ---- render ---- */
 function renderRows(){
   const c=$("#rows");c.innerHTML="";
+  if(!rows.length){
+    c.innerHTML=`<div class="emptyx"><div class="emptyx-ico">🗒️</div>
+      <p class="emptyx-t">Nenhuma despesa ainda</p>
+      <p class="emptyx-s">Toque em <b>＋ Adicionar despesa</b> ou <b>📥 Importar extrato</b> para começar.</p></div>`;
+    $("#rowcount").textContent="";
+    calc();return;
+  }
   rows.forEach((row,i)=>{
     const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${curLbl(cu)}</button>`).join("");
     const el=document.createElement("div");el.className="xp";
@@ -711,14 +737,13 @@ function renderTopList(){
   $("#topSub").innerHTML=`${list.length} lançamentos<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   $("#applyBtn").textContent=totG?`✓ Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")} como despesa`:"✓ Aplicar como despesa";
   $("#topList").innerHTML=list.length?list.map((x,n)=>{
-    const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,pct=totG?x.val/totG*100:0,dm=x.date?x.date.slice(0,5):"";
+    const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,dm=x.date?x.date.slice(0,5):"";
     const key=`${x.date}|${x.ref}|${x.val}|${x.desc}`;
     return `<div class="ti"><div class="top1">
         <span class="nmw"><span class="rk">${String(n+1).padStart(2,"0")}</span><span class="nm">${x.desc}</span> <span class="dt">${dm}</span></span>
-        <span class="vr"><span class="vl">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
+        <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
           <span class="acts"><button class="cod" data-tip="${x.ref||"—"}" title="Ref. ${x.ref||"—"}">ⓘ</button><button class="exc" data-key="${key}" title="Excluir">✕</button></span></span></div>
-      <div class="conv2">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}<span class="pct">${pct.toFixed(1)}%</span></div>
-      <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div></div>`;
+      <div class="conv2"><span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
   }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
 function openTop(pre,info){
