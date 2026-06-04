@@ -36,14 +36,18 @@
     font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
   .clearBtn:active{border-color:var(--danger);color:var(--danger)}
 
-  .params{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .params{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .params .full{grid-column:1/-1}
-  .pcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:11px 13px}
-  .pcard label{display:block;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:5px}
-  .pcard .row{display:flex;align-items:center;gap:7px}
-  .pcard .tag{font-size:.78rem;font-weight:700}
+  .pcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 11px}
+  .pcard label{display:block;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:4px}
+  .pcard .row{display:flex;align-items:center;gap:6px}
+  .pcard .tag{font-size:.74rem;font-weight:700}
   .pcard input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;
-    font-size:1.15rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:2px 0}
+    font-size:.98rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:2px 0}
+  .salrow{display:flex;align-items:center;gap:8px}
+  .salrow input{flex:1;font-size:1.05rem}
+  #salSeg{flex:none}
+  #salSeg button{font-size:.7rem;padding:6px 9px}
 
   /* BANNER COTAÇÃO OFICIAL */
   .fx{grid-column:1/-1;display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);
@@ -172,13 +176,15 @@
   .topmonths{display:flex;gap:6px;overflow-x:auto;padding:10px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .topmonths::-webkit-scrollbar{display:none}
   .topmonths .mchip{flex:none;font-size:.7rem;padding:5px 10px;white-space:nowrap}
-  .topfilter{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 0 8px}
-  .topfilter label{display:flex;flex-direction:column;gap:4px;font-size:.64rem;color:var(--ink-faint);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-  .topfilter input[type=date]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.8rem;padding:8px;outline:none}
-  .topfilter input[type=date]:focus,.topfilter input[type=search]:focus{border-color:var(--accent)}
-  .topfilter #fSearch{grid-column:1/-1;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px;outline:none}
-  .topfilter #fClear{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
+  .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
+  .topfilter input[type=search]:focus{border-color:var(--accent)}
+  .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px;outline:none}
+  .topfilter #fClear{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
   .topfilter #fClear:active{border-color:var(--accent);color:var(--accent)}
+  .topbtns{display:flex;gap:10px;margin-top:12px}
+  .topbtns .applybtn{flex:1;margin-top:0}
+  .applybtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
+  .applybtn.alt:active{border-color:var(--accent);color:var(--accent)}
   .ti{padding:9px 2px;border-bottom:1px solid var(--line-soft)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1}
@@ -222,15 +228,19 @@
 
   <div class="sec"><span>Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
   <div class="params">
-    <div class="pcard full"><label>Salário (em dólar)</label><div class="row"><span class="tag" style="color:var(--usd)">US$</span>
-      <input class="num" id="salary" inputmode="numeric" value="3605"></div></div>
+    <div class="pcard full"><label>Salário</label>
+      <div class="salrow">
+        <input class="num" id="salary" inputmode="numeric" value="3605">
+        <div class="seg" id="salSeg"><button data-sc="USD">U$</button><button data-sc="PYG">₲</button><button data-sc="BRL">R$</button></div>
+      </div>
+    </div>
   </div>
 
   <div class="sec">Cotação</div>
   <div class="params">
-    <div class="pcard"><label>USD → Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
+    <div class="pcard"><label>U$ → Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
       <input class="num" id="usdBrl" inputmode="decimal" value="5.05"></div></div>
-    <div class="pcard"><label>USD → Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
+    <div class="pcard"><label>U$ → Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
       <input class="num" id="usdPyg" inputmode="numeric" value="6060"></div></div>
     <div class="fx" id="fxBanner">
       <span class="dot"></span>
@@ -242,11 +252,11 @@
   <div class="sec">Resumo</div>
   <div class="resumo">
     <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
-      <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
+      <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
     <div class="rrow"><span class="lbl">Salário</span><span class="v" id="rSal"></span>
-      <div class="cseg" data-sv="sal"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
+      <div class="cseg" data-sv="sal"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
     <div class="rrow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span>
-      <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">US$</button><button data-c="PYG">₲</button></div></div>
+      <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
   </div>
 
   <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="clearBtn" id="clearBtn">Limpar</button></div>
@@ -288,14 +298,15 @@
     <div class="topscroll">
       <div class="topmonths" id="topMonths"></div>
       <div class="topfilter">
-        <label>De<input type="date" id="fDe"></label>
-        <label>Até<input type="date" id="fAte"></label>
         <input type="search" id="fSearch" placeholder="🔎 Buscar despesa…">
         <button id="fClear">↺ Limpar filtros</button>
       </div>
       <div class="toplist" id="topList"></div>
     </div>
-    <button class="applybtn" id="applyBtn">✓ Aplicar como despesa</button>
+    <div class="topbtns">
+      <button class="applybtn alt" id="reportBtn">📄 Relatório</button>
+      <button class="applybtn" id="applyBtn">✓ Aplicar como despesa</button>
+    </div>
   </div>
 </div>
 
@@ -324,11 +335,12 @@ try{if(sessionStorage.getItem("unlocked")==="1")$("#lock").classList.add("hidden
 const rate=()=>({brl:parseFloat($("#usdBrl").value)||0,pyg:parseFloat($("#usdPyg").value)||0});
 const toUSD=(a,c,r)=>c==="USD"?a:c==="PYG"?(r.pyg?a/r.pyg:0):(r.brl?a/r.brl:0);
 const fmt={
-  USD:v=>"US$ "+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),
+  USD:v=>"U$ "+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),
   BRL:v=>"R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}),
   PYG:v=>"₲ "+Math.round(v).toLocaleString("es-PY"),
 };
 const CURS=["USD","PYG","BRL"];
+const curLbl=c=>c==="USD"?"U$":c==="BRL"?"R$":"₲";
 // máscara de digitação por moeda: USD/PYG inteiro com ponto de milhar; BRL com vírgula e 2 decimais
 function fmtAmt(amt,cur){
   if(cur==="BRL") return (amt||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -339,12 +351,13 @@ function parseAmt(str,cur){
   if(!d) return 0;
   return cur==="BRL" ? parseInt(d,10)/100 : parseInt(d,10);
 }
-const salNum=()=>{const d=($("#salary").value||"").replace(/\D/g,"");return d?parseInt(d,10):0;};
-const fmtSal=()=>{$("#salary").value=salNum()?salNum().toLocaleString("pt-BR"):"";};
+let salCur="USD";
+const salNum=()=>parseAmt($("#salary").value,salCur);
+const fmtSal=()=>{$("#salary").value=fmtAmt(salNum(),salCur);};
 
 /* ---- salvar / carregar ---- */
 function save(){
-  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
+  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,salCur,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
     const h=$("#saveHint");h.classList.add("show");clearTimeout(window._st);window._st=setTimeout(()=>h.classList.remove("show"),1200);
   }catch(e){}
 }
@@ -354,6 +367,7 @@ function load(){
     if(s.sv)sv=Object.assign(sv,s.sv);
     else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
     if(s.imp)imp=s.imp;
+    if(s.salCur)salCur=s.salCur;
     if(s.salary!=null)$("#salary").value=s.salary;
     if(s.usdBrl!=null)$("#usdBrl").value=s.usdBrl;
     if(s.usdPyg!=null)$("#usdPyg").value=s.usdPyg;
@@ -382,7 +396,7 @@ async function fetchRates(){
 function renderRows(){
   const c=$("#rows");c.innerHTML="";
   rows.forEach((row,i)=>{
-    const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${cu}</button>`).join("");
+    const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${curLbl(cu)}</button>`).join("");
     const el=document.createElement("div");el.className="xp";
     el.innerHTML=`
       <div class="head">
@@ -441,11 +455,11 @@ function calc(){
   const r=rate();let tU=0,tP=0,tB=0;
   rows.forEach((row,i)=>{
     const u=toUSD(row.amt,row.cur,r),p=u*r.pyg,b=u*r.brl;tU+=u;tP+=p;tB+=b;
-    const set=(k,v)=>{const e=document.querySelector(`[data-c="${k}-${i}"]`);if(e)e.innerHTML=`<span class="k">${k}</span>${fmt[k](v).replace(/^[^\d-]+/,"")}`;};
+    const set=(k,v)=>{const e=document.querySelector(`[data-c="${k}-${i}"]`);if(e)e.innerHTML=`<span class="k">${curLbl(k)}</span>${fmt[k](v).replace(/^[^\d-]+/,"")}`;};
     set("USD",u);set("PYG",p);set("BRL",b);
   });
-  const sU=salNum(),sB=sU*r.brl,sP=sU*r.pyg;
-  const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:sU,PYG:sP,BRL:sB};
+  const salUsd=toUSD(salNum(),salCur,r);
+  const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
   const d=SAL[sv.diff]-TOT[sv.diff];
@@ -471,12 +485,14 @@ $("#clearBtn").onclick=()=>{
 $("#addRow").onclick=()=>{rows.push({name:"Nova despesa",amt:0,cur:"PYG"});renderRows();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});};
 ["#usdBrl","#usdPyg"].forEach(s=>$(s).oninput=calc);
 $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}calc();};
+function markSalCur(){$("#salSeg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.sc===salCur));}
+$("#salSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{salCur=b.dataset.sc;markSalCur();fmtSal();calc();});
 $("#copyBtn").onclick=()=>{
   const r=rate();let L=["CONTAS FIXAS PARAGUAI",""],tB=0,tU=0,tP=0;
   rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tB+=u*r.brl;tP+=u*r.pyg;
     L.push(`${row.name}: ${fmt.BRL(u*r.brl)} | ${fmt.PYG(u*r.pyg)}`);});
-  const sU=salNum(),dB=sU*r.brl-tB;
-  L.push("",`TOTAL: ${fmt.BRL(tB)} | ${fmt.USD(tU)}`,`SALÁRIO: ${fmt.BRL(sU*r.brl)} | ${fmt.USD(sU)}`,`DIFERENÇA: ${dB>=0?"+":"−"}${fmt.BRL(Math.abs(dB))}`);
+  const sUsd=toUSD(salNum(),salCur,r),dB=sUsd*r.brl-tB;
+  L.push("",`TOTAL: ${fmt.BRL(tB)} | ${fmt.USD(tU)}`,`SALÁRIO: ${fmt.BRL(sUsd*r.brl)} | ${fmt.USD(sUsd)}`,`DIFERENÇA: ${dB>=0?"+":"−"}${fmt.BRL(Math.abs(dB))}`);
   navigator.clipboard.writeText(L.join("\n")).then(()=>toast("Copiado ✓"),()=>toast("Falha ao copiar"));
 };
 
@@ -485,8 +501,8 @@ function fillShareCard(){
   const r=rate();let tU=0,tP=0,tB=0,xp="";
   rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tP+=u*r.pyg;tB+=u*r.brl;
     xp+=`<div class="sxp"><span class="nm">${(row.name||"—")}</span><span class="vl">${fmt.BRL(u*r.brl)}</span></div>`;});
-  const sU=salNum(),sB=sU*r.brl,sP=sU*r.pyg;
-  const TOT={USD:tU,PYG:tP,BRL:tB},SAL={USD:sU,PYG:sP,BRL:sB},d=SAL[sv.diff]-TOT[sv.diff];
+  const salUsd=toUSD(salNum(),salCur,r);
+  const TOT={USD:tU,PYG:tP,BRL:tB},SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl},d=SAL[sv.diff]-TOT[sv.diff];
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   $("#shareCard").innerHTML=`
     <p class="sct">Contas Fixas <b>Paraguai</b></p>
@@ -507,6 +523,20 @@ function fillAcctCard(items){
     <p class="sdate">Unimed &amp; Farmácia · ${meses||dt}</p>
     ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos.</p>'}
     <div class="stot first"><span class="lbl">Total (Guarani)</span><span class="vl">₲ ${Math.round(total).toLocaleString("es-PY")}</span></div>`;
+}
+function fillReportCard(){
+  const r=rate();
+  const list=getFilteredTop().slice().sort((a,b)=>isoDMY(b.date).localeCompare(isoDMY(a.date))||b.val-a.val);
+  const totG=list.reduce((s,x)=>s+x.val,0),tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
+  const meses=topSel?[...topSel].sort().map(monthLabel).join(", "):"";
+  const li=list.map(t=>`<div class="sxp"><span class="nm">${t.date} · ${t.desc}</span><span class="vl">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
+  $("#shareCard").innerHTML=`
+    <p class="sct">Relatório de despesas</p>
+    <p class="sdate">${meses||"Extrato"} · ${list.length} lançamentos</p>
+    ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos.</p>'}
+    <div class="stot first"><span class="lbl">Total</span><span class="vl">₲ ${Math.round(totG).toLocaleString("es-PY")}</span></div>
+    <div class="stot"><span class="lbl">Em Real</span><span class="vl">${fmt.BRL(tBrl)}</span></div>
+    <div class="stot"><span class="lbl">Em Dólar</span><span class="vl">${fmt.USD(tUsd)}</span></div>`;
 }
 async function imageFrom(fillFn){
   fillFn();
@@ -659,12 +689,10 @@ $("#fileInput").onchange=e=>{
 function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:"";}
 let topSel=null; // Set de "yyyy-mm" selecionados
 function getFilteredTop(){
-  const de=$("#fDe").value,ate=$("#fAte").value,q=norm($("#fSearch")?$("#fSearch").value:"");
+  const q=norm($("#fSearch")?$("#fSearch").value:"");
   return imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
     const mk=t.iso?t.iso.slice(0,7):"";
     if(topSel&&!topSel.has(mk))return false;
-    if(de&&!(t.iso&&t.iso>=de))return false;
-    if(ate&&!(t.iso&&t.iso<=ate))return false;
     if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
     return true;
   }).sort((a,b)=>b.val-a.val);
@@ -689,9 +717,7 @@ function renderTopList(){
 function openTop(pre){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
   $("#topTitle").textContent="Extrato";
-  const isos=imp.txns.map(t=>isoDMY(t.date)).filter(Boolean).sort();
-  if(isos.length){[$("#fDe"),$("#fAte")].forEach(el=>{el.min=isos[0];el.max=isos[isos.length-1];});}
-  $("#fDe").value="";$("#fAte").value="";if($("#fSearch"))$("#fSearch").value="";
+  if($("#fSearch"))$("#fSearch").value="";
   const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
   const preset=(pre&&pre.length)?pre.filter(k=>months.includes(k)):months;
   topSel=new Set(preset.length?preset:months);
@@ -712,16 +738,21 @@ $("#topList").onclick=e=>{
 $("#topBtn").onclick=()=>openTop();
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
-$("#fDe").oninput=renderTopList;$("#fAte").oninput=renderTopList;$("#fSearch").oninput=renderTopList;
-$("#fClear").onclick=()=>{$("#fDe").value="";$("#fAte").value="";$("#fSearch").value="";
+$("#fSearch").oninput=renderTopList;
+$("#fClear").onclick=()=>{$("#fSearch").value="";
   if(topSel){topSel=new Set([...$("#topMonths").querySelectorAll(".mchip")].map(b=>b.dataset.k));
     $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.classList.add("on"));}
   renderTopList();};
 $("#applyBtn").onclick=applyToCard;
+$("#reportBtn").onclick=()=>{
+  if(!imp||!getFilteredTop().length){toast("Nada para o relatório");return;}
+  shareImage(fillReportCard,"relatorio-despesas.png","Relatório de despesas");
+};
 
 /* ---- init ---- */
 load();
 fmtSal();
+markSalCur();
 markSv();
 renderRows();
 fetchRates();
