@@ -113,6 +113,18 @@
   .xp.flash{animation:flash 1.4s ease}
   @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(55,214,160,0)}25%{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}}
 
+  /* modal contabilidade (seleção de meses) */
+  #acctModal{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
+  #acctModal.hidden{display:none}
+  .acctcard{width:100%;max-width:380px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:18px}
+  .accthead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .acctmonths{display:flex;flex-wrap:wrap;gap:9px;padding:16px 0}
+  .acctmonths .empty2{color:var(--ink-faint);font-size:.85rem}
+  .mchip{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-weight:600;
+    font-size:.84rem;padding:9px 14px;border-radius:11px;cursor:pointer;transition:.12s}
+  .mchip.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
+
   /* tela de senha */
   #lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;
     background:radial-gradient(700px 400px at 50% 0%,rgba(55,214,160,.10),transparent 60%),var(--bg)}
@@ -225,17 +237,28 @@
   <button class="add" id="addRow">＋ Adicionar despesa</button>
   <div class="impbtns">
     <button class="ibtn" id="importBtn">📥 Importar fatura</button>
-    <button class="ibtn" id="topBtn">📊 Ver gastos (top)</button>
+    <button class="ibtn" id="topBtn">📊 Extrato</button>
   </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none">
 </main>
 
 <div class="actbar">
   <button class="btn" id="copyBtn">Copiar</button>
-  <button class="btn primary" id="shareBtn">📷 Imagem</button>
+  <button class="btn" id="shareBtn">📷 Resumo</button>
   <button class="btn" id="acctBtn">🧾 Contábil</button>
 </div>
 <div class="toast" id="toast"></div>
+
+<div id="acctModal" class="hidden">
+  <div class="acctcard">
+    <div class="accthead">
+      <div><div class="topttl">Contabilidade — Saúde</div><div class="topsub">Escolha os meses (Unimed &amp; Farmácia)</div></div>
+      <button class="topclose" id="acctClose">✕</button>
+    </div>
+    <div class="acctmonths" id="acctMonths"></div>
+    <button class="applybtn" id="acctGen">📷 Gerar resumo</button>
+  </div>
+</div>
 
 <div id="shareCard"></div>
 
@@ -256,16 +279,8 @@
 </div>
 
 <script>
-const DEFAULTS=[
-  {name:"Imposto (IRP)",amt:670000,cur:"PYG"},
-  {name:"Contabilidade",amt:250000,cur:"PYG"},
-  {name:"Seguro da moto",amt:150000,cur:"PYG"},
-  {name:"Empréstimo moto",amt:103,cur:"USD"},
-  {name:"Compra de facturas",amt:0,cur:"PYG"},
-  {name:"Cartão de crédito",amt:4530000,cur:"PYG"},
-];
 const KEY="contas-py-v1";
-let rows=structuredClone(DEFAULTS);
+let rows=[];
 let sv={tot:"BRL",sal:"BRL",diff:"BRL"};
 let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
 let liveRates=null; // {brl,pyg,date}
@@ -445,15 +460,16 @@ function fillShareCard(){
     <div class="stot"><span class="lbl">Salário</span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
     <div class="stot diff ${d<0?"neg":""}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"+ ":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>`;
 }
-function fillAcctCard(){
-  const items=(imp&&imp.txns?imp.txns:[]).filter(t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia");}).sort((a,b)=>b.val-a.val);
+function fillAcctCard(items){
+  items=(items||[]).slice().sort((a,b)=>b.val-a.val);
   const total=items.reduce((s,x)=>s+x.val,0);
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+  const meses=[...new Set(items.map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?monthLabel(m[3]+"-"+m[2]):"";}).filter(Boolean))].join(", ");
   const li=items.map(t=>`<div class="sxp"><span class="nm">${t.date} · ${t.desc}<br><span class="ref">Ref. ${t.ref||"—"}</span></span><span class="vl">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
   $("#shareCard").innerHTML=`
     <p class="sct">Contabilidade — Saúde</p>
-    <p class="sdate">Unimed &amp; Farmácia · ${imp&&imp.month?imp.month+" · ":""}${dt}</p>
-    ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos de Unimed/Farmácia.</p>'}
+    <p class="sdate">Unimed &amp; Farmácia · ${meses||dt}</p>
+    ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos.</p>'}
     <div class="stot first"><span class="lbl">Total (Guarani)</span><span class="vl">₲ ${Math.round(total).toLocaleString("es-PY")}</span></div>`;
 }
 async function imageFrom(fillFn){
@@ -477,15 +493,31 @@ async function shareImage(fillFn,fname,title){
   }catch(e){toast("Não foi possível gerar");}
 }
 $("#shareBtn").onclick=()=>shareImage(fillShareCard,"contas-paraguai.png","Contas Fixas Paraguai");
+const isUF=t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia");};
+let acctSel=null;
 $("#acctBtn").onclick=()=>{
   if(!imp||!imp.txns){toast("Importe uma fatura primeiro");return;}
-  const has=imp.txns.some(t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia");});
-  if(!has){toast("Nenhum lançamento Unimed/Farmácia");return;}
-  shareImage(fillAcctCard,"contabilidade.png","Contabilidade — Saúde");
+  if(!imp.txns.some(isUF)){toast("Nenhum lançamento Unimed/Farmácia");return;}
+  const months=[...new Set(imp.txns.filter(isUF).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?m[3]+"-"+m[2]:"";}).filter(Boolean))].sort();
+  acctSel=new Set(months);
+  $("#acctMonths").innerHTML=months.map(k=>`<button class="mchip on" data-k="${k}">${monthLabel(k)}</button>`).join("");
+  $("#acctMonths").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
+    if(acctSel.has(k)){acctSel.delete(k);b.classList.remove("on");}else{acctSel.add(k);b.classList.add("on");}});
+  $("#acctModal").classList.remove("hidden");
+};
+$("#acctClose").onclick=()=>$("#acctModal").classList.add("hidden");
+$("#acctModal").onclick=e=>{if(e.target.id==="acctModal")$("#acctModal").classList.add("hidden");};
+$("#acctGen").onclick=()=>{
+  if(!acctSel||!acctSel.size){toast("Escolha pelo menos um mês");return;}
+  const items=imp.txns.filter(t=>{if(!isUF(t))return false;const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m&&acctSel.has(m[3]+"-"+m[2]);});
+  if(!items.length){toast("Nada nos meses escolhidos");return;}
+  $("#acctModal").classList.add("hidden");
+  shareImage(()=>fillAcctCard(items),"contabilidade.png","Contabilidade — Saúde");
 };
 
 /* ---- importar fatura (extrato de cartão) ---- */
 const MESES=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const monthLabel=key=>{const [y,m]=String(key).split("-");const nm=MESES[(+m)-1]||"";return nm.replace(/^\w/,c=>c.toUpperCase())+"/"+y;};
 const norm=v=>String(v==null?"":v).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
 const pNum=v=>{if(typeof v==="number")return v;const s=String(v).replace(/[^\d-]/g,"");return s&&s!=="-"?parseInt(s,10):NaN;};
 
