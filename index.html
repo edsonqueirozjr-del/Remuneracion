@@ -67,20 +67,22 @@
   .cseg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.62rem;padding:5px 7px;cursor:pointer;transition:.12s}
   .cseg button.on{color:#06251b;background:var(--accent)}
 
-  .xp{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:11px}
-  .xp .head{display:flex;align-items:center;gap:8px;margin-bottom:11px}
-  .xp .name{flex:1;border:0;background:transparent;color:var(--ink);font-size:1.05rem;font-weight:600;outline:none;padding:4px 0;min-width:0}
-  .xp .del{flex:none;width:34px;height:34px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-faint);font-size:1.3rem;line-height:1;cursor:pointer}
+  .xp{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:9px}
+  .xp .head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .xp .name{flex:1;border:0;background:transparent;color:var(--ink);font-size:.95rem;font-weight:600;outline:none;padding:3px 0;min-width:0}
+  .xp .det{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:.82rem;line-height:1;cursor:pointer;padding:0}
+  .xp .det:active{border-color:var(--accent);color:var(--accent)}
+  .xp .del{flex:none;width:30px;height:30px;border:0;border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:1.15rem;line-height:1;cursor:pointer}
   .xp .del:active{background:rgba(255,107,107,.18);color:var(--danger)}
-  .entry{display:flex;gap:10px;align-items:stretch}
-  .amtbox{flex:1;display:flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:0 13px}
-  .amtbox input{width:100%;border:0;background:transparent;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:1.35rem;font-weight:500;outline:none;text-align:right;font-variant-numeric:tabular-nums;padding:13px 0}
+  .entry{display:flex;gap:8px;align-items:stretch}
+  .amtbox{flex:1;display:flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:0 11px}
+  .amtbox input{width:100%;border:0;background:transparent;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;font-weight:500;outline:none;text-align:right;font-variant-numeric:tabular-nums;padding:9px 0}
   .amtbox:focus-within{border-color:var(--accent)}
-  .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;overflow:hidden;flex:none}
-  .seg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.78rem;padding:0 13px;cursor:pointer;transition:.12s}
+  .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:none}
+  .seg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.72rem;padding:0 10px;cursor:pointer;transition:.12s}
   .seg button.on{color:#06251b;background:var(--accent)}
-  .chips{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
-  .chip{font-family:'IBM Plex Mono',monospace;font-size:.78rem;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:999px;padding:5px 11px;font-variant-numeric:tabular-nums}
+  .chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .chip{font-family:'IBM Plex Mono',monospace;font-size:.72rem;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:999px;padding:4px 9px;font-variant-numeric:tabular-nums}
   .chip.usd{color:var(--usd)} .chip.pyg{color:var(--pyg)} .chip.brl{color:var(--brl)}
   .chip .k{color:var(--ink-faint);font-size:.66em;margin-right:4px}
 
@@ -161,33 +163,39 @@
   .topcard{width:100%;max-width:540px;max-height:86vh;display:flex;flex-direction:column;
     background:var(--bg);border:1px solid var(--line);border-top-left-radius:22px;border-top-right-radius:22px;
     padding:18px 18px calc(env(safe-area-inset-bottom) + 18px)}
-  .tophead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .tophead{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
   .topttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem}
-  .topsub{color:var(--ink-dim);font-size:.8rem;margin-top:2px}
+  .topsub{color:var(--ink-dim);font-size:.78rem;margin-top:2px}
   .topclose{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer}
-  .toplist{overflow-y:auto;padding-top:8px}
-  .topmonths{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 2px}
-  .topfilter{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0 4px}
-  .topfilter label{display:flex;flex-direction:column;gap:4px;font-size:.66rem;color:var(--ink-faint);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-  .topfilter input[type=date]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.82rem;padding:9px;outline:none}
-  .topfilter input[type=date]:focus{border-color:var(--accent)}
-  .topfilter #fClear{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.78rem;font-weight:600;padding:10px;border-radius:10px;cursor:pointer}
+  .topscroll{flex:1;min-height:0;overflow-y:auto}
+  .toplist{padding-top:6px}
+  .topmonths{display:flex;gap:6px;overflow-x:auto;padding:10px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .topmonths::-webkit-scrollbar{display:none}
+  .topmonths .mchip{flex:none;font-size:.7rem;padding:5px 10px;white-space:nowrap}
+  .topfilter{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 0 8px}
+  .topfilter label{display:flex;flex-direction:column;gap:4px;font-size:.64rem;color:var(--ink-faint);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .topfilter input[type=date]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.8rem;padding:8px;outline:none}
+  .topfilter input[type=date]:focus,.topfilter input[type=search]:focus{border-color:var(--accent)}
+  .topfilter #fSearch{grid-column:1/-1;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px;outline:none}
+  .topfilter #fClear{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
   .topfilter #fClear:active{border-color:var(--accent);color:var(--accent)}
-  .ti{padding:11px 2px;border-bottom:1px solid var(--line-soft)}
-  .ti .top1{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .ti{padding:9px 2px;border-bottom:1px solid var(--line-soft)}
+  .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1}
-  .ti .rk{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.78rem;margin-right:8px}
-  .ti .nm{color:var(--ink);font-size:.92rem;font-weight:500}
-  .ti .dt{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.72rem;margin-left:4px}
-  .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.92rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .ti .conv2{font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--ink-dim);margin-top:3px}
+  .ti .rk{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.74rem;margin-right:7px}
+  .ti .nm{color:var(--ink);font-size:.9rem;font-weight:500}
+  .ti .dt{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.7rem;margin-left:4px}
+  .ti .vr{display:flex;align-items:center;gap:6px;flex:none}
+  .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.9rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ti .acts{display:flex;gap:4px}
+  .ti .acts button{width:26px;height:26px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-faint);border-radius:7px;font-size:.78rem;line-height:1;cursor:pointer;padding:0;position:relative}
+  .ti .acts .cod:hover,.ti .acts .cod:focus{border-color:var(--accent);color:var(--accent)}
+  .ti .acts .exc:active{border-color:var(--danger);color:var(--danger)}
+  .ti .acts .cod[data-tip]:hover::after,.ti .acts .cod.show::after{content:"Ref. " attr(data-tip);position:absolute;right:0;bottom:130%;background:#000;color:#fff;border:1px solid var(--line);padding:6px 9px;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;white-space:nowrap;z-index:5}
+  .ti .conv2{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);margin-top:3px}
   .ti .conv2 .pct{color:var(--ink-faint);margin-left:8px}
-  .ti .tbar{height:5px;border-radius:4px;background:var(--panel-2);margin-top:7px;overflow:hidden}
+  .ti .tbar{height:4px;border-radius:4px;background:var(--panel-2);margin-top:6px;overflow:hidden}
   .ti .tbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent))}
-  .ti .tiact{display:flex;gap:8px;margin-top:8px}
-  .ti .tiact button{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.7rem;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer}
-  .ti .tiact .exc:active{border-color:var(--danger);color:var(--danger)}
-  .ti .tiact .cod:active{border-color:var(--accent);color:var(--accent)}
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
   .applybtn{margin-top:12px;flex:none;border:0;background:var(--accent);color:#06251b;font-family:inherit;font-weight:700;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer}
   .applybtn:active{filter:brightness(1.08)}
@@ -277,13 +285,16 @@
       <div><div class="topttl" id="topTitle">Top gastos</div><div class="topsub" id="topSub"></div></div>
       <button class="topclose" id="topClose">✕</button>
     </div>
-    <div class="topmonths" id="topMonths"></div>
-    <div class="topfilter">
-      <label>De<input type="date" id="fDe"></label>
-      <label>Até<input type="date" id="fAte"></label>
-      <button id="fClear">↺ Limpar filtros</button>
+    <div class="topscroll">
+      <div class="topmonths" id="topMonths"></div>
+      <div class="topfilter">
+        <label>De<input type="date" id="fDe"></label>
+        <label>Até<input type="date" id="fAte"></label>
+        <input type="search" id="fSearch" placeholder="🔎 Buscar despesa…">
+        <button id="fClear">↺ Limpar filtros</button>
+      </div>
+      <div class="toplist" id="topList"></div>
     </div>
-    <div class="toplist" id="topList"></div>
     <button class="applybtn" id="applyBtn">✓ Aplicar como despesa</button>
   </div>
 </div>
@@ -376,6 +387,7 @@ function renderRows(){
     el.innerHTML=`
       <div class="head">
         <input class="name" value="${(row.name||"").replace(/"/g,'&quot;')}" data-i="${i}" data-k="name" placeholder="Nome da despesa">
+        ${(norm(row.name).includes("cartao")||norm(row.name).includes("credito"))?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato">ⓘ</button>`:""}
         <button class="del" data-del="${i}">×</button>
       </div>
       <div class="entry">
@@ -411,6 +423,19 @@ function bind(){
     calc();
   });
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=e=>{rows.splice(+e.currentTarget.dataset.del,1);renderRows();});
+  document.querySelectorAll("[data-det2]").forEach(b=>b.onclick=e=>{
+    const i=+e.currentTarget.dataset.det2;openTopForRow(rows[i].name);});
+}
+function labelToKey(lbl){
+  const m=String(lbl).trim().match(/^(.+)\/(\d{4})$/);if(!m)return"";
+  const idx=MESES.findIndex(x=>x.replace(/^\w/,c=>c.toUpperCase())===m[1].trim());
+  return idx>=0?m[2]+"-"+String(idx+1).padStart(2,"0"):"";
+}
+function openTopForRow(name){
+  if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
+  const after=String(name).split("·")[1]||"";
+  const keys=after.split(",").map(s=>labelToKey(s.trim())).filter(Boolean);
+  openTop(keys);
 }
 function calc(){
   const r=rate();let tU=0,tP=0,tB=0;
@@ -634,12 +659,13 @@ $("#fileInput").onchange=e=>{
 function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:"";}
 let topSel=null; // Set de "yyyy-mm" selecionados
 function getFilteredTop(){
-  const de=$("#fDe").value,ate=$("#fAte").value;
+  const de=$("#fDe").value,ate=$("#fAte").value,q=norm($("#fSearch")?$("#fSearch").value:"");
   return imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
     const mk=t.iso?t.iso.slice(0,7):"";
     if(topSel&&!topSel.has(mk))return false;
     if(de&&!(t.iso&&t.iso>=de))return false;
     if(ate&&!(t.iso&&t.iso<=ate))return false;
+    if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
     return true;
   }).sort((a,b)=>b.val-a.val);
 }
@@ -654,20 +680,22 @@ function renderTopList(){
     const key=`${x.date}|${x.ref}|${x.val}|${x.desc}`;
     return `<div class="ti"><div class="top1">
         <span class="nmw"><span class="rk">${String(n+1).padStart(2,"0")}</span><span class="nm">${x.desc}</span> <span class="dt">${dm}</span></span>
-        <span class="vl">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></div>
+        <span class="vr"><span class="vl">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
+          <span class="acts"><button class="cod" data-tip="${x.ref||"—"}" title="Ref. ${x.ref||"—"}">ⓘ</button><button class="exc" data-key="${key}" title="Excluir">✕</button></span></span></div>
       <div class="conv2">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}<span class="pct">${pct.toFixed(1)}%</span></div>
-      <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div>
-      <div class="tiact"><button class="cod" data-ref="${x.ref||""}">🔖 código</button><button class="exc" data-key="${key}">🗑 excluir</button></div></div>`;
+      <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div></div>`;
   }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
-function openTop(){
+function openTop(pre){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
   $("#topTitle").textContent="Extrato";
   const isos=imp.txns.map(t=>isoDMY(t.date)).filter(Boolean).sort();
   if(isos.length){[$("#fDe"),$("#fAte")].forEach(el=>{el.min=isos[0];el.max=isos[isos.length-1];});}
+  $("#fDe").value="";$("#fAte").value="";if($("#fSearch"))$("#fSearch").value="";
   const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
-  topSel=new Set(months);
-  $("#topMonths").innerHTML=months.map(k=>`<button class="mchip on" data-k="${k}">${monthLabel(k)}</button>`).join("");
+  const preset=(pre&&pre.length)?pre.filter(k=>months.includes(k)):months;
+  topSel=new Set(preset.length?preset:months);
+  $("#topMonths").innerHTML=months.map(k=>`<button class="mchip ${topSel.has(k)?"on":""}" data-k="${k}">${monthLabel(k)}</button>`).join("");
   $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
     if(topSel.has(k)){topSel.delete(k);b.classList.remove("on");}else{topSel.add(k);b.classList.add("on");}renderTopList();});
   renderTopList();
@@ -675,16 +703,17 @@ function openTop(){
 }
 $("#topList").onclick=e=>{
   const cod=e.target.closest(".cod");
-  if(cod){const ref=cod.dataset.ref||"—";toast("Ref. "+ref);try{navigator.clipboard&&navigator.clipboard.writeText(ref);}catch(_){}return;}
+  if(cod){document.querySelectorAll(".cod.show").forEach(b=>{if(b!==cod)b.classList.remove("show");});
+    cod.classList.toggle("show");return;}
   const exc=e.target.closest(".exc");
   if(exc){const k=exc.dataset.key;imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
     imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();renderTopList();toast("Lançamento removido");}
 };
-$("#topBtn").onclick=openTop;
+$("#topBtn").onclick=()=>openTop();
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
-$("#fDe").oninput=renderTopList;$("#fAte").oninput=renderTopList;
-$("#fClear").onclick=()=>{$("#fDe").value="";$("#fAte").value="";
+$("#fDe").oninput=renderTopList;$("#fAte").oninput=renderTopList;$("#fSearch").oninput=renderTopList;
+$("#fClear").onclick=()=>{$("#fDe").value="";$("#fAte").value="";$("#fSearch").value="";
   if(topSel){topSel=new Set([...$("#topMonths").querySelectorAll(".mchip")].map(b=>b.dataset.k));
     $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.classList.add("on"));}
   renderTopList();};
