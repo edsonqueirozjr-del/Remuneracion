@@ -166,6 +166,7 @@
   .topsub{color:var(--ink-dim);font-size:.8rem;margin-top:2px}
   .topclose{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer}
   .toplist{overflow-y:auto;padding-top:8px}
+  .topmonths{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 2px}
   .topfilter{display:flex;align-items:center;gap:8px;padding:12px 0 4px;flex-wrap:wrap}
   .topfilter label{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--ink-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
   .topfilter input[type=date]{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.82rem;padding:7px 9px;outline:none}
@@ -236,10 +237,10 @@
   <div id="rows"></div>
   <button class="add" id="addRow">＋ Adicionar despesa</button>
   <div class="impbtns">
-    <button class="ibtn" id="importBtn">📥 Importar fatura</button>
+    <button class="ibtn" id="importBtn">📥 Importar extrato</button>
     <button class="ibtn" id="topBtn">📊 Extrato</button>
   </div>
-  <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none">
+  <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 </main>
 
 <div class="actbar">
@@ -268,13 +269,14 @@
       <div><div class="topttl" id="topTitle">Top gastos</div><div class="topsub" id="topSub"></div></div>
       <button class="topclose" id="topClose">✕</button>
     </div>
+    <div class="topmonths" id="topMonths"></div>
     <div class="topfilter">
       <label>De<input type="date" id="fDe"></label>
       <label>Até<input type="date" id="fAte"></label>
       <button id="fClear">limpar</button>
     </div>
     <div class="toplist" id="topList"></div>
-    <button class="applybtn" id="applyBtn">✓ Aplicar ao Cartão de crédito</button>
+    <button class="applybtn" id="applyBtn">✓ Aplicar como despesa</button>
   </div>
 </div>
 
@@ -559,16 +561,16 @@ function applyImport(res){
   openTop();
 }
 function applyToCard(){
-  if(!imp){toast("Importe uma fatura primeiro");return;}
-  const val=imp.total!=null?imp.total:Math.round(imp.totalGastos||0);
-  if(!val){toast("Sem valor para aplicar");return;}
+  if(!imp){toast("Importe um extrato primeiro");return;}
+  const list=getFilteredTop();
+  const val=Math.round(list.reduce((s,x)=>s+x.val,0));
+  if(!val){toast("Nada filtrado para aplicar");return;}
   let i=rows.findIndex(r=>{const n=norm(r.name);return n.includes("cartao")||n.includes("credito");});
   if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
   else{rows.push({name:"Cartão de crédito",amt:val,cur:"PYG"});i=rows.length-1;}
   renderRows();
   $("#topModal").classList.add("hidden");
-  toast("✓ Aplicado ao Cartão de crédito");
-  // destacar a linha aplicada
+  toast("✓ Aplicado como despesa");
   const card=document.querySelectorAll(".xp")[i];
   if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.classList.add("flash");setTimeout(()=>card.classList.remove("flash"),1400);}
 }
@@ -587,33 +589,54 @@ $("#importBtn").onclick=()=>{
   $("#fileInput").click();
 };
 $("#fileInput").onchange=e=>{
-  const f=e.target.files[0];if(!f)return;
-  const rd=new FileReader();
-  rd.onload=ev=>{
-    try{
-      const wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array"});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const arr=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:""});
-      const res=parseFatura(arr);
-      const fn=monthFromName(f.name);if(fn)res.month=fn;
-      applyImport(res);
-    }catch(err){toast("Erro ao ler o arquivo");}
-    $("#fileInput").value="";
-  };
-  rd.readAsArrayBuffer(f);
+  const files=[...e.target.files];if(!files.length)return;
+  toast(`Lendo ${files.length} arquivo(s)…`);
+  let done=0,collected=[],okTotal=0;
+  files.forEach(f=>{
+    const rd=new FileReader();
+    rd.onload=ev=>{
+      try{
+        const wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array"});
+        const arr=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:false,defval:""});
+        const res=parseFatura(arr);
+        collected.push(...res.txns);okTotal++;
+      }catch(err){}
+      if(++done===files.length){
+        // acumula com o que já havia + dedup
+        const base=(imp&&imp.txns)?imp.txns.slice():[];
+        const all=base.concat(collected),seen=new Set();
+        const txns=all.filter(t=>{const k=`${t.date}|${t.ref}|${t.val}|${t.desc}`;if(seen.has(k))return false;seen.add(k);return true;}).sort((a,b)=>b.val-a.val);
+        if(!txns.length){toast("Não reconheci o(s) extrato(s)");$("#fileInput").value="";return;}
+        imp={month:"",count:txns.length,txns,totalGastos:txns.reduce((s,x)=>s+x.val,0)};
+        save();
+        toast(`Extrato importado · ${txns.length} lançamentos`);
+        openTop();
+      }
+      $("#fileInput").value="";
+    };
+    rd.readAsArrayBuffer(f);
+  });
 };
 
 /* ---- visão top de gastos ---- */
 function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:"";}
+let topSel=null; // Set de "yyyy-mm" selecionados
+function getFilteredTop(){
+  const de=$("#fDe").value,ate=$("#fAte").value;
+  return imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
+    const mk=t.iso?t.iso.slice(0,7):"";
+    if(topSel&&!topSel.has(mk))return false;
+    if(de&&!(t.iso&&t.iso>=de))return false;
+    if(ate&&!(t.iso&&t.iso<=ate))return false;
+    return true;
+  }).sort((a,b)=>b.val-a.val);
+}
 function renderTopList(){
-  const r=rate(),de=$("#fDe").value,ate=$("#fAte").value;
-  let list=imp.txns.map(t=>({...t,iso:isoDMY(t.date)}));
-  if(de)list=list.filter(t=>t.iso&&t.iso>=de);
-  if(ate)list=list.filter(t=>t.iso&&t.iso<=ate);
-  list.sort((a,b)=>b.val-a.val);
+  const r=rate(),list=getFilteredTop();
   const totG=list.reduce((s,x)=>s+x.val,0),max=list.length?list[0].val:1;
   const tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
   $("#topSub").innerHTML=`${list.length} lançamentos<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  $("#applyBtn").textContent=totG?`✓ Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")} como despesa`:"✓ Aplicar como despesa";
   $("#topList").innerHTML=list.length?list.map((x,n)=>{
     const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,pct=totG?x.val/totG*100:0,dm=x.date?x.date.slice(0,5):"";
     return `<div class="ti"><div class="top1">
@@ -621,14 +644,18 @@ function renderTopList(){
         <span class="vl">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></div>
       <div class="conv2">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · US$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}<span class="pct">${pct.toFixed(1)}%</span></div>
       <div class="tbar"><i style="width:${(x.val/max*100).toFixed(1)}%"></i></div></div>`;
-  }).join(""):'<p class="empty">Nada nesse período.</p>';
+  }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
 function openTop(){
-  if(!imp||!imp.txns||!imp.txns.length){toast("Importe uma fatura primeiro");return;}
-  $("#topTitle").textContent="Top gastos"+(imp.month?" · "+imp.month:"");
+  if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
+  $("#topTitle").textContent="Extrato";
   const isos=imp.txns.map(t=>isoDMY(t.date)).filter(Boolean).sort();
   if(isos.length){[$("#fDe"),$("#fAte")].forEach(el=>{el.min=isos[0];el.max=isos[isos.length-1];});}
-  $("#applyBtn").textContent=imp.total!=null?`✓ Aplicar ₲ ${imp.total.toLocaleString("es-PY")} ao Cartão`:"✓ Aplicar ao Cartão";
+  const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
+  topSel=new Set(months);
+  $("#topMonths").innerHTML=months.map(k=>`<button class="mchip on" data-k="${k}">${monthLabel(k)}</button>`).join("");
+  $("#topMonths").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
+    if(topSel.has(k)){topSel.delete(k);b.classList.remove("on");}else{topSel.add(k);b.classList.add("on");}renderTopList();});
   renderTopList();
   $("#topModal").classList.remove("hidden");
 }
