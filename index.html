@@ -229,9 +229,14 @@
   .topheadbtns{display:flex;gap:6px;flex:none}
   .gexp{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:7px;cursor:pointer;margin-left:6px}
   .gexp.open{border-color:var(--accent);color:var(--accent)}
-  .gdates{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .gdates{display:flex;flex-direction:column;gap:5px;margin-top:8px;padding-left:2px}
   .gdates[hidden]{display:none}
-  .gdates .gd{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-dim);background:var(--panel-2);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px}
+  .gdates .gd{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;font-family:'IBM Plex Mono',monospace;font-size:.7rem;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:7px;padding:5px 8px;scrollbar-width:none}
+  .gdates .gd::-webkit-scrollbar{display:none}
+  .gdates .gd-dt{color:var(--ink-dim);flex:none}
+  .gdates .gd span{white-space:nowrap}
+  .gdates .gd-edt{flex:none;margin-left:auto;width:22px;height:22px;border:1px solid var(--line);background:var(--panel);color:var(--ink-faint);border-radius:6px;font-size:.7rem;cursor:pointer;padding:0}
+  .gdates .gd-edt:active{border-color:var(--usd);color:var(--usd)}
   .modsel{opacity:.5;transition:opacity .15s}
   .modsel.on{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
   .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
@@ -244,7 +249,7 @@
   .topbtns .applybtn{flex:1;margin-top:0;font-size:.82rem;padding:11px}
   .applybtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
   .applybtn.alt:active{border-color:var(--accent);color:var(--accent)}
-  .topcard.info .mtabs,.topcard.info .topfilter,.topcard.info #applyBtn{display:none}
+  .topcard.info #applyBtn{display:none}
   .gct{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--ink-faint);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:6px}
   #fGroup.on{border-color:var(--accent);color:var(--accent);background:rgba(55,214,160,.12)}
   .ti{padding:9px 2px;border-bottom:1px solid var(--line-soft)}
@@ -364,7 +369,7 @@
   <div class="topcard">
     <div class="tophead">
       <div><div class="topttl" id="topTitle">Top gastos</div><div class="topsub" id="topSub"></div></div>
-      <span class="topheadbtns"><button class="topclose" id="topImport" title="Importar mais">📥</button><button class="topclose" id="topClose">✕</button></span>
+      <span class="topheadbtns"><button class="topclose" id="topImport" title="Importar mais">📥</button><button class="topclose" id="topClear" title="Excluir extrato importado">🗑</button><button class="topclose" id="topClose">✕</button></span>
     </div>
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
@@ -913,7 +918,8 @@ function renderTopList(){
     $("#topList").innerHTML=g.length?g.map((x,gi)=>{
       const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl;
       const datas=x.items.slice().sort((a,b)=>isoDMY(a.date).localeCompare(isoDMY(b.date)))
-        .map(t=>`<span class="gd">${t.date} · ₲ ${Math.round(t.val).toLocaleString("es-PY")}</span>`).join("");
+        .map(t=>{const u=r.pyg?t.val/r.pyg:0,b2=u*r.brl,k=`${t.date}|${t.ref}|${t.val}|${t.desc}`;
+          return `<div class="gd"><span class="gd-dt">${t.date}</span><span style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span><span style="color:var(--brl)">R$ ${b2.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><span style="color:var(--usd)">U$ ${u.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><button class="edt gd-edt" data-key="${k.replace(/"/g,'&quot;')}" title="Editar valor em ₲">✎</button></div>`;}).join("");
       return `<div class="ti"><div class="top1">
           <span class="nmw"><span class="nm">${x.desc}</span> <button class="gexp" data-g="${gi}" title="Ver datas">${x.count}× ▾</button></span>
           <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></span></div>
@@ -959,31 +965,39 @@ function openTop(pre,info){
   topSel=(pre&&months.includes(pre))?new Set([pre]):new Set(months); // padrão: Todos
   $(".topcard").classList.toggle("info",!!info);
   $("#topImport").style.display=info?"none":"";
+  $("#topClear").style.display=info?"none":"";
   if(info)topSort="date";
   $("#topTitle").textContent=info?("Detalhes · "+(pre?monthLabel(pre):"Extrato")):"Extrato";
   mtabsRefresh();
   renderTopList();
   $("#topModal").classList.remove("hidden");
 }
+function editTxn(k){
+  const t=imp.txns.find(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`===k);
+  if(!t)return;const novo=prompt("Novo valor em Guarani (₲):",Math.round(t.val));
+  if(novo===null)return;const v=parseInt(String(novo).replace(/\D/g,""),10);
+  if(!(v>0)){toast("Valor inválido");return;}
+  t.val=v;imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Valor atualizado");
+}
 $("#topList").onclick=e=>{
   const gexp=e.target.closest(".gexp");
   if(gexp){const p=$("#gdates-"+gexp.dataset.g);if(p){p.hidden=!p.hidden;gexp.classList.toggle("open",!p.hidden);}return;}
+  const edt=e.target.closest(".edt");
+  if(edt){editTxn(edt.dataset.key);return;}
   if(grouped)return;
   const cod=e.target.closest(".cod");
   if(cod){document.querySelectorAll(".cod.show").forEach(b=>{if(b!==cod)b.classList.remove("show");});
     cod.classList.toggle("show");return;}
-  const edt=e.target.closest(".edt");
-  if(edt){const k=edt.dataset.key;const t=imp.txns.find(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`===k);
-    if(!t)return;const novo=prompt("Novo valor em Guarani (₲):",Math.round(t.val));
-    if(novo===null)return;const v=parseInt(String(novo).replace(/\D/g,""),10);
-    if(!(v>0)){toast("Valor inválido");return;}
-    t.val=v;imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Valor atualizado");return;}
   const exc=e.target.closest(".exc");
   if(exc){if(!confirm("Tem certeza que deseja excluir este lançamento?"))return;
     const k=exc.dataset.key;imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
     imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Lançamento removido");}
 };
 $("#topImport").onclick=doImport;
+$("#topClear").onclick=()=>{
+  if(!confirm("Excluir TODO o extrato importado? Os lançamentos serão removidos (as despesas já aplicadas continuam)."))return;
+  imp=null;save();renderRows();$("#topModal").classList.add("hidden");toast("Extrato importado excluído");
+};
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 $("#fSearch").oninput=renderTopList;
