@@ -103,21 +103,32 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* cartão para gerar imagem (fica fora da tela) */
-  #shareCard{position:fixed;left:-9999px;top:0;width:420px;background:#0d1117;color:var(--ink);
-    padding:28px 30px;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line)}
-  #shareCard .sct{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;margin:0}
+  #shareCard{position:fixed;left:-9999px;top:0;width:440px;background:#0d1117;color:var(--ink);
+    padding:0;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  #shareCard .shead{display:flex;align-items:center;gap:14px;padding:24px 26px 20px;background:linear-gradient(135deg,#141c27,#0d1117);border-bottom:2px solid var(--accent)}
+  #shareCard .sbadge{flex:none;width:46px;height:46px;border-radius:13px;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+  #shareCard .sct{font-family:'Fraunces',serif;font-weight:900;font-size:1.4rem;margin:0;line-height:1.1}
   #shareCard .sct b{color:var(--pyg)}
-  #shareCard .sdate{color:var(--ink-faint);font-size:.8rem;margin:2px 0 18px}
-  #shareCard .sxp{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:.9rem}
-  #shareCard .sxp .nm{color:var(--ink-dim)}
-  #shareCard .sxp .vl{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
-  #shareCard .stot{display:flex;justify-content:space-between;padding:9px 0;font-size:1rem}
-  #shareCard .stot.first{margin-top:14px;border-top:2px solid var(--line)}
-  #shareCard .stot .lbl{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:.78rem;font-weight:700}
-  #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums}
+  #shareCard .sdate{color:var(--ink-faint);font-size:.78rem;margin:3px 0 0}
+  #shareCard .sbody{padding:14px 26px 4px}
+  #shareCard .srow{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:9px 12px;border-radius:9px}
+  #shareCard .srow:nth-child(even){background:rgba(255,255,255,.035)}
+  #shareCard .snm{min-width:0;display:flex;flex-direction:column;gap:2px}
+  #shareCard .sdesc{color:var(--ink);font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #shareCard .sdt{color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace}
+  #shareCard .sref{color:var(--ink-faint);font-size:.68rem;font-family:'IBM Plex Mono',monospace}
+  #shareCard .vmain{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:700;font-size:.96rem;white-space:nowrap}
+  #shareCard .vsub{display:block;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-faint);white-space:nowrap;margin-top:1px}
+  #shareCard .stotbox{margin:14px 26px 0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:6px 16px}
+  #shareCard .stot{display:flex;justify-content:space-between;align-items:center;padding:11px 0}
+  #shareCard .stot+.stot{border-top:1px solid var(--line-soft)}
+  #shareCard .stot .lbl{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;font-weight:700}
+  #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:700;font-variant-numeric:tabular-nums;font-size:1.05rem}
+  #shareCard .stot.big .vl{font-size:1.3rem}
   #shareCard .stot.diff .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
-  #shareCard .sxp .ref{color:var(--ink-faint);font-size:.74em;font-family:'IBM Plex Mono',monospace}
+  #shareCard .sfoot{padding:16px 26px 20px;color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace;line-height:1.5}
+  #shareCard .sempty{padding:18px 26px;color:var(--ink-faint)}
   .xp.flash{animation:flash 1.4s ease}
   @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(55,214,160,0)}25%{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}}
 
@@ -580,46 +591,59 @@ $("#copyBtn").onclick=()=>{
 };
 
 /* ---- imagem para WhatsApp ---- */
+function shareHead(icon,title,sub){
+  return `<div class="shead"><div class="sbadge">${icon}</div><div><p class="sct">${title}</p><p class="sdate">${sub}</p></div></div>`;
+}
+function shareFoot(r){
+  const dt=new Date().toLocaleDateString("pt-BR");
+  return `<div class="sfoot">Gerado em ${dt} · Cotação usada: R$ ${(r.brl||0).toLocaleString("pt-BR",{minimumFractionDigits:2})} · ₲ ${Math.round(r.pyg||0).toLocaleString("es-PY")}</div>`;
+}
 function fillShareCard(){
   const r=rate();let tU=0,tP=0,tB=0,xp="";
   rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tP+=u*r.pyg;tB+=u*r.brl;
-    xp+=`<div class="sxp"><span class="nm">${(row.name||"—")}</span><span class="vl">${fmt.BRL(u*r.brl)}</span></div>`;});
+    xp+=`<div class="srow"><div class="snm"><span class="sdesc">${(row.name||"—")}</span></div><span class="vmain" style="color:var(--brl)">${fmt.BRL(u*r.brl)}</span></div>`;});
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB},SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl},d=SAL[sv.diff]-TOT[sv.diff];
+  const ccol={BRL:"var(--brl)",USD:"var(--usd)",PYG:"var(--pyg)"};
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
-  $("#shareCard").innerHTML=`
-    <p class="sct">Contas Fixas <b>Paraguai</b></p>
-    <p class="sdate">${dt}</p>
-    ${xp}
-    <div class="stot first"><span class="lbl">Total despesas</span><span class="vl">${fmt[sv.tot](TOT[sv.tot])}</span></div>
-    <div class="stot"><span class="lbl">Salário</span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
-    <div class="stot diff ${d<0?"neg":""}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"+ ":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>`;
+  $("#shareCard").innerHTML=
+    shareHead("💸","Contas Fixas <b>Paraguai</b>",dt)+
+    `<div class="sbody">${xp||'<p class="sempty">Sem despesas.</p>'}</div>`+
+    `<div class="stotbox">
+       <div class="stot"><span class="lbl">Total despesas</span><span class="vl" style="color:${ccol[sv.tot]}">${fmt[sv.tot](TOT[sv.tot])}</span></div>
+       <div class="stot"><span class="lbl">Salário</span><span class="vl" style="color:${ccol[sv.sal]}">${fmt[sv.sal](SAL[sv.sal])}</span></div>
+       <div class="stot diff big ${d<0?"neg":""}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"+ ":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>
+     </div>`+
+    shareFoot(r);
 }
 function fillAcctCard(items){
+  const r=rate();
   items=(items||[]).slice().sort((a,b)=>b.val-a.val);
   const total=items.reduce((s,x)=>s+x.val,0);
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const meses=[...new Set(items.map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?monthLabel(m[3]+"-"+m[2]):"";}).filter(Boolean))].join(", ");
-  const li=items.map(t=>`<div class="sxp"><span class="nm">${t.date} · ${t.desc}<br><span class="ref">Ref. ${t.ref||"—"}</span></span><span class="vl">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
-  $("#shareCard").innerHTML=`
-    <p class="sct">Contabilidade — Saúde</p>
-    <p class="sdate">Unimed &amp; Farmácia · ${meses||dt}</p>
-    ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos.</p>'}
-    <div class="stot first"><span class="lbl">Total (Guarani)</span><span class="vl">₲ ${Math.round(total).toLocaleString("es-PY")}</span></div>`;
+  const li=items.map(t=>`<div class="srow"><div class="snm"><span class="sdesc">${t.desc}</span><span class="sdt">${t.date} · Ref. ${t.ref||"—"}</span></div><span class="vmain" style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
+  $("#shareCard").innerHTML=
+    shareHead("🧾","Contabilidade — Saúde","Unimed &amp; Farmácia · "+(meses||dt))+
+    `<div class="sbody">${li||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
+    `<div class="stotbox"><div class="stot big"><span class="lbl">Total (Guarani)</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(total).toLocaleString("es-PY")}</span></div></div>`+
+    shareFoot(r);
 }
 function fillReportCard(){
   const r=rate();
   const list=getFilteredTop().slice().sort((a,b)=>isoDMY(b.date).localeCompare(isoDMY(a.date))||b.val-a.val);
   const totG=list.reduce((s,x)=>s+x.val,0),tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
   const meses=topSel?[...topSel].sort().map(monthLabel).join(", "):"";
-  const li=list.map(t=>`<div class="sxp"><span class="nm">${t.date} · ${t.desc}</span><span class="vl">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
-  $("#shareCard").innerHTML=`
-    <p class="sct">Relatório de despesas</p>
-    <p class="sdate">${meses||"Extrato"} · ${list.length} lançamentos</p>
-    ${li||'<p class="ref" style="padding:10px 0">Sem lançamentos.</p>'}
-    <div class="stot first"><span class="lbl">Total</span><span class="vl">₲ ${Math.round(totG).toLocaleString("es-PY")}</span></div>
-    <div class="stot"><span class="lbl">Em Real</span><span class="vl">${fmt.BRL(tBrl)}</span></div>
-    <div class="stot"><span class="lbl">Em Dólar</span><span class="vl">${fmt.USD(tUsd)}</span></div>`;
+  const li=list.map(t=>`<div class="srow"><div class="snm"><span class="sdesc">${t.desc}</span><span class="sdt">${t.date}</span></div><span class="vmain" style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
+  $("#shareCard").innerHTML=
+    shareHead("📄","Relatório de despesas",(meses||"Extrato")+" · "+list.length+" lançamentos")+
+    `<div class="sbody">${li||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
+    `<div class="stotbox">
+       <div class="stot big"><span class="lbl">Total</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(totG).toLocaleString("es-PY")}</span></div>
+       <div class="stot"><span class="lbl">Em Real</span><span class="vl" style="color:var(--brl)">${fmt.BRL(tBrl)}</span></div>
+       <div class="stot"><span class="lbl">Em Dólar</span><span class="vl" style="color:var(--usd)">${fmt.USD(tUsd)}</span></div>
+     </div>`+
+    shareFoot(r);
 }
 async function imageFrom(fillFn){
   fillFn();
