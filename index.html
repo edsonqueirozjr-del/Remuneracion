@@ -117,14 +117,13 @@
   #shareCard .sdesc{color:var(--ink);font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #shareCard .sdt{color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace}
   #shareCard .sref{color:var(--ink-faint);font-size:.68rem;font-family:'IBM Plex Mono',monospace}
-  #shareCard .vmain{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:700;font-size:.96rem;white-space:nowrap}
+  #shareCard .vmain{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem;white-space:nowrap}
   #shareCard .vsub{display:block;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-faint);white-space:nowrap;margin-top:1px}
   #shareCard .stotbox{margin:14px 26px 0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:6px 16px}
   #shareCard .stot{display:flex;justify-content:space-between;align-items:center;padding:11px 0}
   #shareCard .stot+.stot{border-top:1px solid var(--line-soft)}
   #shareCard .stot .lbl{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;font-weight:700}
-  #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:700;font-variant-numeric:tabular-nums;font-size:1.05rem}
-  #shareCard .stot.big .vl{font-size:1.3rem}
+  #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:700;font-variant-numeric:tabular-nums;font-size:.92rem}
   #shareCard .stot.diff .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
   #shareCard .sfoot{padding:16px 26px 20px;color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace;line-height:1.5}
@@ -136,10 +135,22 @@
   #acctModal{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;padding:24px;
     background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
   #acctModal.hidden{display:none}
-  .acctcard{width:100%;max-width:380px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:18px}
+  .acctcard{width:100%;max-width:380px;max-height:88vh;overflow-y:auto;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:18px}
   .accthead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
   .acctmonths{display:flex;flex-wrap:wrap;gap:9px;padding:16px 0}
   .acctmonths .empty2{color:var(--ink-faint);font-size:.85rem}
+  .acctadd{border-top:1px solid var(--line);padding-top:14px;margin-bottom:14px}
+  .acctadd #acctSearch{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:inherit;font-size:.86rem;padding:11px 12px;outline:none}
+  .acctadd #acctSearch:focus{border-color:var(--accent)}
+  .acctresults{max-height:210px;overflow-y:auto;margin-top:8px;display:flex;flex-direction:column;gap:6px}
+  .ares{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer}
+  .ares.on{border-color:var(--accent);background:rgba(55,214,160,.1)}
+  .ares-nm{min-width:0;display:flex;flex-direction:column;gap:2px}
+  .ares-nm>span:first-child{font-size:.84rem;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ares-dt{font-size:.7rem;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace}
+  .ares-btn{flex:none;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-weight:700}
+  .ares.on .ares-btn{background:var(--accent);color:#06251b;border-color:var(--accent)}
+  .acctextra{color:var(--accent);font-size:.76rem;font-weight:600;margin-top:8px;min-height:1em}
   .mchip{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-weight:600;
     font-size:.84rem;padding:9px 14px;border-radius:11px;cursor:pointer;transition:.12s}
   .mchip.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
@@ -196,18 +207,11 @@
   .topclose{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer}
   .topscroll{flex:1;min-height:0;overflow-y:auto}
   .toplist{padding-top:6px}
-  .monthdd{position:relative;padding:10px 0 4px}
-  .mdd-bar{width:100%;display:flex;align-items:center;gap:6px;background:var(--panel-2);border:1px solid var(--line);
-    border-radius:10px;color:var(--ink);font-family:inherit;font-size:.84rem;font-weight:600;padding:11px 13px;cursor:pointer;text-align:left}
-  .mdd-bar #mddLabel{flex:1;color:var(--accent);font-weight:700}
-  .mdd-arrow{flex:none;color:var(--ink-faint)}
-  .mdd-panel{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px;max-height:240px;overflow-y:auto}
-  .mdd-actions{display:flex;gap:8px;margin-bottom:6px}
-  .mdd-actions button{flex:1;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);font-family:inherit;font-size:.74rem;font-weight:600;padding:7px;border-radius:8px;cursor:pointer}
-  .mdd-actions button:active{border-color:var(--accent);color:var(--accent)}
-  .mdd-item{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:8px;cursor:pointer;font-size:.86rem}
-  .mdd-item:active{background:var(--panel)}
-  .mdd-item input{width:17px;height:17px;accent-color:var(--accent);flex:none}
+  .mtabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .mtabs::-webkit-scrollbar{display:none}
+  .mtab{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
+    font-size:.78rem;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;cursor:pointer}
+  .mtab.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
   .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
   .topfilter input[type=search]:focus{border-color:var(--accent)}
   .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px;outline:none}
@@ -218,7 +222,9 @@
   .topbtns .applybtn{flex:1;margin-top:0;font-size:.82rem;padding:11px}
   .applybtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
   .applybtn.alt:active{border-color:var(--accent);color:var(--accent)}
-  .topcard.info .monthdd,.topcard.info .topfilter,.topcard.info #applyBtn{display:none}
+  .topcard.info .mtabs,.topcard.info .topfilter,.topcard.info #applyBtn{display:none}
+  .gct{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--ink-faint);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:6px}
+  #fGroup.on{border-color:var(--accent);color:var(--accent);background:rgba(55,214,160,.12)}
   .ti{padding:9px 2px;border-bottom:1px solid var(--line-soft)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1}
@@ -316,10 +322,15 @@
 <div id="acctModal" class="hidden">
   <div class="acctcard">
     <div class="accthead">
-      <div><div class="topttl">Contabilidade — Saúde</div><div class="topsub">Escolha os meses (Unimed &amp; Farmácia)</div></div>
+      <div><div class="topttl">Contabilidade — Saúde</div><div class="topsub">Escolha os meses e inclua despesas extras se precisar</div></div>
       <button class="topclose" id="acctClose">✕</button>
     </div>
     <div class="acctmonths" id="acctMonths"></div>
+    <div class="acctadd">
+      <input type="search" id="acctSearch" placeholder="🔎 Incluir outras despesas (ex.: nome da farmácia)…">
+      <div class="acctresults" id="acctResults"></div>
+      <div class="acctextra" id="acctExtra"></div>
+    </div>
     <button class="applybtn" id="acctGen">📷 Gerar resumo</button>
   </div>
 </div>
@@ -333,17 +344,12 @@
       <button class="topclose" id="topClose">✕</button>
     </div>
     <div class="topscroll">
-      <div class="monthdd" id="monthDd">
-        <button class="mdd-bar" id="mddBar">Meses: <span id="mddLabel">Todos</span><span class="mdd-arrow">▾</span></button>
-        <div class="mdd-panel" id="mddPanel" hidden>
-          <div class="mdd-actions"><button type="button" data-all="1">Todos</button><button type="button" data-all="0">Nenhum</button></div>
-          <div id="mddList"></div>
-        </div>
-      </div>
+      <div class="mtabs" id="mtabs"></div>
       <div class="topfilter">
         <input type="search" id="fSearch" placeholder="🔎 Buscar despesa…">
         <div class="frow">
           <button id="fSort">⇅ Data</button>
+          <button id="fGroup">⊞ Agrupar</button>
           <button id="fClear">↺ Limpar</button>
         </div>
       </div>
@@ -529,8 +535,8 @@ function labelToKey(lbl){
 function openTopForRow(name){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
   const after=String(name).split("·")[1]||"";
-  const keys=after.split(",").map(s=>labelToKey(s.trim())).filter(Boolean);
-  openTop(keys,true);
+  const key=labelToKey((after.split(",")[0]||"").trim());
+  openTop(key||null,true);
 }
 function calc(){
   const r=rate();let tU=0,tP=0,tB=0;
@@ -633,7 +639,7 @@ function fillReportCard(){
   const r=rate();
   const list=getFilteredTop().slice().sort((a,b)=>isoDMY(b.date).localeCompare(isoDMY(a.date))||b.val-a.val);
   const totG=list.reduce((s,x)=>s+x.val,0),tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
-  const meses=topSel?[...topSel].sort().map(monthLabel).join(", "):"";
+  const meses=topMonth?monthLabel(topMonth):"Todos os meses";
   const li=list.map(t=>`<div class="srow"><div class="snm"><span class="sdesc">${t.desc}</span><span class="sdt">${t.date}</span></div><span class="vmain" style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
   $("#shareCard").innerHTML=
     shareHead("📄","Relatório de despesas",(meses||"Extrato")+" · "+list.length+" lançamentos")+
@@ -667,23 +673,48 @@ async function shareImage(fillFn,fname,title){
 }
 $("#shareBtn").onclick=()=>shareImage(fillShareCard,"contas-paraguai.png","Contas Fixas Paraguai");
 const isUF=t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia");};
-let acctSel=null;
+const keyOf=t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`;
+let acctSel=null,extraKeys=new Set();
+function acctRenderResults(){
+  const q=norm($("#acctSearch").value);
+  const box=$("#acctResults");
+  if(!q){box.innerHTML="";acctRenderExtra();return;}
+  const found=imp.txns
+    .map(t=>({...t,iso:isoDMY(t.date)}))
+    .filter(t=>norm(t.desc).includes(q)||String(t.ref||"").includes(q))
+    .sort((a,b)=>b.iso.localeCompare(a.iso)).slice(0,40);
+  box.innerHTML=found.length?found.map(t=>{
+    const k=keyOf(t),on=extraKeys.has(k),auto=isUF(t);
+    return `<div class="ares ${on?"on":""}" data-key="${k.replace(/"/g,'&quot;')}">
+      <div class="ares-nm"><span>${t.desc}</span><span class="ares-dt">${t.date} · ₲ ${Math.round(t.val).toLocaleString("es-PY")}${auto?" · auto":""}</span></div>
+      <span class="ares-btn">${on?"✓":"＋"}</span></div>`;
+  }).join(""):'<p class="empty" style="padding:10px 2px">Nada encontrado.</p>';
+  box.querySelectorAll(".ares").forEach(el=>el.onclick=()=>{
+    const k=el.dataset.key;if(extraKeys.has(k))extraKeys.delete(k);else extraKeys.add(k);
+    el.classList.toggle("on");el.querySelector(".ares-btn").textContent=extraKeys.has(k)?"✓":"＋";acctRenderExtra();});
+  acctRenderExtra();
+}
+function acctRenderExtra(){
+  $("#acctExtra").textContent=extraKeys.size?`+ ${extraKeys.size} despesa(s) adicional(is) incluída(s)`:"";
+}
 $("#acctBtn").onclick=()=>{
   if(!imp||!imp.txns){toast("Importe uma fatura primeiro");return;}
-  if(!imp.txns.some(isUF)){toast("Nenhum lançamento Unimed/Farmácia");return;}
-  const months=[...new Set(imp.txns.filter(isUF).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?m[3]+"-"+m[2]:"";}).filter(Boolean))].sort();
+  extraKeys=new Set();$("#acctSearch").value="";$("#acctResults").innerHTML="";acctRenderExtra();
+  const monthsUF=[...new Set(imp.txns.filter(isUF).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?m[3]+"-"+m[2]:"";}).filter(Boolean))].sort();
+  const months=monthsUF.length?monthsUF:[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
   acctSel=new Set(months);
   $("#acctMonths").innerHTML=months.map(k=>`<button class="mchip on" data-k="${k}">${monthLabel(k)}</button>`).join("");
   $("#acctMonths").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
     if(acctSel.has(k)){acctSel.delete(k);b.classList.remove("on");}else{acctSel.add(k);b.classList.add("on");}});
   $("#acctModal").classList.remove("hidden");
 };
+$("#acctSearch").oninput=acctRenderResults;
 $("#acctClose").onclick=()=>$("#acctModal").classList.add("hidden");
 $("#acctModal").onclick=e=>{if(e.target.id==="acctModal")$("#acctModal").classList.add("hidden");};
 $("#acctGen").onclick=()=>{
-  if(!acctSel||!acctSel.size){toast("Escolha pelo menos um mês");return;}
-  const items=imp.txns.filter(t=>{if(!isUF(t))return false;const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m&&acctSel.has(m[3]+"-"+m[2]);});
-  if(!items.length){toast("Nada nos meses escolhidos");return;}
+  const inMonth=t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m&&acctSel&&acctSel.has(m[3]+"-"+m[2]);};
+  const items=imp.txns.filter(t=>(isUF(t)&&inMonth(t))||extraKeys.has(keyOf(t)));
+  if(!items.length){toast("Nada para gerar — escolha meses ou adicione despesas");return;}
   $("#acctModal").classList.add("hidden");
   shareImage(()=>fillAcctCard(items),"contabilidade.png","Contabilidade — Saúde");
 };
@@ -736,8 +767,7 @@ function applyToCard(){
   const list=getFilteredTop();
   const val=Math.round(list.reduce((s,x)=>s+x.val,0));
   if(!val){toast("Nada filtrado para aplicar");return;}
-  const keys=topSel?[...topSel].sort():[];
-  const label=keys.length===0?"extrato":keys.length<=2?keys.map(monthLabel).join(", "):keys.length+" meses";
+  const label=topMonth?monthLabel(topMonth):"extrato";
   const name="Cartão · "+label;
   let i=rows.findIndex(r=>norm(r.name)===norm(name));
   if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
@@ -792,15 +822,17 @@ $("#fileInput").onchange=e=>{
   });
 };
 
-/* ---- visão top de gastos ---- */
+/* ---- visão top de gastos (extrato) ---- */
 function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:"";}
-let topSel=null; // Set de "yyyy-mm" selecionados
+let topMonth=null; // null = todos os meses; senão "yyyy-mm"
 let topSort="date"; // "date" ou "val"
+let grouped=false; // agrupa por nome
+function topMonths(){return [...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort().reverse();}
 function getFilteredTop(){
   const q=norm($("#fSearch")?$("#fSearch").value:"");
   const list=imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
     const mk=t.iso?t.iso.slice(0,7):"";
-    if(topSel&&!topSel.has(mk))return false;
+    if(topMonth&&mk!==topMonth)return false;
     if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
     return true;
   });
@@ -808,12 +840,28 @@ function getFilteredTop(){
   else list.sort((a,b)=>b.iso.localeCompare(a.iso)||b.val-a.val);
   return list;
 }
+function groupedTop(list){
+  const m=new Map();
+  list.forEach(t=>{const k=norm(t.desc)||"—";const g=m.get(k)||{desc:t.desc,val:0,count:0};g.val+=t.val;g.count++;m.set(k,g);});
+  return [...m.values()].sort((a,b)=>b.val-a.val);
+}
 function renderTopList(){
   const r=rate(),list=getFilteredTop();
-  const totG=list.reduce((s,x)=>s+x.val,0),max=list.length?Math.max(...list.map(x=>x.val)):1;
+  const totG=list.reduce((s,x)=>s+x.val,0);
   const tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
-  $("#topSub").innerHTML=`${list.length} lançamentos<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  $("#topSub").innerHTML=`${list.length} lançamentos${grouped?" · agrupado por nome":""}<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   $("#applyBtn").textContent=totG?`✓ Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")} como despesa`:"✓ Aplicar como despesa";
+  if(grouped){
+    const g=groupedTop(list);
+    $("#topList").innerHTML=g.length?g.map(x=>{
+      const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl;
+      return `<div class="ti"><div class="top1">
+          <span class="nmw"><span class="nm">${x.desc}</span> <span class="gct">${x.count}×</span></span>
+          <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></span></div>
+        <div class="conv2"><span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
+    }).join(""):'<p class="empty">Nada nesse filtro.</p>';
+    return;
+  }
   $("#topList").innerHTML=list.length?list.map((x,n)=>{
     const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,dm=x.date?x.date.slice(0,5):"";
     const key=`${x.date}|${x.ref}|${x.val}|${x.desc}`;
@@ -824,63 +872,62 @@ function renderTopList(){
       <div class="conv2"><span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
   }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
-function mddRefresh(){
-  const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
-  $("#mddList").innerHTML=months.map(k=>`<label class="mdd-item"><input type="checkbox" data-k="${k}" ${topSel.has(k)?"checked":""}><span>${monthLabel(k)}</span></label>`).join("");
-  $("#mddList").querySelectorAll("input").forEach(c=>c.onchange=()=>{
-    const k=c.dataset.k;if(c.checked)topSel.add(k);else topSel.delete(k);mddLabel();renderTopList();});
-  mddLabel();
+function monthTab(k){const m=String(k).match(/^(\d{4})-(\d{2})$/);if(!m)return k;return MESES[+m[2]-1].replace(/^\w/,c=>c.toUpperCase())+" "+m[1].slice(2);}
+function mtabsRefresh(){
+  const months=topMonths();
+  let html=`<button class="mtab ${topMonth===null?"on":""}" data-m="">Todos</button>`;
+  html+=months.map(k=>`<button class="mtab ${topMonth===k?"on":""}" data-m="${k}">${monthTab(k)}</button>`).join("");
+  $("#mtabs").innerHTML=html;
+  $("#mtabs").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{topMonth=b.dataset.m||null;mtabsRefresh();renderTopList();});
+  const on=$("#mtabs").querySelector(".mtab.on");if(on)on.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
 }
-function mddLabel(){
-  const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))];
-  const sel=[...topSel].sort();
-  let txt;
-  if(!sel.length)txt="Nenhum";
-  else if(sel.length===months.length)txt="Todos";
-  else if(sel.length<=2)txt=sel.map(monthLabel).join(", ");
-  else txt=sel.length+" meses";
-  $("#mddLabel").textContent=txt;
+function shiftMonth(dir){ // +1 = mês mais antigo, -1 = mais recente
+  const seq=[null,...topMonths()];
+  let idx=seq.findIndex(k=>k===topMonth);if(idx<0)idx=0;
+  idx=Math.min(seq.length-1,Math.max(0,idx+dir));
+  if(seq[idx]!==topMonth){topMonth=seq[idx];mtabsRefresh();renderTopList();}
 }
 function openTop(pre,info){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
   if($("#fSearch"))$("#fSearch").value="";
-  $("#mddPanel").hidden=true;
-  const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
-  const preset=(pre&&pre.length)?pre.filter(k=>months.includes(k)):months;
-  topSel=new Set(preset.length?preset:months);
+  grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";
+  const months=topMonths();
+  topMonth=(pre&&months.includes(pre))?pre:null; // padrão: Todos os meses
   $(".topcard").classList.toggle("info",!!info);
   if(info)topSort="date";
-  $("#topTitle").textContent=info?("Detalhes · "+[...topSel].sort().map(monthLabel).join(", ")):"Extrato";
-  mddRefresh();
+  $("#topTitle").textContent=info?("Detalhes · "+(topMonth?monthLabel(topMonth):"Extrato")):"Extrato";
+  mtabsRefresh();
   renderTopList();
   $("#topModal").classList.remove("hidden");
 }
-$("#mddBar").onclick=()=>{$("#mddPanel").hidden=!$("#mddPanel").hidden;};
-$("#mddPanel").querySelectorAll("[data-all]").forEach(b=>b.onclick=()=>{
-  const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))];
-  topSel=b.dataset.all==="1"?new Set(months):new Set();
-  mddRefresh();renderTopList();});
-document.addEventListener("click",e=>{if($("#monthDd")&&!$("#monthDd").contains(e.target)&&!$("#mddPanel").hidden)$("#mddPanel").hidden=true;});
 $("#topList").onclick=e=>{
+  if(grouped)return;
   const cod=e.target.closest(".cod");
   if(cod){document.querySelectorAll(".cod.show").forEach(b=>{if(b!==cod)b.classList.remove("show");});
     cod.classList.toggle("show");return;}
   const exc=e.target.closest(".exc");
   if(exc){if(!confirm("Tem certeza que deseja excluir este lançamento?"))return;
     const k=exc.dataset.key;imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
-    imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mddRefresh();renderTopList();toast("Lançamento removido");}
+    imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Lançamento removido");}
 };
+(function(){ // deslizar para o lado troca o mês
+  let x0=null,y0=null;
+  const list=$("#topList");
+  list.addEventListener("touchstart",e=>{const t=e.changedTouches[0];x0=t.clientX;y0=t.clientY;},{passive:true});
+  list.addEventListener("touchend",e=>{if(x0===null)return;const t=e.changedTouches[0];const dx=t.clientX-x0,dy=t.clientY-y0;
+    if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)shiftMonth(dx<0?1:-1);x0=null;});
+})();
 $("#topBtn").onclick=()=>openTop();
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 $("#fSearch").oninput=renderTopList;
 $("#fSort").onclick=()=>{topSort=topSort==="date"?"val":"date";$("#fSort").textContent=topSort==="date"?"⇅ Data":"⇅ Valor";renderTopList();};
+$("#fGroup").onclick=()=>{grouped=!grouped;$("#fGroup").classList.toggle("on",grouped);$("#fGroup").textContent=grouped?"⊟ Desagrupar":"⊞ Agrupar";renderTopList();};
 $("#fClear").onclick=()=>{
   if(!confirm("Tem certeza que deseja limpar os filtros?"))return;
   $("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";
-  const months=[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))];
-  topSel=new Set(months);mddRefresh();
-  renderTopList();};
+  grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";
+  topMonth=null;mtabsRefresh();renderTopList();};
 $("#applyBtn").onclick=applyToCard;
 $("#reportBtn").onclick=()=>{
   if(!imp||!getFilteredTop().length){toast("Nada para o relatório");return;}
