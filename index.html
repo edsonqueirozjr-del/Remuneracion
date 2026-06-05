@@ -113,6 +113,9 @@
   #shareCard .sbody{padding:14px 26px 4px}
   #shareCard .srow{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:9px 12px;border-radius:9px}
   #shareCard .srow:nth-child(even){background:rgba(255,255,255,.035)}
+  #shareCard .smonth{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px;padding:6px 12px;
+    background:rgba(199,146,234,.12);border-radius:8px;font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--pyg);font-family:'IBM Plex Mono',monospace}
+  #shareCard .smonth:first-child{margin-top:0}
   #shareCard .snm{min-width:0;display:flex;flex-direction:column;gap:2px}
   #shareCard .sdesc{color:var(--ink);font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #shareCard .sdt{color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace}
@@ -145,6 +148,8 @@
   .acctresults{max-height:210px;overflow-y:auto;margin-top:8px;display:flex;flex-direction:column;gap:6px}
   .ares{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer}
   .ares.on{border-color:var(--accent);background:rgba(55,214,160,.1)}
+  .ares.auto{opacity:.85}
+  .ares.auto .ares-btn{background:var(--accent);color:#06251b;border-color:var(--accent)}
   .ares-nm{min-width:0;display:flex;flex-direction:column;gap:2px}
   .ares-nm>span:first-child{font-size:.84rem;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .ares-dt{font-size:.7rem;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace}
@@ -236,6 +241,7 @@
   .ti .acts{display:flex;gap:4px}
   .ti .acts button{width:26px;height:26px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-faint);border-radius:7px;font-size:.78rem;line-height:1;cursor:pointer;padding:0;position:relative}
   .ti .acts .cod:hover,.ti .acts .cod:focus{border-color:var(--accent);color:var(--accent)}
+  .ti .acts .edt:active{border-color:var(--usd);color:var(--usd)}
   .ti .acts .exc:active{border-color:var(--danger);color:var(--danger)}
   .ti .acts .cod[data-tip]:hover::after,.ti .acts .cod.show::after{content:"Ref. " attr(data-tip);position:absolute;right:0;bottom:130%;background:#000;color:#fff;border:1px solid var(--line);padding:6px 9px;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;white-space:nowrap;z-index:5}
   .ti .conv2{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);margin-top:3px}
@@ -622,30 +628,42 @@ function fillShareCard(){
      </div>`+
     shareFoot(r);
 }
+function shareRowsByMonth(items,color,showRef){
+  const by=new Map();
+  items.forEach(t=>{const mk=isoDMY(t.date).slice(0,7)||"—";if(!by.has(mk))by.set(mk,[]);by.get(mk).push(t);});
+  const months=[...by.keys()].sort().reverse();
+  let html="",grand=0;
+  months.forEach(mk=>{
+    const arr=by.get(mk).slice().sort((a,b)=>isoDMY(a.date).localeCompare(isoDMY(b.date)));
+    const sub=arr.reduce((s,x)=>s+x.val,0);grand+=sub;
+    html+=`<div class="smonth"><span>${mk==="—"?"Sem data":monthLabel(mk)}</span><span>₲ ${Math.round(sub).toLocaleString("es-PY")}</span></div>`;
+    arr.forEach(t=>{html+=`<div class="srow"><div class="snm"><span class="sdesc">${t.desc}</span><span class="sdt">${t.date}${showRef&&t.ref?(" · Ref. "+t.ref):""}</span></div><span class="vmain" style="color:${color}">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`;});
+  });
+  return {html,grand};
+}
 function fillAcctCard(items){
   const r=rate();
-  items=(items||[]).slice().sort((a,b)=>b.val-a.val);
-  const total=items.reduce((s,x)=>s+x.val,0);
+  const {html,grand}=shareRowsByMonth(items||[],"var(--pyg)",true);
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
-  const meses=[...new Set(items.map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?monthLabel(m[3]+"-"+m[2]):"";}).filter(Boolean))].join(", ");
-  const li=items.map(t=>`<div class="srow"><div class="snm"><span class="sdesc">${t.desc}</span><span class="sdt">${t.date} · Ref. ${t.ref||"—"}</span></div><span class="vmain" style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
+  const meses=[...new Set((items||[]).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?monthLabel(m[3]+"-"+m[2]):"";}).filter(Boolean))].join(", ");
   $("#shareCard").innerHTML=
     shareHead("🧾","Contabilidade — Saúde","Unimed &amp; Farmácia · "+(meses||dt))+
-    `<div class="sbody">${li||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
-    `<div class="stotbox"><div class="stot big"><span class="lbl">Total (Guarani)</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(total).toLocaleString("es-PY")}</span></div></div>`+
+    `<div class="sbody">${html||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
+    `<div class="stotbox"><div class="stot"><span class="lbl">Total (Guarani)</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(grand).toLocaleString("es-PY")}</span></div></div>`+
     shareFoot(r);
 }
 function fillReportCard(){
   const r=rate();
-  const list=getFilteredTop().slice().sort((a,b)=>isoDMY(b.date).localeCompare(isoDMY(a.date))||b.val-a.val);
-  const totG=list.reduce((s,x)=>s+x.val,0),tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
-  const meses=topMonth?monthLabel(topMonth):"Todos os meses";
-  const li=list.map(t=>`<div class="srow"><div class="snm"><span class="sdesc">${t.desc}</span><span class="sdt">${t.date}</span></div><span class="vmain" style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>`).join("");
+  const list=getFilteredTop();
+  const {html,grand}=shareRowsByMonth(list,"var(--pyg)",false);
+  const tUsd=r.pyg?grand/r.pyg:0,tBrl=tUsd*r.brl;
+  const months=topMonths();const sel=topSel?[...topSel].sort():[];
+  const meses=(!sel.length||sel.length===months.length)?"Todos os meses":sel.map(monthLabel).join(", ");
   $("#shareCard").innerHTML=
-    shareHead("📄","Relatório de despesas",(meses||"Extrato")+" · "+list.length+" lançamentos")+
-    `<div class="sbody">${li||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
+    shareHead("📄","Relatório de despesas",meses+" · "+list.length+" lançamentos")+
+    `<div class="sbody">${html||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
     `<div class="stotbox">
-       <div class="stot big"><span class="lbl">Total</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(totG).toLocaleString("es-PY")}</span></div>
+       <div class="stot"><span class="lbl">Total</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(grand).toLocaleString("es-PY")}</span></div>
        <div class="stot"><span class="lbl">Em Real</span><span class="vl" style="color:var(--brl)">${fmt.BRL(tBrl)}</span></div>
        <div class="stot"><span class="lbl">Em Dólar</span><span class="vl" style="color:var(--usd)">${fmt.USD(tUsd)}</span></div>
      </div>`+
@@ -678,18 +696,22 @@ let acctSel=null,extraKeys=new Set();
 function acctRenderResults(){
   const q=norm($("#acctSearch").value);
   const box=$("#acctResults");
-  if(!q){box.innerHTML="";acctRenderExtra();return;}
-  const found=imp.txns
+  // base: lançamentos dos meses selecionados (para você ver e escolher)
+  const base=imp.txns
     .map(t=>({...t,iso:isoDMY(t.date)}))
-    .filter(t=>norm(t.desc).includes(q)||String(t.ref||"").includes(q))
-    .sort((a,b)=>b.iso.localeCompare(a.iso)).slice(0,40);
-  box.innerHTML=found.length?found.map(t=>{
-    const k=keyOf(t),on=extraKeys.has(k),auto=isUF(t);
-    return `<div class="ares ${on?"on":""}" data-key="${k.replace(/"/g,'&quot;')}">
+    .filter(t=>{const mk=t.iso?t.iso.slice(0,7):"";
+      if(acctSel&&acctSel.size&&!acctSel.has(mk))return false;
+      if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
+      return true;})
+    .sort((a,b)=>b.iso.localeCompare(a.iso)).slice(0,80);
+  box.innerHTML=base.length?base.map(t=>{
+    const k=keyOf(t),auto=isUF(t),on=auto||extraKeys.has(k);
+    return `<div class="ares ${on?"on":""} ${auto?"auto":""}" data-key="${k.replace(/"/g,'&quot;')}" data-auto="${auto?1:0}">
       <div class="ares-nm"><span>${t.desc}</span><span class="ares-dt">${t.date} · ₲ ${Math.round(t.val).toLocaleString("es-PY")}${auto?" · auto":""}</span></div>
       <span class="ares-btn">${on?"✓":"＋"}</span></div>`;
-  }).join(""):'<p class="empty" style="padding:10px 2px">Nada encontrado.</p>';
+  }).join(""):'<p class="empty" style="padding:10px 2px">Nenhum lançamento nesse(s) mês(es).</p>';
   box.querySelectorAll(".ares").forEach(el=>el.onclick=()=>{
+    if(el.dataset.auto==="1"){toast("Já incluída automaticamente");return;}
     const k=el.dataset.key;if(extraKeys.has(k))extraKeys.delete(k);else extraKeys.add(k);
     el.classList.toggle("on");el.querySelector(".ares-btn").textContent=extraKeys.has(k)?"✓":"＋";acctRenderExtra();});
   acctRenderExtra();
@@ -699,13 +721,14 @@ function acctRenderExtra(){
 }
 $("#acctBtn").onclick=()=>{
   if(!imp||!imp.txns){toast("Importe uma fatura primeiro");return;}
-  extraKeys=new Set();$("#acctSearch").value="";$("#acctResults").innerHTML="";acctRenderExtra();
+  extraKeys=new Set();$("#acctSearch").value="";acctRenderExtra();
   const monthsUF=[...new Set(imp.txns.filter(isUF).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?m[3]+"-"+m[2]:"";}).filter(Boolean))].sort();
   const months=monthsUF.length?monthsUF:[...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort();
   acctSel=new Set(months);
   $("#acctMonths").innerHTML=months.map(k=>`<button class="mchip on" data-k="${k}">${monthLabel(k)}</button>`).join("");
   $("#acctMonths").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
-    if(acctSel.has(k)){acctSel.delete(k);b.classList.remove("on");}else{acctSel.add(k);b.classList.add("on");}});
+    if(acctSel.has(k)){acctSel.delete(k);b.classList.remove("on");}else{acctSel.add(k);b.classList.add("on");}acctRenderResults();});
+  acctRenderResults();
   $("#acctModal").classList.remove("hidden");
 };
 $("#acctSearch").oninput=acctRenderResults;
@@ -767,7 +790,9 @@ function applyToCard(){
   const list=getFilteredTop();
   const val=Math.round(list.reduce((s,x)=>s+x.val,0));
   if(!val){toast("Nada filtrado para aplicar");return;}
-  const label=topMonth?monthLabel(topMonth):"extrato";
+  const months=topMonths();
+  const sel=topSel?[...topSel].sort():[];
+  const label=(!sel.length||sel.length===months.length)?"extrato":sel.length<=2?sel.map(monthLabel).join(", "):sel.length+" meses";
   const name="Cartão · "+label;
   let i=rows.findIndex(r=>norm(r.name)===norm(name));
   if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
@@ -824,7 +849,7 @@ $("#fileInput").onchange=e=>{
 
 /* ---- visão top de gastos (extrato) ---- */
 function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:"";}
-let topMonth=null; // null = todos os meses; senão "yyyy-mm"
+let topSel=null; // Set de "yyyy-mm" selecionados (null/contém todos = Todos)
 let topSort="date"; // "date" ou "val"
 let grouped=false; // agrupa por nome
 function topMonths(){return [...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort().reverse();}
@@ -832,7 +857,7 @@ function getFilteredTop(){
   const q=norm($("#fSearch")?$("#fSearch").value:"");
   const list=imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
     const mk=t.iso?t.iso.slice(0,7):"";
-    if(topMonth&&mk!==topMonth)return false;
+    if(topSel&&topSel.size&&!topSel.has(mk))return false;
     if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
     return true;
   });
@@ -868,34 +893,36 @@ function renderTopList(){
     return `<div class="ti"><div class="top1">
         <span class="nmw"><span class="rk">${String(n+1).padStart(2,"0")}</span><span class="nm">${x.desc}</span> <span class="dt">${dm}</span></span>
         <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
-          <span class="acts"><button class="cod" data-tip="${x.ref||"—"}" title="Ref. ${x.ref||"—"}">ⓘ</button><button class="exc" data-key="${key}" title="Excluir">✕</button></span></span></div>
+          <span class="acts"><button class="cod" data-tip="${x.ref||"—"}" title="Ref. ${x.ref||"—"}">ⓘ</button><button class="edt" data-key="${key}" title="Editar valor">✎</button><button class="exc" data-key="${key}" title="Excluir">✕</button></span></span></div>
       <div class="conv2"><span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
   }).join(""):'<p class="empty">Nada nesse filtro.</p>';
 }
 function monthTab(k){const m=String(k).match(/^(\d{4})-(\d{2})$/);if(!m)return k;return MESES[+m[2]-1].replace(/^\w/,c=>c.toUpperCase())+" "+m[1].slice(2);}
 function mtabsRefresh(){
   const months=topMonths();
-  let html=`<button class="mtab ${topMonth===null?"on":""}" data-m="">Todos</button>`;
-  html+=months.map(k=>`<button class="mtab ${topMonth===k?"on":""}" data-m="${k}">${monthTab(k)}</button>`).join("");
+  const allOn=!topSel||topSel.size===0||topSel.size===months.length;
+  let html=`<button class="mtab ${allOn?"on":""}" data-m="">Todos</button>`;
+  html+=months.map(k=>`<button class="mtab ${(!allOn&&topSel.has(k))?"on":""}" data-m="${k}">${monthTab(k)}</button>`).join("");
   $("#mtabs").innerHTML=html;
-  $("#mtabs").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{topMonth=b.dataset.m||null;mtabsRefresh();renderTopList();});
-  const on=$("#mtabs").querySelector(".mtab.on");if(on)on.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
-}
-function shiftMonth(dir){ // +1 = mês mais antigo, -1 = mais recente
-  const seq=[null,...topMonths()];
-  let idx=seq.findIndex(k=>k===topMonth);if(idx<0)idx=0;
-  idx=Math.min(seq.length-1,Math.max(0,idx+dir));
-  if(seq[idx]!==topMonth){topMonth=seq[idx];mtabsRefresh();renderTopList();}
+  $("#mtabs").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.m;const all=new Set(months);
+    if(k===""){topSel=new Set(all);} // Todos
+    else{
+      if(!topSel||topSel.size===0||topSel.size===months.length)topSel=new Set([k]); // de "Todos" -> só esse mês
+      else{topSel.has(k)?topSel.delete(k):topSel.add(k);}
+      if(topSel.size===0)topSel=new Set(all); // nunca vazio -> volta pra Todos
+    }
+    mtabsRefresh();renderTopList();});
 }
 function openTop(pre,info){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
   if($("#fSearch"))$("#fSearch").value="";
-  grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";
+  grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";$("#fSort").style.display="";
   const months=topMonths();
-  topMonth=(pre&&months.includes(pre))?pre:null; // padrão: Todos os meses
+  topSel=(pre&&months.includes(pre))?new Set([pre]):new Set(months); // padrão: Todos
   $(".topcard").classList.toggle("info",!!info);
   if(info)topSort="date";
-  $("#topTitle").textContent=info?("Detalhes · "+(topMonth?monthLabel(topMonth):"Extrato")):"Extrato";
+  $("#topTitle").textContent=info?("Detalhes · "+(pre?monthLabel(pre):"Extrato")):"Extrato";
   mtabsRefresh();
   renderTopList();
   $("#topModal").classList.remove("hidden");
@@ -905,29 +932,29 @@ $("#topList").onclick=e=>{
   const cod=e.target.closest(".cod");
   if(cod){document.querySelectorAll(".cod.show").forEach(b=>{if(b!==cod)b.classList.remove("show");});
     cod.classList.toggle("show");return;}
+  const edt=e.target.closest(".edt");
+  if(edt){const k=edt.dataset.key;const t=imp.txns.find(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`===k);
+    if(!t)return;const novo=prompt("Novo valor em Guarani (₲):",Math.round(t.val));
+    if(novo===null)return;const v=parseInt(String(novo).replace(/\D/g,""),10);
+    if(!(v>0)){toast("Valor inválido");return;}
+    t.val=v;imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Valor atualizado");return;}
   const exc=e.target.closest(".exc");
   if(exc){if(!confirm("Tem certeza que deseja excluir este lançamento?"))return;
     const k=exc.dataset.key;imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
     imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Lançamento removido");}
 };
-(function(){ // deslizar para o lado troca o mês
-  let x0=null,y0=null;
-  const list=$("#topList");
-  list.addEventListener("touchstart",e=>{const t=e.changedTouches[0];x0=t.clientX;y0=t.clientY;},{passive:true});
-  list.addEventListener("touchend",e=>{if(x0===null)return;const t=e.changedTouches[0];const dx=t.clientX-x0,dy=t.clientY-y0;
-    if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)shiftMonth(dx<0?1:-1);x0=null;});
-})();
 $("#topBtn").onclick=()=>openTop();
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
 $("#fSearch").oninput=renderTopList;
 $("#fSort").onclick=()=>{topSort=topSort==="date"?"val":"date";$("#fSort").textContent=topSort==="date"?"⇅ Data":"⇅ Valor";renderTopList();};
-$("#fGroup").onclick=()=>{grouped=!grouped;$("#fGroup").classList.toggle("on",grouped);$("#fGroup").textContent=grouped?"⊟ Desagrupar":"⊞ Agrupar";renderTopList();};
+$("#fGroup").onclick=()=>{grouped=!grouped;$("#fGroup").classList.toggle("on",grouped);$("#fGroup").textContent=grouped?"⊟ Desagrupar":"⊞ Agrupar";
+  $("#fSort").style.display=grouped?"none":"";renderTopList();};
 $("#fClear").onclick=()=>{
   if(!confirm("Tem certeza que deseja limpar os filtros?"))return;
-  $("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";
+  $("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";$("#fSort").style.display="";
   grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";
-  topMonth=null;mtabsRefresh();renderTopList();};
+  topSel=new Set(topMonths());mtabsRefresh();renderTopList();};
 $("#applyBtn").onclick=applyToCard;
 $("#reportBtn").onclick=()=>{
   if(!imp||!getFilteredTop().length){toast("Nada para o relatório");return;}
