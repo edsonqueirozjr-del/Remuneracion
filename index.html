@@ -101,8 +101,11 @@
   .chip.usd{color:var(--usd)} .chip.pyg{color:var(--pyg)} .chip.brl{color:var(--brl)}
   .chip .k{color:var(--ink-faint);font-size:.66em;margin-right:4px}
 
-  .add{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px dashed var(--line);color:var(--ink-dim);border-radius:14px;padding:15px;cursor:pointer;font-family:inherit;font-size:.92rem;font-weight:600;margin-top:4px}
+  .addrow{display:flex;gap:8px;margin-top:4px}
+  .add{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px dashed var(--line);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:600}
   .add:active{border-color:var(--accent);color:var(--accent)}
+  .impmini{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px 14px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;white-space:nowrap}
+  .impmini:active{border-color:var(--accent);color:var(--accent)}
 
   .actbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(180deg,transparent,rgba(13,17,23,.92)28%)}
   .actbar .btn{flex:1;font-family:inherit;font-size:.84rem;font-weight:700;border-radius:13px;padding:14px 6px;cursor:pointer;border:1px solid var(--line);background:var(--panel-2);color:var(--ink)}
@@ -229,12 +232,6 @@
   .gdates{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
   .gdates[hidden]{display:none}
   .gdates .gd{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-dim);background:var(--panel-2);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px}
-  .addopts{display:flex;flex-direction:column;gap:10px;padding-top:16px}
-  .addopt{display:flex;align-items:center;gap:14px;text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:14px 16px;cursor:pointer;color:var(--ink)}
-  .addopt:active{border-color:var(--accent)}
-  .addopt .ico{font-size:1.5rem;flex:none}
-  .addopt b{display:block;font-size:.95rem}
-  .addopt small{color:var(--ink-faint);font-size:.76rem}
   .modsel{opacity:.5;transition:opacity .15s}
   .modsel.on{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
   .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
@@ -321,7 +318,10 @@
     <span class="secbtns"><button class="clearBtn" id="filterToggle" title="Filtrar despesas">🔎 Filtrar</button><button class="clearBtn" id="clearBtn">Limpar</button></span></div>
   <div class="rowfilterwrap" id="rowFilterWrap" hidden><input type="search" id="rowFilter" placeholder="Filtrar despesas pelo nome…"></div>
   <div id="rows"></div>
-  <button class="add" id="addRow">＋ Adicionar despesa</button>
+  <div class="addrow">
+    <button class="add" id="addRow">＋ Adicionar despesa</button>
+    <button class="impmini" id="importBtn" title="Importar extrato">📥 Importar</button>
+  </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 
   <div class="sec">Resumo</div>
@@ -359,19 +359,6 @@
 </div>
 
 <div id="shareCard"></div>
-
-<div id="addModal" class="hidden">
-  <div class="acctcard">
-    <div class="accthead">
-      <div><div class="topttl">Adicionar despesa</div><div class="topsub">Como você quer adicionar?</div></div>
-      <button class="topclose" id="addClose">✕</button>
-    </div>
-    <div class="addopts">
-      <button class="addopt" id="optManual"><span class="ico">✍️</span><span><b>Adicionar manual</b><small>Digite nome e valor</small></span></button>
-      <button class="addopt" id="optImport"><span class="ico">📥</span><span><b>Importar extrato</b><small>Cartão / banco (Excel)</small></span></button>
-    </div>
-  </div>
-</div>
 
 <div id="topModal" class="hidden">
   <div class="topcard">
@@ -631,12 +618,8 @@ function addManualRow(){
   window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
   setTimeout(()=>{const last=$("#rows").lastElementChild;const inp=last&&last.querySelector(".name");if(inp)inp.focus();},300);
 }
-$("#addRow").onclick=()=>$("#addModal").classList.remove("hidden");
-$("#addClose").onclick=()=>$("#addModal").classList.add("hidden");
-$("#addModal").onclick=e=>{if(e.target.id==="addModal")$("#addModal").classList.add("hidden");};
-$("#optManual").onclick=()=>{$("#addModal").classList.add("hidden");addManualRow();};
-$("#optImport").onclick=()=>{$("#addModal").classList.add("hidden");
-  if(imp&&imp.txns&&imp.txns.length)openTop();else doImport();};
+$("#addRow").onclick=addManualRow;
+$("#importBtn").onclick=()=>{if(imp&&imp.txns&&imp.txns.length)openTop();else doImport();};
 $("#filterToggle").onclick=()=>{const w=$("#rowFilterWrap");w.hidden=!w.hidden;if(!w.hidden)$("#rowFilter").focus();else{$("#rowFilter").value="";renderRows();}};
 $("#rowFilter").oninput=renderRows;
 $("#usdBrl").oninput=()=>{updateFxReset();calc();};
