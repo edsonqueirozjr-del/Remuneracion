@@ -22,7 +22,7 @@
     font-family:'Hanken Grotesk',sans-serif;color:var(--ink);
     background:radial-gradient(900px 500px at 90% -10%,rgba(55,214,160,.10),transparent 55%),var(--bg);
     -webkit-font-smoothing:antialiased;
-    padding:calc(env(safe-area-inset-top) + 6px) 0 calc(env(safe-area-inset-bottom) + 90px);
+    padding:calc(env(safe-area-inset-top) + 6px) 0 calc(env(safe-area-inset-bottom) + 24px);
   }
   .num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
   main{padding:16px;max-width:540px;margin:0 auto}
@@ -107,10 +107,7 @@
   .impmini{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px 14px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;white-space:nowrap}
   .impmini:active{border-color:var(--accent);color:var(--accent)}
 
-  .actbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(180deg,transparent,rgba(13,17,23,.92)28%)}
-  .actbar .btn{flex:1;font-family:inherit;font-size:.84rem;font-weight:700;border-radius:13px;padding:14px 6px;cursor:pointer;border:1px solid var(--line);background:var(--panel-2);color:var(--ink)}
-  .actbar .btn.primary{background:var(--accent);color:#06251b;border-color:var(--accent)}
-  .actbar .btn:active{filter:brightness(1.1)}
+
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#06251b;font-weight:700;font-size:.85rem;padding:11px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:40}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -329,7 +326,7 @@
   </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 
-  <div class="sec">Resumo</div>
+  <div class="sec"><span>Resumo</span><button class="clearBtn" id="shareBtn">📷 Compartilhar</button></div>
   <div class="resumo">
     <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
       <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
@@ -340,11 +337,6 @@
   </div>
 </main>
 
-<div class="actbar">
-  <button class="btn" id="copyBtn">Copiar</button>
-  <button class="btn" id="shareBtn">📷 Resumo</button>
-  <button class="btn" id="acctBtn">🧾 Contábil</button>
-</div>
 <div class="toast" id="toast"></div>
 
 <div id="acctModal" class="hidden">
@@ -369,7 +361,7 @@
   <div class="topcard">
     <div class="tophead">
       <div><div class="topttl" id="topTitle">Top gastos</div><div class="topsub" id="topSub"></div></div>
-      <span class="topheadbtns"><button class="topclose" id="topImport" title="Importar mais">📥</button><button class="topclose" id="topClear" title="Excluir extrato importado">🗑</button><button class="topclose" id="topClose">✕</button></span>
+      <span class="topheadbtns"><button class="topclose" id="acctBtn" title="Contábil (Saúde)">🧾</button><button class="topclose" id="topImport" title="Importar mais">📥</button><button class="topclose" id="topClear" title="Excluir extrato importado">🗑</button><button class="topclose" id="topClose">✕</button></span>
     </div>
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
@@ -630,14 +622,7 @@ $("#rowFilter").oninput=renderRows;
 $("#usdBrl").oninput=()=>{updateFxReset();calc();};
 $("#usdPyg").oninput=e=>{const d=(e.target.value||"").replace(/\D/g,"");e.target.value=d?parseInt(d,10).toLocaleString("pt-BR"):"";const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}updateFxReset();calc();};
 $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}calc();};
-$("#copyBtn").onclick=()=>{
-  const r=rate();let L=["CONTAS FIXAS PARAGUAI",""],tB=0,tU=0,tP=0;
-  rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tB+=u*r.brl;tP+=u*r.pyg;
-    L.push(`${row.name}: ${fmt.BRL(u*r.brl)} | ${fmt.PYG(u*r.pyg)}`);});
-  const sUsd=toUSD(salNum(),salCur,r),dB=sUsd*r.brl-tB;
-  L.push("",`TOTAL: ${fmt.BRL(tB)} | ${fmt.USD(tU)}`,`SALÁRIO: ${fmt.BRL(sUsd*r.brl)} | ${fmt.USD(sUsd)}`,`DIFERENÇA: ${dB>=0?"+":"−"}${fmt.BRL(Math.abs(dB))}`);
-  navigator.clipboard.writeText(L.join("\n")).then(()=>toast("Copiado ✓"),()=>toast("Falha ao copiar"));
-};
+
 
 /* ---- imagem para WhatsApp ---- */
 function shareHead(icon,title,sub){
@@ -965,6 +950,7 @@ function openTop(pre,info){
   topSel=(pre&&months.includes(pre))?new Set([pre]):new Set(months); // padrão: Todos
   $(".topcard").classList.toggle("info",!!info);
   $("#topImport").style.display=info?"none":"";
+  $("#acctBtn").style.display=info?"none":"";
   $("#topClear").style.display=info?"none":"";
   if(info)topSort="date";
   $("#topTitle").textContent=info?("Detalhes · "+(pre?monthLabel(pre):"Extrato")):"Extrato";
