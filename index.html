@@ -64,6 +64,35 @@
   #fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200;display:none}
   #fw.on{display:block}
 
+  /* ---- módulo IRP ---- */
+  .irpHero{background:linear-gradient(135deg,#14202b,#0d1117);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0 4px;position:relative;overflow:hidden}
+  .irpHero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(55,214,160,.14);filter:blur(6px)}
+  .irpHeroT{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;position:relative;z-index:1}
+  .irpHeroV{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:2rem;margin:6px 0 2px;color:var(--pyg);position:relative;z-index:1}
+  .irpHeroSub{font-size:.78rem;color:var(--ink-dim);position:relative;z-index:1}
+  .irpTax{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);position:relative;z-index:1}
+  .irpTax span{font-size:.78rem;color:var(--ink-dim)}
+  .irpTax b{font-family:'IBM Plex Mono',monospace;font-size:1.2rem;color:var(--accent)}
+  .irpCard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 14px;margin-bottom:4px}
+  .irpBig{display:flex;gap:12px}
+  .irpBig>div{flex:1;padding:8px 0}
+  .irpBig .k{display:block;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:4px}
+  .irpBig .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.05rem}
+  .irpBig .v.pos{color:var(--accent)}
+  .irow{display:grid;grid-template-columns:1.1fr 1.3fr 1.3fr 1.3fr;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+  .irow:last-child{border-bottom:0}
+  .irow.irhead{color:var(--ink-faint);font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;font-family:inherit;font-weight:700}
+  .irow .im{font-family:inherit;color:var(--ink-dim)}
+  .irow .ii{color:var(--accent);text-align:right}
+  .irow .ie{color:var(--danger);text-align:right}
+  .irow .in{text-align:right;font-weight:700}
+  .irow .in.pos{color:var(--accent)} .irow .in.neg{color:var(--danger)}
+  .irow.irtot{border-top:1px solid var(--line);border-bottom:0;margin-top:2px;padding-top:11px}
+  .irow.irtot .im{color:var(--ink);font-weight:700;font-family:inherit}
+  .irow.irtot .in{color:var(--accent);font-size:.95rem}
+  .irpNote{font-size:.72rem;color:var(--ink-faint);padding:9px 0 4px;line-height:1.5}
+  .irpNote b{color:var(--ink-dim)}
+
 
   .fxreset{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--accent);
     font-family:inherit;font-size:.76rem;font-weight:700;padding:9px;border-radius:10px;cursor:pointer}
@@ -300,7 +329,7 @@
     <div class="lockerr" id="lockErr"></div>
   </div>
 </div>
-<main>
+<main id="despMain">
   <div class="hdr">
     <h1>Contas Fixas <span class="py">Paraguai</span></h1>
     <button class="hdrbtn" id="goIrp" title="Ir para IRP">📑 IRP</button>
@@ -345,6 +374,20 @@
     <div class="rrow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span>
       <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
   </div>
+</main>
+
+<main id="irpMain" hidden>
+  <div class="hdr">
+    <h1>IRP <span class="py">2026</span></h1>
+    <button class="hdrbtn" id="goDesp" title="Ir para Despesas">💸 Despesas</button>
+  </div>
+  <p class="sub">Cálculo preliminar do Impuesto a la Renta Personal. Importe o arquivo da SET (Ventas + Compras) que eu somo, separo e calculo as faixas.</p>
+
+  <button class="add" id="irpImport">📥 Importar arquivo da SET</button>
+  <button class="clearBtn" id="irpShare" style="display:none;width:100%;margin-top:8px;padding:11px">📷 Compartilhar resumo</button>
+  <input type="file" id="irpFile" accept=".xls,.xlsx" style="display:none">
+
+  <div id="irpBody"></div>
 </main>
 
 <canvas id="fw"></canvas>
@@ -398,6 +441,7 @@ const KEY="contas-py-v1";
 let rows=[];
 let sv={tot:"BRL",sal:"BRL",diff:"BRL"};
 let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
+let irpData=null; // {ingresos:{byMonth,total},egresos:{byMonth,total},date}
 let liveRates=null; // {brl,pyg,date}
 const $=s=>document.querySelector(s);
 
@@ -427,8 +471,7 @@ $("#enterIrp").onclick=()=>setMod("irp");
   function end(){if(!drawing)return;drawing=false;const code=seq.join("");
     if(code===PATTERN){
       grid.querySelectorAll(".pdot.on").forEach(d=>d.classList.add("ok"));
-      if(chosenMod==="irp"){$("#lockErr").style.color="var(--ink-dim)";$("#lockErr").textContent="📑 IRP — em construção";setTimeout(clearP,600);}
-      else{setTimeout(unlock,150);}
+      setTimeout(()=>{showView(chosenMod==="irp"?"irp":"desp");unlock();},150);
     }
     else{grid.querySelectorAll(".pdot.on").forEach(d=>d.classList.add("err"));$("#lockErr").style.color="var(--danger)";$("#lockErr").textContent="Padrão incorreto";setTimeout(clearP,500);}}
   grid.addEventListener("pointerdown",e=>{e.preventDefault();grid.setPointerCapture(e.pointerId);start(e.clientX,e.clientY);});
@@ -463,7 +506,7 @@ const fmtSal=()=>{$("#salary").value=salNum()?fmtAmt(salNum(),salCur):"";};
 
 /* ---- salvar / carregar ---- */
 function save(){
-  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,salCur,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
+  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,irpData,salCur,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
     const h=$("#saveHint");h.classList.add("show");clearTimeout(window._st);window._st=setTimeout(()=>h.classList.remove("show"),1200);
   }catch(e){}
 }
@@ -473,6 +516,7 @@ function load(){
     if(s.sv)sv=Object.assign(sv,s.sv);
     else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
     if(s.imp)imp=s.imp;
+    if(s.irpData)irpData=s.irpData;
     if(s.salary!=null)$("#salary").value=s.salary;
     if(s.usdBrl!=null)$("#usdBrl").value=s.usdBrl;
     if(s.usdPyg!=null)$("#usdPyg").value=s.usdPyg;
@@ -605,7 +649,14 @@ $("#fxReset").onclick=()=>{
   if(!liveRates)return;
   if(confirm("Voltar à cotação do dia?")){applyLive();toast("Cotação do dia aplicada");}
 };
-$("#goIrp").onclick=showChooser;
+function showView(v){
+  const irp=v==="irp";
+  $("#despMain").hidden=irp;$("#irpMain").hidden=!irp;
+  window.scrollTo(0,0);
+  if(irp)renderIRP();
+}
+$("#goIrp").onclick=()=>showView("irp");
+$("#goDesp").onclick=()=>showView("desp");
 function addManualRow(){
   const bad=rows.findIndex(r=>!(r.name||"").trim()||!(r.amt>0));
   if(bad>=0){
@@ -1079,6 +1130,139 @@ function launchFireworks(){
   frame();
 }
 $("#fxBtn").onclick=()=>{launchFireworks();toast("🎉 Boa!");};
+
+/* ====== MÓDULO IRP ====== */
+const fmtG=v=>"₲ "+Math.round(v||0).toLocaleString("es-PY");
+// faixas progressivas 8% até 50M, 9% de 50M a 150M, 10% acima de 150M (sobre a renta neta)
+function irpTax(net){
+  if(!(net>0))return 0;
+  const B1=50000000,B2=150000000;let t=0;
+  t+=Math.min(net,B1)*0.08;
+  if(net>B1)t+=(Math.min(net,B2)-B1)*0.09;
+  if(net>B2)t+=(net-B2)*0.10;
+  return t;
+}
+function irpBreakdown(net){
+  const B1=50000000,B2=150000000,out=[];
+  if(net<=0)return out;
+  out.push({faixa:"8%",base:Math.min(net,B1),imp:Math.min(net,B1)*0.08});
+  if(net>B1)out.push({faixa:"9%",base:Math.min(net,B2)-B1,imp:(Math.min(net,B2)-B1)*0.09});
+  if(net>B2)out.push({faixa:"10%",base:net-B2,imp:(net-B2)*0.10});
+  return out;
+}
+// lê uma aba (Ventas/Compras) e soma a coluna "Total Comprobante IRP" por período, só Imputa IRP = SI
+function parseIRPSheet(wb,wanted){
+  const name=wb.SheetNames.find(n=>norm(n).includes(wanted));
+  if(!name)return null;
+  const arr=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:""});
+  let hi=-1,cT=-1,cImp=-1,cPer=-1,cO=-1,cP=-1,cQ=-1,cR=-1,cS=-1;
+  for(let i=0;i<arr.length;i++){const h=arr[i].map(norm);
+    const it=h.findIndex(x=>x.includes("total comprobante irp"));
+    const ii=h.findIndex(x=>x==="imputa irp");
+    if(it>=0&&ii>=0){hi=i;cT=it;cImp=ii;
+      cPer=h.findIndex(x=>x.includes("periodo"));
+      cO=h.findIndex(x=>x.includes("monto gravado 10"));
+      cP=h.findIndex(x=>x==="iva 10%"||x.includes("iva 10"));
+      cQ=h.findIndex(x=>x.includes("monto gravado 5"));
+      cR=h.findIndex(x=>x.includes("iva 5"));
+      cS=h.findIndex(x=>x.includes("no gravado")||x.includes("exento"));
+      break;}}
+  if(hi<0)return null;
+  const num=v=>{if(typeof v==="number")return v;const n=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(n)?0:n;};
+  const byMonth={};let total=0,count=0,excl=0;
+  for(let i=hi+1;i<arr.length;i++){const row=arr[i];if(!row||!row.length)continue;
+    const imp=norm(row[cImp]);if(imp!=="si"){if(imp==="no")excl++;continue;}
+    let t=num(row[cT]);
+    if(!t&&(cO>=0))t=(num(row[cO])-num(row[cP]))+(num(row[cQ])-num(row[cR]))+num(row[cS]);
+    if(!t)continue;
+    const per=cPer>=0?String(row[cPer]||"").trim():"";const mk=per||"—";
+    byMonth[mk]=(byMonth[mk]||0)+t;total+=t;count++;}
+  return {byMonth,total,count,excl};
+}
+function parseIRP(wb){
+  const ing=parseIRPSheet(wb,"ventas"),eg=parseIRPSheet(wb,"compras");
+  if(!ing&&!eg)return null;
+  return {ingresos:ing||{byMonth:{},total:0,count:0,excl:0},egresos:eg||{byMonth:{},total:0,count:0,excl:0},date:new Date().toLocaleDateString("pt-BR")};
+}
+function monthsSorted(o){return Object.keys(o).filter(k=>k!=="—").sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});}
+function renderIRP(){
+  const body=$("#irpBody");
+  if(!irpData){body.innerHTML=`<div class="emptyx"><div class="emptyx-ico">📑</div>
+    <p class="emptyx-t">Nenhum cálculo ainda</p>
+    <p class="emptyx-s">Toque em <b>📥 Importar arquivo da SET</b> para eu somar Ventas e Compras e calcular o IRP.</p></div>`;
+    $("#irpShare").style.display="none";return;}
+  $("#irpShare").style.display="block";
+  const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
+  const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
+    .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
+  const nM=months.length||1;
+  const annNet=net*12/nM,annTax=irpTax(annNet);
+  const bd=irpBreakdown(net);
+  const faixaAtual=net<=50000000?"8%":net<=150000000?"9%":"10%";
+  let monthRows=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0;
+    return `<div class="irow"><span class="im">${m}</span><span class="ii">${fmtG(i)}</span><span class="ie">−${fmtG(e).replace("₲ ","₲ ")}</span><span class="in ${i-e>=0?'pos':'neg'}">${fmtG(i-e)}</span></div>`;}).join("");
+  body.innerHTML=`
+    <div class="irpHero">
+      <div class="irpHeroT">Renta neta acumulada</div>
+      <div class="irpHeroV">${fmtG(net)}</div>
+      <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"} · faixa atual ${faixaAtual}</div>
+      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b>${fmtG(tax)}</b></div>
+    </div>
+
+    <div class="sec">Ingressos × Egressos</div>
+    <div class="irpCard">
+      <div class="irpBig"><div><span class="k">Ingressos (SI)</span><span class="v pos">${fmtG(ing)}</span></div>
+        <div><span class="k">Egressos (SI)</span><span class="v">−${fmtG(eg)}</span></div></div>
+      <div class="irpNote">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.</div>
+    </div>
+
+    <div class="sec">Por mês</div>
+    <div class="irpCard">
+      <div class="irow irhead"><span class="im">Mês</span><span class="ii">Ingressos</span><span class="ie">Egressos</span><span class="in">Neto</span></div>
+      ${monthRows||'<p class="emptyx-s" style="padding:8px">Sem períodos detectados.</p>'}
+    </div>
+
+    <div class="sec">Cálculo do imposto (faixas)</div>
+    <div class="irpCard">
+      ${bd.length?bd.map(f=>`<div class="irow"><span class="im">Faixa ${f.faixa}</span><span class="ii">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`).join(""):'<p class="emptyx-s" style="padding:8px">Renta neta zerada ou negativa — sem imposto.</p>'}
+      <div class="irow irtot"><span class="im">Total acumulado</span><span class="in">${fmtG(tax)}</span></div>
+    </div>
+
+    <div class="sec">Projeção anual (estimativa)</div>
+    <div class="irpCard">
+      <div class="irow"><span class="im">Renta neta projetada</span><span class="in">${fmtG(annNet)}</span></div>
+      <div class="irow"><span class="im">Imposto anual projetado</span><span class="in">${fmtG(annTax)}</span></div>
+      <div class="irpNote">Projeção simples (acumulado ÷ ${nM} × 12). O IRP é anual: fecha em 31/dez e declara-se em março. Confirme sempre no Marangatú da SET.</div>
+    </div>`;
+}
+function doImportIRP(){if(typeof XLSX==="undefined"){toast("Abra no navegador para importar");return;}$("#irpFile").click();}
+$("#irpImport").onclick=doImportIRP;
+$("#irpFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;toast("Lendo arquivo da SET…");
+  const rd=new FileReader();rd.onload=ev=>{
+    try{const wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array"});const d=parseIRP(wb);
+      if(!d||(!d.ingresos.count&&!d.egresos.count)){toast("Não encontrei as abas Ventas/Compras");$("#irpFile").value="";return;}
+      irpData=d;save();renderIRP();toast(`IRP calculado · ${d.ingresos.count} ingressos · ${d.egresos.count} egressos`);
+    }catch(err){toast("Não consegui ler esse arquivo");}
+    $("#irpFile").value="";};
+  rd.readAsArrayBuffer(f);};
+$("#irpShare").onclick=()=>{if(!irpData){toast("Importe o arquivo primeiro");return;}shareImage(fillIRPCard,"irp-2026.png","IRP 2026");};
+function fillIRPCard(){
+  const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
+  const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
+    .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
+  let rowsH=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0,n=i-e;
+    return `<div class="srow"><div class="snm"><span class="sdesc">${m}</span><span class="sdt">Ingr. ₲ ${Math.round(i).toLocaleString("es-PY")} · Egr. ₲ ${Math.round(e).toLocaleString("es-PY")}</span></div><span class="vmain" style="color:${n<0?'var(--danger)':'var(--accent)'}">₲ ${Math.round(n).toLocaleString("es-PY")}</span></div>`;}).join("");
+  $("#shareCard").innerHTML=
+    shareHead("📑","IRP <b>2026</b>","Cálculo preliminar · "+(irpData.date||""))+
+    `<div class="sbody">${rowsH||'<p class="sempty">Sem períodos.</p>'}</div>`+
+    `<div class="stotbox">
+       <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fmtG(ing)}</span></div>
+       <div class="stot"><span class="lbl">Egressos</span><span class="vl">− ${fmtG(eg).replace("₲ ","₲ ")}</span></div>
+       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:var(--pyg)">${fmtG(net)}</span></div>
+       <div class="stot diff big"><span class="lbl">Imposto estimado</span><span class="vl">${fmtG(tax)}</span></div>
+     </div>`+
+    `<div class="sfoot">Gerado em ${new Date().toLocaleDateString("pt-BR")} · Faixas 8/9/10% sobre a renta neta · IRP anual (fecha 31/dez)</div>`;
+}
 
 /* ---- init ---- */
 load();
