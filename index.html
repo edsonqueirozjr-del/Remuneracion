@@ -374,6 +374,46 @@
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
   .applybtn{margin-top:12px;flex:none;border:0;background:var(--accent);color:#06251b;font-family:inherit;font-weight:700;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer}
   .applybtn:active{filter:brightness(1.08)}
+
+
+  /* ---- ajustes exclusivos para web/desktop ---- */
+  .irpOverview{display:block}
+  @media (min-width: 768px){
+    body{padding-top:24px;padding-bottom:40px}
+    main{max-width:860px;padding:24px 28px 38px}
+    .hdr{margin-bottom:22px}
+    h1{font-size:2rem}
+    .hdrbtn{min-width:132px;padding:9px 14px;font-size:.82rem}
+
+    /* IRP: aproveita melhor a largura da tela sem mexer no mobile */
+    #irpMain .irpbtns{max-width:640px;margin:0 auto 12px}
+    #irpMain .irpCurWrap{max-width:520px;margin:10px auto 20px;justify-content:center;padding:10px 14px}
+    #irpMain .irpCurSeg{width:100%;max-width:440px;flex:none}
+    #irpBody>.sec{max-width:820px;margin-left:auto;margin-right:auto}
+    .irpOverview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch;max-width:820px;margin:0 auto 14px}
+    .irpOverview .irpCard,.irpOverview .irpHero{height:100%;margin:0}
+    .irpOverview .irpCard{padding:12px 18px;display:flex;flex-direction:column;justify-content:center}
+    .irpOverview .irpHero{padding:24px 22px;justify-content:center}
+    .irpOverview .irpBig{height:100%;align-items:center}
+    .irpHeroV{font-size:1.65rem}
+    .irpTax b{font-size:1.5rem}
+    #irpBody>.irpCard{max-width:820px;margin-left:auto;margin-right:auto}
+    #irpBody .irow{grid-template-columns:1fr 1.25fr 1.25fr 1.25fr;gap:14px;padding:11px 0}
+    #irpBody .irow.irhead{font-size:.7rem}
+
+    /* Simulador: campos lado a lado no desktop */
+    #simModal .acctcard{max-width:680px}
+    #simModal .simwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;padding-top:18px}
+    #simModal #simCurWrap,#simModal .simResult{grid-column:1/-1}
+    #simModal #simCurWrap{margin-bottom:8px!important}
+    #simModal .simfield{margin-bottom:0}
+    #simModal #simShare{display:block;max-width:360px;margin:12px auto 0!important}
+
+    /* Modais/listas ficam menos apertados na web */
+    .topcard{max-width:840px}
+    .acctcard{max-width:520px}
+  }
+
 </style>
 </head>
 <body>
@@ -1211,6 +1251,9 @@ function reportPDF(){
     tfoot td{border-top:2px solid #10161f;font-weight:700;padding-top:10px}
     .foot{margin-top:18px;color:#889;font-size:10px}
     @media print{body{padding:10px}}
+  
+
+
   </style></head><body>
     <h1>Relatório de despesas</h1>
     <div class="sub">${meses} · ${list.length} lançamentos</div>
@@ -1339,18 +1382,20 @@ function renderIRP(){
     return `<div class="irow"><span class="im">${m}</span><span class="ii">${fc(i)}</span><span class="ie">−${fc(e)}</span><span class="in ${i-e>=0?'pos':'neg'}">${fc(i-e)}</span></div>`;}).join("");
   body.innerHTML=`
     <div class="sec">Ingressos × Egressos</div>
-    <div class="irpCard">
-      <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
-        <div><span class="k">Egressos (Compras)</span><span class="v neg">${fc(eg)}</span></div></div>
-      ${(((irpData.ingresos.excl||0)+(irpData.egresos.excl||0))>0)?`<div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
-      <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
-    </div>
+    <div class="irpOverview">
+      <div class="irpCard">
+        <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
+          <div><span class="k">Egressos (Compras)</span><span class="v neg">${fc(eg)}</span></div></div>
+        ${(((irpData.ingresos.excl||0)+(irpData.egresos.excl||0))>0)?`<div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
+        <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
+      </div>
 
-    <div class="irpHero">
-      <div class="irpHeroT">Renta neta acumulada</div>
-      <div class="irpHeroV ${netCls}">${fc(net)}</div>
-      <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"}</div>
-      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b class="${taxCls}">${fc(tax)}</b></div>
+      <div class="irpHero">
+        <div class="irpHeroT">Renta neta acumulada</div>
+        <div class="irpHeroV ${netCls}">${fc(net)}</div>
+        <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"}</div>
+        <div class="irpTax"><span>Imposto estimado (acumulado)</span><b class="${taxCls}">${fc(tax)}</b></div>
+      </div>
     </div>
 
     <div class="sec">Por mês</div>
