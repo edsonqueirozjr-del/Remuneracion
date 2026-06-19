@@ -68,15 +68,11 @@
   /* ---- módulo IRP (tamanhos padronizados) ---- */
   /* escala: rótulo .66 · nota .74 · nº tabela .82 · nº padrão 1.0 · nº destaque 1.7 */
   .irpbtns{display:flex;gap:8px;align-items:stretch}
-  .irpCurWrap{position:relative;margin-top:8px}
-  .irpCurBtn{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);border-radius:12px;padding:10px 14px;cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:600}
-  .irpCurBtn b{color:var(--ink);font-weight:700}
-  .irpCurBtn .chev{font-size:.68rem;color:var(--ink-faint)}
-  .irpCurMenu{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden;z-index:20;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-  .irpCurMenu button{display:block;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line-soft);color:var(--ink-dim);padding:11px 14px;font-family:inherit;font-size:.84rem;font-weight:600;cursor:pointer}
-  .irpCurMenu button:last-child{border-bottom:0}
-  .irpCurMenu button:active{background:var(--panel-2)}
-  .irpCurMenu button.on{color:var(--accent);font-weight:700}
+  .irpCurWrap{margin-top:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .irpCurLabel{font-size:.74rem;color:var(--ink-dim);font-weight:600;flex:none}
+  .irpCurSeg{display:flex;flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .irpCurSeg button{flex:1;border:0;background:transparent;color:var(--ink-faint);font-family:inherit;font-weight:700;font-size:clamp(.62rem,2.6vw,.74rem);padding:8px 4px;cursor:pointer;transition:.12s;white-space:nowrap}
+  .irpCurSeg button.on{color:#06251b;background:var(--accent)}
   .irpbtns .add{flex:1;margin-top:0}
   .irpSimBtn{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:14px;padding:0 16px;cursor:pointer;font-family:inherit;font-size:.84rem;font-weight:700;min-width:108px;text-align:center}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
@@ -433,8 +429,8 @@
     <button class="irpSimBtn" id="irpSimOpen">🧮 Simular</button>
   </div>
   <div class="irpCurWrap" id="irpCurWrap" hidden>
-    <button class="irpCurBtn" id="irpCurBtn"><span>💱</span> Ver em <b id="irpCurLbl">₲ Guarani</b> <span class="chev">▾</span></button>
-    <div class="irpCurMenu" id="irpCurMenu" hidden>
+    <span class="irpCurLabel">💱 Ver em</span>
+    <div class="irpCurSeg" id="irpCurSeg">
       <button data-cur="PYG">₲ Guarani</button>
       <button data-cur="USD">U$ Dólar</button>
       <button data-cur="BRL">R$ Real</button>
@@ -474,9 +470,9 @@
       <button class="topclose" id="simClose">✕</button>
     </div>
     <div class="simwrap">
-      <div class="irpCurWrap" id="simCurWrap" style="margin-top:0">
-        <button class="irpCurBtn" id="simCurBtn"><span>💱</span> Ver em <b id="simCurLbl">₲ Guarani</b> <span class="chev">▾</span></button>
-        <div class="irpCurMenu" id="simCurMenu" hidden>
+      <div class="irpCurWrap" id="simCurWrap" style="margin-top:0;margin-bottom:22px">
+        <span class="irpCurLabel">💱 Ver em</span>
+        <div class="irpCurSeg" id="simCurSeg">
           <button data-cur="PYG">₲ Guarani</button>
           <button data-cur="USD">U$ Dólar</button>
           <button data-cur="BRL">R$ Real</button>
@@ -1352,17 +1348,10 @@ function renderIRP(){
 }
 /* ---- seletor de moeda do painel IRP ---- */
 function updateIrpCurBtn(){
-  const lbl={PYG:"₲ Guarani",USD:"U$ Dólar",BRL:"R$ Real"};
-  $("#irpCurLbl").textContent=lbl[irpCur];
-  $("#irpCurMenu").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
+  $("#irpCurSeg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
 }
-$("#irpCurBtn").onclick=()=>{$("#irpCurMenu").hidden=!$("#irpCurMenu").hidden;};
-$("#irpCurMenu").querySelectorAll("button").forEach(b=>{
-  b.onclick=()=>{irpCur=b.dataset.cur;updateIrpCurBtn();$("#irpCurMenu").hidden=true;save();renderIRP();if(!$("#simModal").classList.contains("hidden"))renderSim();};
-});
-document.addEventListener("click",e=>{
-  const wrap=$("#irpCurWrap");
-  if(wrap&&!wrap.contains(e.target))$("#irpCurMenu").hidden=true;
+$("#irpCurSeg").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{if(b.dataset.cur===irpCur)return;irpCur=b.dataset.cur;updateIrpCurBtn();save();renderIRP();if(!$("#simModal").classList.contains("hidden"))renderSim();};
 });
 updateIrpCurBtn();
 function doImportIRP(){if(typeof XLSX==="undefined"){toast("Abra no navegador para importar");return;}$("#irpFile").click();}
@@ -1413,9 +1402,7 @@ function simSetFieldPyg(id,pygVal){
   $("#"+id).value=pygVal?fmtAmt(pygToCur(pygVal,irpCur),irpCur):"";
 }
 function updateSimCurUI(){
-  const lbl={PYG:"₲ Guarani",USD:"U$ Dólar",BRL:"R$ Real"};
-  $("#simCurLbl").textContent=lbl[irpCur];
-  $("#simCurMenu").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
+  $("#simCurSeg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
   $("#simIngTag").textContent=curLbl(irpCur);
   $("#simEgTag").textContent=curLbl(irpCur);
 }
@@ -1451,19 +1438,15 @@ $("#simIng").oninput=e=>{simMaskCur(e.target,irpCur);renderSim();};
 $("#simEg").oninput=e=>{simMaskCur(e.target,irpCur);renderSim();};
 $("#simIngReset").onclick=()=>{if(irpData){simSetFieldPyg("simIng",irpData.ingresos.total);renderSim();}};
 $("#simEgReset").onclick=()=>{if(irpData){simSetFieldPyg("simEg",irpData.egresos.total);renderSim();}};
-$("#simCurBtn").onclick=()=>{$("#simCurMenu").hidden=!$("#simCurMenu").hidden;};
-$("#simCurMenu").querySelectorAll("button").forEach(b=>{
+$("#simCurSeg").querySelectorAll("button").forEach(b=>{
   b.onclick=()=>{
+    if(b.dataset.cur===irpCur)return;
     const ingPyg=simValPyg("simIng"),egPyg=simValPyg("simEg");
     irpCur=b.dataset.cur;save();updateIrpCurBtn();updateSimCurUI();
     $("#simIng").value=ingPyg?fmtAmt(pygToCur(ingPyg,irpCur),irpCur):"";
     $("#simEg").value=egPyg?fmtAmt(pygToCur(egPyg,irpCur),irpCur):"";
-    $("#simCurMenu").hidden=true;renderSim();renderIRP();
+    renderSim();renderIRP();
   };
-});
-document.addEventListener("click",e=>{
-  const wrap=$("#simCurWrap");
-  if(wrap&&!wrap.contains(e.target))$("#simCurMenu").hidden=true;
 });
 
 /* ---- init ---- */
