@@ -135,7 +135,7 @@
   .simResult .srTop{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft);gap:10px}
   .simResult .srTop .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
   .simResult .srTop .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.85rem,4vw,1rem);white-space:nowrap}
-  .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:13px 0 12px;border-top:1px solid var(--line);margin-top:2px;gap:10px}
+  .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:13px 0 12px;margin-top:2px;gap:10px}
   .simResult .srTax .k{font-size:.74rem;color:var(--ink-dim);font-weight:600}
   .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.2rem,6vw,1.5rem);color:var(--accent);white-space:nowrap}
   .simResult .srEff{text-align:right;font-size:.72rem;color:var(--ink-faint);padding-bottom:10px}
@@ -1378,20 +1378,19 @@ $("#irpFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)retur
 $("#irpShare").onclick=()=>{if(!irpData){toast("Importe o arquivo primeiro");return;}shareImage(fillIRPCard,"irp-2026.png","IRP 2026");};
 function fillIRPCard(){
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
-  const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
-    .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
-  let rowsH=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0,n=i-e;
-    return `<div class="srow"><div class="snm"><span class="sdesc">${m}</span><span class="sdt">Ingr. ₲ ${Math.round(i).toLocaleString("es-PY")} · Egr. ₲ ${Math.round(e).toLocaleString("es-PY")}</span></div><span class="vmain" style="color:${n<0?'var(--danger)':'var(--accent)'}">₲ ${Math.round(n).toLocaleString("es-PY")}</span></div>`;}).join("");
+  const faixaAtual=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
+  const eff=ing>0?(tax/ing*100):0;
+  const fc=v=>fmtCur(v,irpCur);
+  const monthsCount=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])].length;
   $("#shareCard").innerHTML=
-    shareHead("📑","IRP <b>2026</b>","Cálculo preliminar · "+(irpData.date||""))+
-    `<div class="sbody">${rowsH||'<p class="sempty">Sem períodos.</p>'}</div>`+
+    shareHead("📑","IRP <b>2026</b>","Cálculo preliminar · "+(monthsCount||0)+" "+(monthsCount===1?"mês":"meses")+" · faixa atual "+faixaAtual)+
     `<div class="stotbox">
-       <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fmtG(ing)}</span></div>
-       <div class="stot"><span class="lbl">Egressos</span><span class="vl">− ${fmtG(eg).replace("₲ ","₲ ")}</span></div>
-       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:var(--pyg)">${fmtG(net)}</span></div>
-       <div class="stot diff big"><span class="lbl">Imposto estimado</span><span class="vl">${fmtG(tax)}</span></div>
+       <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
+       <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl">${fc(eg)}</span></div>
+       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:var(--pyg)">${fc(net)}</span></div>
+       <div class="stot diff big"><span class="lbl">Imposto estimado · faixa ${faixaAtual}</span><span class="vl">${fc(tax)}</span></div>
      </div>`+
-    `<div class="sfoot">Gerado em ${new Date().toLocaleDateString("pt-BR")} · Faixas 8/9/10% sobre a renta neta · IRP anual (fecha 31/dez)</div>`;
+    `<div class="sfoot">Alíquota efetiva: ${eff.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}% dos ingressos · Gerado em ${new Date().toLocaleDateString("pt-BR")} · Faixas 8/9/10% sobre a renta neta · IRP anual (fecha 31/dez)</div>`;
 }
 
 /* ---- simulador IRP ---- */
