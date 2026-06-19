@@ -360,7 +360,7 @@
 <div id="lock">
   <div class="lockcard">
     <div class="lockbtns">
-      <button class="lockbtn modsel on" id="enterDesp">💸 Despesas</button>
+      <button class="lockbtn modsel on" id="enterDesp">💸 Salário</button>
       <button class="lockbtn modsel alt" id="enterIrp">📑 IRP</button>
     </div>
     <div class="pattern" id="pattern">
@@ -429,14 +429,12 @@
     <button class="irpSimBtn" id="irpSimOpen">🧮 Simular</button>
   </div>
   <div class="irpCurWrap" id="irpCurWrap" hidden>
-    <span class="irpCurLabel">💱 Ver em</span>
     <div class="irpCurSeg" id="irpCurSeg">
       <button data-cur="PYG">₲ Guarani</button>
       <button data-cur="USD">U$ Dólar</button>
       <button data-cur="BRL">R$ Real</button>
     </div>
   </div>
-  <button class="clearBtn" id="irpShare" style="display:none;width:100%;margin-top:8px;padding:11px">📷 Compartilhar resumo</button>
   <input type="file" id="irpFile" accept=".xls,.xlsx" style="display:none">
 
   <div id="irpBody"></div>
@@ -471,7 +469,6 @@
     </div>
     <div class="simwrap">
       <div class="irpCurWrap" id="simCurWrap" style="margin-top:0;margin-bottom:22px">
-        <span class="irpCurLabel">💱 Ver em</span>
         <div class="irpCurSeg" id="simCurSeg">
           <button data-cur="PYG">₲ Guarani</button>
           <button data-cur="USD">U$ Dólar</button>
@@ -486,6 +483,7 @@
           <button class="simResetField" id="simEgReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
 
       <div class="simResult" id="simResult"></div>
+      <button class="clearBtn" id="simShare" style="width:100%;margin-top:10px;padding:11px">📷 Compartilhar resumo</button>
     </div>
   </div>
 </div>
@@ -783,7 +781,8 @@ $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.set
 
 /* ---- imagem para WhatsApp ---- */
 function shareHead(icon,title,sub){
-  return `<div class="shead"><div class="sbadge">${icon}</div><div><p class="sct">${title}</p><p class="sdate">${sub}</p></div></div>`;
+  const badge=icon?`<div class="sbadge">${icon}</div>`:"";
+  return `<div class="shead">${badge}<div><p class="sct">${title}</p><p class="sdate">${sub}</p></div></div>`;
 }
 function shareFoot(r){
   const dt=new Date().toLocaleDateString("pt-BR");
@@ -1305,25 +1304,15 @@ function renderExclDetail(d){
 }
 function renderIRP(){
   const body=$("#irpBody");
-  if(!irpData){body.innerHTML="";$("#irpShare").style.display="none";$("#irpCurWrap").hidden=true;return;}
-  $("#irpShare").style.display="block";
+  if(!irpData){body.innerHTML="";$("#irpCurWrap").hidden=true;return;}
   $("#irpCurWrap").hidden=false;
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
   const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
     .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
-  const bd=irpBreakdown(net);
-  const faixaAtual=net<=50000000?"8%":net<=150000000?"9%":"10%";
   const fc=v=>fmtCur(v,irpCur);
   let monthRows=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0;
     return `<div class="irow"><span class="im">${m}</span><span class="ii">${fc(i)}</span><span class="ie">−${fc(e)}</span><span class="in ${i-e>=0?'pos':'neg'}">${fc(i-e)}</span></div>`;}).join("");
   body.innerHTML=`
-    <div class="irpHero">
-      <div class="irpHeroT">Renta neta acumulada</div>
-      <div class="irpHeroV">${fc(net)}</div>
-      <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"} · faixa atual ${faixaAtual}</div>
-      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b>${fc(tax)}</b></div>
-    </div>
-
     <div class="sec">Ingressos × Egressos</div>
     <div class="irpCard">
       <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
@@ -1332,16 +1321,17 @@ function renderIRP(){
       <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
     </div>
 
+    <div class="irpHero">
+      <div class="irpHeroT">Renta neta acumulada</div>
+      <div class="irpHeroV">${fc(net)}</div>
+      <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"}</div>
+      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b>${fc(tax)}</b></div>
+    </div>
+
     <div class="sec">Por mês</div>
     <div class="irpCard">
       <div class="irow irhead"><span class="im">Mês</span><span class="ii">Ingressos</span><span class="ie">Egressos</span><span class="in">Neto</span></div>
       ${monthRows||'<p class="emptyx-s" style="padding:8px">Sem períodos detectados.</p>'}
-    </div>
-
-    <div class="sec">Cálculo do imposto (faixas)</div>
-    <div class="irpCard">
-      ${bd.length?bd.map((f,idx)=>`<div class="irow ir3${(idx===bd.length-1&&bd.length>1)?' noborder':''}"><span class="im">Faixa ${f.faixa}</span><span class="ii">sobre ${fc(f.base)}</span><span class="in">${fc(f.imp)}</span></div>`).join(""):'<p class="emptyx-s" style="padding:8px">Renta neta zerada ou negativa — sem imposto.</p>'}
-      ${bd.length>1?`<div class="irow irtot ir2"><span class="im">Total acumulado</span><span class="in">${fc(tax)}</span></div>`:""}
     </div>`;
   const exclToggle=$("#irpExclToggle");
   if(exclToggle)exclToggle.onclick=()=>{exclToggle.classList.toggle("open");$("#irpExclDetail").classList.toggle("open");};
@@ -1375,22 +1365,19 @@ $("#irpFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)retur
     }catch(err){toast("Não consegui ler esse arquivo");}
     $("#irpFile").value="";};
   rd.readAsArrayBuffer(f);};
-$("#irpShare").onclick=()=>{if(!irpData){toast("Importe o arquivo primeiro");return;}shareImage(fillIRPCard,"irp-2026.png","IRP 2026");};
 function fillIRPCard(){
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
   const faixaAtual=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
-  const eff=ing>0?(tax/ing*100):0;
   const fc=v=>fmtCur(v,irpCur);
   const monthsCount=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])].length;
   $("#shareCard").innerHTML=
-    shareHead("📑","IRP <b>2026</b>","Cálculo preliminar · "+(monthsCount||0)+" "+(monthsCount===1?"mês":"meses")+" · faixa atual "+faixaAtual)+
+    shareHead("","IRP","Cálculo preliminar · "+(monthsCount||0)+" "+(monthsCount===1?"mês":"meses")+" · faixa atual "+faixaAtual)+
     `<div class="stotbox">
        <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
        <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl">${fc(eg)}</span></div>
        <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:var(--pyg)">${fc(net)}</span></div>
        <div class="stot diff big"><span class="lbl">Imposto estimado · faixa ${faixaAtual}</span><span class="vl">${fc(tax)}</span></div>
-     </div>`+
-    `<div class="sfoot">Alíquota efetiva: ${eff.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}% dos ingressos · Gerado em ${new Date().toLocaleDateString("pt-BR")} · Faixas 8/9/10% sobre a renta neta · IRP anual (fecha 31/dez)</div>`;
+     </div>`;
 }
 
 /* ---- simulador IRP ---- */
@@ -1424,16 +1411,15 @@ function updateSimResetBtns(){
 function renderSim(){
   const ing=simValPyg("simIng"),eg=simValPyg("simEg");
   if(!ing&&!eg){$("#simResult").innerHTML="";return;}
-  const net=ing-eg,tax=irpTax(net),bd=irpBreakdown(net);
-  const eff=ing>0?(tax/ing*100):0;
+  const net=ing-eg,tax=irpTax(net);
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   const fc=v=>fmtCur(v,irpCur);
-  let body=`<div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fc(net)}</span></div>`;
-  if(bd.length>1){bd.forEach(f=>{body+=`<div class="irow ir3"><span class="im">Faixa ${f.faixa}</span><span class="ii" style="color:var(--ink-dim)">sobre ${fc(f.base)}</span><span class="in">${fc(f.imp)}</span></div>`;});}
-  if(!bd.length)body+=`<div class="irpNote">Sem renta neta tributável (ingressos menores ou iguais aos egressos).</div>`;
-  body+=`<div class="srTax"><span class="k">Imposto estimado · faixa ${faixa}</span><span class="v">${fc(tax)}</span></div>`;
-  if(ing>0)body+=`<div class="srEff">Alíquota efetiva: ${eff.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}% dos ingressos</div>`;
-  $("#simResult").innerHTML=body;
+  $("#simResult").innerHTML=`
+    <div class="srTop"><span class="k">Ingressos</span><span class="v" style="color:var(--accent)">${fc(ing)}</span></div>
+    <div class="srTop"><span class="k">Egressos</span><span class="v">${fc(eg)}</span></div>
+    <div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fc(net)}</span></div>
+    <div class="srTax"><span class="k">Imposto estimado</span><span class="v">${fc(tax)}</span></div>
+    <div class="srEff">Faixa aplicada: ${faixa}</div>`;
 }
 function openSim(prefill){
   updateSimCurUI();
@@ -1461,6 +1447,27 @@ $("#simCurSeg").addEventListener("click",e=>{
   if(!b)return;
   setSimCur(b.dataset.cur);
 });
+
+
+function fillSimIRPCard(){
+  const ing=simValPyg("simIng"),eg=simValPyg("simEg"),net=ing-eg,tax=irpTax(net);
+  const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
+  const fc=v=>fmtCur(v,irpCur);
+  $("#shareCard").innerHTML=
+    shareHead("","Simulador IRP","Resumo preliminar · moeda "+irpCur)+
+    `<div class="stotbox">
+       <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
+       <div class="stot"><span class="lbl">Egressos</span><span class="vl">${fc(eg)}</span></div>
+       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fc(net)}</span></div>
+       <div class="stot"><span class="lbl">Imposto estimado</span><span class="vl">${fc(tax)}</span></div>
+       <div class="stot diff"><span class="lbl">Faixa (%)</span><span class="vl">${faixa}</span></div>
+     </div>`;
+}
+$("#simShare").onclick=()=>{
+  const ing=simValPyg("simIng"),eg=simValPyg("simEg");
+  if(!ing&&!eg){toast("Informe ingressos ou egressos no simulador");return;}
+  shareImage(fillSimIRPCard,"simulador-irp.png","Simulador IRP");
+};
 
 /* ---- init ---- */
 load();
