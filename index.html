@@ -238,7 +238,6 @@
   #lock.hidden{display:none}
   .lockcard{width:100%;max-width:330px;background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);
     border-radius:20px;padding:30px 24px;text-align:center;box-shadow:0 30px 70px -30px #000}
-  .lockcard .ico{font-size:1.8rem}
   .lockcard h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:8px 0 2px}
   .lockcard .locksub{color:var(--ink-dim);font-size:.84rem;margin:0 0 18px}
   .pattern{position:relative;width:240px;height:240px;margin:0 auto;touch-action:none}
@@ -337,9 +336,6 @@
 <body>
 <div id="lock">
   <div class="lockcard">
-    <div class="ico">🔒</div>
-    <h2>Acesso restrito</h2>
-    <p class="locksub">Escolha o que ver e desenhe o padrão</p>
     <div class="lockbtns">
       <button class="lockbtn modsel on" id="enterDesp">💸 Despesas</button>
       <button class="lockbtn modsel alt" id="enterIrp">📑 IRP</button>
@@ -408,7 +404,7 @@
   <p class="sub">Cálculo preliminar do Impuesto a la Renta Personal. Importe o arquivo da SET (Ventas + Compras) que eu somo, separo e calculo as faixas.</p>
 
   <div class="irpbtns">
-    <button class="add" id="irpImport">📥 Importar arquivo da SET</button>
+    <button class="add" id="irpImport">📥 Importar Resumo IRP</button>
     <button class="irpSimBtn" id="irpSimOpen">🧮 Simular</button>
   </div>
   <button class="clearBtn" id="irpShare" style="display:none;width:100%;margin-top:8px;padding:11px">📷 Compartilhar resumo</button>
@@ -495,7 +491,10 @@ const PATTERN="1235789";
 let chosenMod="desp"; // módulo escolhido antes do padrão
 function unlock(){$("#lock").classList.add("hidden");try{sessionStorage.setItem("unlocked","1");}catch(_){}}
 function showChooser(){clearPattern();$("#lockErr").textContent="";try{sessionStorage.removeItem("unlocked");}catch(_){}$("#lock").classList.remove("hidden");}
-function setMod(m){chosenMod=m;$("#enterDesp").classList.toggle("on",m==="desp");$("#enterIrp").classList.toggle("on",m==="irp");$("#lockErr").textContent="";}
+function setMod(m){chosenMod=m;
+  $("#enterDesp").classList.toggle("on",m==="desp");$("#enterDesp").classList.toggle("alt",m!=="desp");
+  $("#enterIrp").classList.toggle("on",m==="irp");$("#enterIrp").classList.toggle("alt",m!=="irp");
+  $("#lockErr").textContent="";}
 $("#enterDesp").onclick=()=>setMod("desp");
 $("#enterIrp").onclick=()=>setMod("irp");
 (function initPattern(){
@@ -1232,10 +1231,7 @@ function parseIRP(wb){
 function monthsSorted(o){return Object.keys(o).filter(k=>k!=="—").sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});}
 function renderIRP(){
   const body=$("#irpBody");
-  if(!irpData){body.innerHTML=`<div class="emptyx"><div class="emptyx-ico">📑</div>
-    <p class="emptyx-t">Nenhum cálculo ainda</p>
-    <p class="emptyx-s">Toque em <b>📥 Importar arquivo da SET</b> para eu somar Ventas e Compras e calcular o IRP.</p></div>`;
-    $("#irpShare").style.display="none";return;}
+  if(!irpData){body.innerHTML="";$("#irpShare").style.display="none";return;}
   $("#irpShare").style.display="block";
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
   const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
@@ -1313,7 +1309,9 @@ function fillIRPCard(){
 function simMask(el){const d=(el.value||"").replace(/\D/g,"");el.value=d?parseInt(d,10).toLocaleString("es-PY"):"";const l=el.value.length;try{el.setSelectionRange(l,l);}catch(_){}}
 function simVal(id){const d=($("#"+id).value||"").replace(/\D/g,"");return d?parseInt(d,10):0;}
 function renderSim(){
-  const ing=simVal("simIng"),eg=simVal("simEg"),net=ing-eg,tax=irpTax(net),bd=irpBreakdown(net);
+  const ing=simVal("simIng"),eg=simVal("simEg");
+  if(!ing&&!eg){$("#simResult").innerHTML="";return;}
+  const net=ing-eg,tax=irpTax(net),bd=irpBreakdown(net);
   const eff=ing>0?(tax/ing*100):0;
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   let body=`<div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fmtG(net)}</span></div>`;
