@@ -753,7 +753,7 @@ function showView(v){
   const irp=v==="irp";
   $("#despMain").hidden=irp;$("#irpMain").hidden=!irp;
   window.scrollTo(0,0);
-  if(irp)renderIRP();
+  if(irp){updateIrpCurBtn();renderIRP();}
 }
 $("#goIrp").onclick=()=>showView("irp");
 $("#goDesp").onclick=()=>showView("desp");
@@ -1347,11 +1347,22 @@ function renderIRP(){
   if(exclToggle)exclToggle.onclick=()=>{exclToggle.classList.toggle("open");$("#irpExclDetail").classList.toggle("open");};
 }
 /* ---- seletor de moeda do painel IRP ---- */
+function setIrpCur(cur){
+  if(cur===irpCur)return;
+  irpCur=cur;
+  updateIrpCurBtn();
+  save();
+  renderIRP();
+  if(!$("#simModal").classList.contains("hidden")){updateSimCurUI();renderSim();}
+  toast("Moeda: "+cur);
+}
 function updateIrpCurBtn(){
   $("#irpCurSeg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
 }
-$("#irpCurSeg").querySelectorAll("button").forEach(b=>{
-  b.onclick=()=>{if(b.dataset.cur===irpCur)return;irpCur=b.dataset.cur;updateIrpCurBtn();save();renderIRP();if(!$("#simModal").classList.contains("hidden"))renderSim();};
+$("#irpCurSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-cur]");
+  if(!b)return;
+  setIrpCur(b.dataset.cur);
 });
 updateIrpCurBtn();
 function doImportIRP(){if(typeof XLSX==="undefined"){toast("Abra no navegador para importar");return;}$("#irpFile").click();}
@@ -1438,15 +1449,18 @@ $("#simIng").oninput=e=>{simMaskCur(e.target,irpCur);renderSim();};
 $("#simEg").oninput=e=>{simMaskCur(e.target,irpCur);renderSim();};
 $("#simIngReset").onclick=()=>{if(irpData){simSetFieldPyg("simIng",irpData.ingresos.total);renderSim();}};
 $("#simEgReset").onclick=()=>{if(irpData){simSetFieldPyg("simEg",irpData.egresos.total);renderSim();}};
-$("#simCurSeg").querySelectorAll("button").forEach(b=>{
-  b.onclick=()=>{
-    if(b.dataset.cur===irpCur)return;
-    const ingPyg=simValPyg("simIng"),egPyg=simValPyg("simEg");
-    irpCur=b.dataset.cur;save();updateIrpCurBtn();updateSimCurUI();
-    $("#simIng").value=ingPyg?fmtAmt(pygToCur(ingPyg,irpCur),irpCur):"";
-    $("#simEg").value=egPyg?fmtAmt(pygToCur(egPyg,irpCur),irpCur):"";
-    renderSim();renderIRP();
-  };
+function setSimCur(cur){
+  if(cur===irpCur)return;
+  const ingPyg=simValPyg("simIng"),egPyg=simValPyg("simEg");
+  irpCur=cur;save();updateIrpCurBtn();updateSimCurUI();
+  $("#simIng").value=ingPyg?fmtAmt(pygToCur(ingPyg,irpCur),irpCur):"";
+  $("#simEg").value=egPyg?fmtAmt(pygToCur(egPyg,irpCur),irpCur):"";
+  renderSim();renderIRP();
+}
+$("#simCurSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-cur]");
+  if(!b)return;
+  setSimCur(b.dataset.cur);
 });
 
 /* ---- init ---- */
