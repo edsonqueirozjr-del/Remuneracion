@@ -68,6 +68,15 @@
   /* ---- módulo IRP (tamanhos padronizados) ---- */
   /* escala: rótulo .66 · nota .74 · nº tabela .82 · nº padrão 1.0 · nº destaque 1.7 */
   .irpbtns{display:flex;gap:8px;align-items:stretch}
+  .irpCurWrap{position:relative;margin-top:8px}
+  .irpCurBtn{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);border-radius:12px;padding:10px 14px;cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:600}
+  .irpCurBtn b{color:var(--ink);font-weight:700}
+  .irpCurBtn .chev{font-size:.68rem;color:var(--ink-faint)}
+  .irpCurMenu{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden;z-index:20;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .irpCurMenu button{display:block;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line-soft);color:var(--ink-dim);padding:11px 14px;font-family:inherit;font-size:.84rem;font-weight:600;cursor:pointer}
+  .irpCurMenu button:last-child{border-bottom:0}
+  .irpCurMenu button:active{background:var(--panel-2)}
+  .irpCurMenu button.on{color:var(--accent);font-weight:700}
   .irpbtns .add{flex:1;margin-top:0}
   .irpSimBtn{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:14px;padding:0 16px;cursor:pointer;font-family:inherit;font-size:.84rem;font-weight:700;min-width:108px;text-align:center}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
@@ -81,14 +90,16 @@
   .irpTax b{font-family:'IBM Plex Mono',monospace;font-size:clamp(1.3rem,7vw,1.7rem);color:var(--accent);font-weight:700;white-space:nowrap}
   .irpCard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;margin-bottom:4px}
   .irpBig{display:flex;gap:12px}
-  .irpBig>div{flex:1;padding:9px 0}
+  .irpBig>div{flex:1;padding:9px 0;text-align:center;display:flex;flex-direction:column;align-items:center}
   .irpBig .k{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:4px}
-  .irpBig .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1rem}
+  .irpBig .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.82rem,4vw,1rem);white-space:nowrap}
   .irpBig .v.pos{color:var(--accent)}
   .irow{display:grid;grid-template-columns:1.05fr 1.25fr 1.25fr 1.25fr;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:clamp(.7rem,3vw,.82rem)}
   .irow.ir3{grid-template-columns:1fr 1.5fr 1.1fr}
   .irow.ir2{grid-template-columns:1fr 1fr}
   .irow:last-child{border-bottom:0}
+  .irow.ir3:has(+.irow.irtot){border-bottom:0}
+  .irow.noborder{border-bottom:0}
   .irow.irhead{color:var(--ink-faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;font-family:inherit;font-weight:700}
   .irow .im{font-family:inherit;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .irow .ii{color:var(--accent);text-align:right;white-space:nowrap}
@@ -98,7 +109,7 @@
   .irow.irtot{border-top:1px solid var(--line);border-bottom:0;margin-top:2px;padding-top:11px}
   .irow.irtot .im{color:var(--ink);font-weight:700;font-family:inherit}
   .irow.irtot .in{color:var(--accent);font-size:1rem}
-  .irpNote{font-size:.74rem;color:var(--ink-faint);padding:9px 0 4px;line-height:1.5}
+  .irpNote{font-size:.74rem;color:var(--ink-faint);padding:9px 0 4px;line-height:1.5;text-align:center}
   .irpNote b{color:var(--ink-dim)}
   .irpNote.clickable{cursor:pointer;border-radius:8px;margin:0 -6px;padding:9px 6px 4px 6px;transition:background .15s}
   .irpNote.clickable:active{background:rgba(255,255,255,.05)}
@@ -120,6 +131,8 @@
   .simin{display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
   .simin .tag{font-family:'IBM Plex Mono',monospace;font-weight:700}
   .simin input{flex:1;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;outline:none;font-variant-numeric:tabular-nums;min-width:0}
+  .simResetField{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:.9rem;line-height:1}
+  .simResetField:active{border-color:var(--accent);color:var(--accent)}
   .simUse{width:100%;border:1px dashed var(--line);background:transparent;color:var(--ink-dim);border-radius:11px;padding:10px;cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:700;margin-bottom:4px}
   .simUse:active{border-color:var(--accent);color:var(--accent)}
   .simResult{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px}
@@ -419,6 +432,14 @@
     <button class="add" id="irpImport">📥 Importar Resumo IRP</button>
     <button class="irpSimBtn" id="irpSimOpen">🧮 Simular</button>
   </div>
+  <div class="irpCurWrap" id="irpCurWrap">
+    <button class="irpCurBtn" id="irpCurBtn"><span>💱</span> Ver em <b id="irpCurLbl">₲ Guarani</b> <span class="chev">▾</span></button>
+    <div class="irpCurMenu" id="irpCurMenu" hidden>
+      <button data-cur="PYG">₲ Guarani</button>
+      <button data-cur="USD">U$ Dólar</button>
+      <button data-cur="BRL">R$ Real</button>
+    </div>
+  </div>
   <button class="clearBtn" id="irpShare" style="display:none;width:100%;margin-top:8px;padding:11px">📷 Compartilhar resumo</button>
   <input type="file" id="irpFile" accept=".xls,.xlsx" style="display:none">
 
@@ -449,15 +470,24 @@
 <div id="simModal" class="hidden">
   <div class="acctcard">
     <div class="accthead">
-      <div><div class="topttl">Simulador IRP</div><div class="topsub">Digite os valores e veja o imposto pelas faixas</div></div>
+      <div><div class="topttl">Simulador IRP</div></div>
       <button class="topclose" id="simClose">✕</button>
     </div>
     <div class="simwrap">
+      <div class="irpCurWrap" id="simCurWrap" style="margin-top:0">
+        <button class="irpCurBtn" id="simCurBtn"><span>💱</span> Ver em <b id="simCurLbl">₲ Guarani</b> <span class="chev">▾</span></button>
+        <div class="irpCurMenu" id="simCurMenu" hidden>
+          <button data-cur="PYG">₲ Guarani</button>
+          <button data-cur="USD">U$ Dólar</button>
+          <button data-cur="BRL">R$ Real</button>
+        </div>
+      </div>
       <div class="simfield"><label>Ingressos no ano (faturas que você emite)</label>
-        <div class="simin"><span class="tag" style="color:var(--accent)">₲</span><input id="simIng" inputmode="numeric" placeholder="0"></div></div>
+        <div class="simin"><span class="tag" id="simIngTag" style="color:var(--accent)">₲</span><input id="simIng" inputmode="numeric" placeholder="0">
+          <button class="simResetField" id="simIngReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
       <div class="simfield"><label>Egressos dedutíveis (gastos com Imputa IRP = SI)</label>
-        <div class="simin"><span class="tag" style="color:var(--danger)">₲</span><input id="simEg" inputmode="numeric" placeholder="0"></div></div>
-      <button class="simUse" id="simUseReal" style="display:none">↺ Usar meus valores importados</button>
+        <div class="simin"><span class="tag" id="simEgTag" style="color:var(--danger)">₲</span><input id="simEg" inputmode="numeric" placeholder="0">
+          <button class="simResetField" id="simEgReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
 
       <div class="simResult" id="simResult"></div>
     </div>
@@ -495,6 +525,7 @@ let rows=[];
 let sv={tot:"BRL",sal:"BRL",diff:"BRL"};
 let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
 let irpData=null; // {ingresos:{byMonth,total},egresos:{byMonth,total},date}
+let irpCur="PYG"; // moeda de exibição do painel IRP: PYG/USD/BRL (dados internos sempre em ₲)
 let liveRates=null; // {brl,pyg,date}
 const $=s=>document.querySelector(s);
 
@@ -560,9 +591,25 @@ const salCur="USD";
 const salNum=()=>parseAmt($("#salary").value,salCur);
 const fmtSal=()=>{$("#salary").value=salNum()?fmtAmt(salNum(),salCur):"";};
 
+/* ---- conversão de moeda genérica (PYG <-> USD/BRL), usada pelo módulo IRP ---- */
+function pygToCur(v,cur){
+  if(cur==="PYG")return v||0;
+  const r=rate();
+  if(!r.pyg)return 0;
+  const usd=(v||0)/r.pyg;
+  return cur==="USD"?usd:usd*r.brl;
+}
+function curToPyg(v,cur){
+  if(cur==="PYG")return v||0;
+  const r=rate();
+  const usd=cur==="USD"?(v||0):(r.brl?(v||0)/r.brl:0);
+  return usd*r.pyg;
+}
+function fmtCur(v,cur){return fmt[cur](pygToCur(v,cur));}
+
 /* ---- salvar / carregar ---- */
 function save(){
-  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,irpData,salCur,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
+  try{localStorage.setItem(KEY,JSON.stringify({rows,sv,imp,irpData,irpCur,salCur,salary:$("#salary").value,usdBrl:$("#usdBrl").value,usdPyg:$("#usdPyg").value}));
     const h=$("#saveHint");h.classList.add("show");clearTimeout(window._st);window._st=setTimeout(()=>h.classList.remove("show"),1200);
   }catch(e){}
 }
@@ -573,6 +620,7 @@ function load(){
     else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
     if(s.imp)imp=s.imp;
     if(s.irpData)irpData=s.irpData;
+    if(s.irpCur)irpCur=s.irpCur;
     if(s.salary!=null)$("#salary").value=s.salary;
     if(s.usdBrl!=null)$("#usdBrl").value=s.usdBrl;
     if(s.usdPyg!=null)$("#usdPyg").value=s.usdPyg;
@@ -1253,7 +1301,7 @@ function monthsSorted(o){return Object.keys(o).filter(k=>k!=="—").sort((a,b)=>
 function renderExclDetail(d){
   const ven=(d.ingresos.exclRows||[]),com=(d.egresos.exclRows||[]);
   if(!ven.length&&!com.length)return '<p class="emptyx-s" style="padding:4px 0">Nenhum detalhe disponível.</p>';
-  const row=r=>`<div class="irpExclRow"><span class="ien">${r.data||"—"} · ${r.nome||"—"}</span><span class="iev">${fmtG(r.valor)}</span></div>`;
+  const row=r=>`<div class="irpExclRow"><span class="ien">${r.data||"—"} · ${r.nome||"—"}</span><span class="iev">${fmtCur(r.valor,irpCur)}</span></div>`;
   let h="";
   if(ven.length)h+=`<div class="irpExclGroup">Ventas (${ven.length})</div>`+ven.map(row).join("");
   if(com.length)h+=`<div class="irpExclGroup">Compras (${com.length})</div>`+com.map(row).join("");
@@ -1266,24 +1314,23 @@ function renderIRP(){
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
   const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
     .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
-  const nM=months.length||1;
-  const annNet=net*12/nM,annTax=irpTax(annNet);
   const bd=irpBreakdown(net);
   const faixaAtual=net<=50000000?"8%":net<=150000000?"9%":"10%";
+  const fc=v=>fmtCur(v,irpCur);
   let monthRows=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0;
-    return `<div class="irow"><span class="im">${m}</span><span class="ii">${fmtG(i)}</span><span class="ie">−${fmtG(e).replace("₲ ","₲ ")}</span><span class="in ${i-e>=0?'pos':'neg'}">${fmtG(i-e)}</span></div>`;}).join("");
+    return `<div class="irow"><span class="im">${m}</span><span class="ii">${fc(i)}</span><span class="ie">−${fc(e)}</span><span class="in ${i-e>=0?'pos':'neg'}">${fc(i-e)}</span></div>`;}).join("");
   body.innerHTML=`
     <div class="irpHero">
       <div class="irpHeroT">Renta neta acumulada</div>
-      <div class="irpHeroV">${fmtG(net)}</div>
+      <div class="irpHeroV">${fc(net)}</div>
       <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"} · faixa atual ${faixaAtual}</div>
-      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b>${fmtG(tax)}</b></div>
+      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b>${fc(tax)}</b></div>
     </div>
 
     <div class="sec">Ingressos × Egressos</div>
     <div class="irpCard">
-      <div class="irpBig"><div><span class="k">Ingressos (SI)</span><span class="v pos">${fmtG(ing)}</span></div>
-        <div><span class="k">Egressos (SI)</span><span class="v">−${fmtG(eg)}</span></div></div>
+      <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
+        <div><span class="k">Egressos (Compras)</span><span class="v">${fc(eg)}</span></div></div>
       <div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
       <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>
     </div>
@@ -1296,19 +1343,27 @@ function renderIRP(){
 
     <div class="sec">Cálculo do imposto (faixas)</div>
     <div class="irpCard">
-      ${bd.length?bd.map(f=>`<div class="irow ir3"><span class="im">Faixa ${f.faixa}</span><span class="ii">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`).join(""):'<p class="emptyx-s" style="padding:8px">Renta neta zerada ou negativa — sem imposto.</p>'}
-      <div class="irow irtot ir2"><span class="im">Total acumulado</span><span class="in">${fmtG(tax)}</span></div>
-    </div>
-
-    <div class="sec">Projeção anual (estimativa)</div>
-    <div class="irpCard">
-      <div class="irow ir2"><span class="im">Renta neta projetada</span><span class="in">${fmtG(annNet)}</span></div>
-      <div class="irow ir2"><span class="im">Imposto anual projetado</span><span class="in">${fmtG(annTax)}</span></div>
-      <div class="irpNote">Projeção simples (acumulado ÷ ${nM} × 12). O IRP é anual: fecha em 31/dez e declara-se em março. Confirme sempre no Marangatú da SET.</div>
+      ${bd.length?bd.map((f,idx)=>`<div class="irow ir3${(idx===bd.length-1&&bd.length>1)?' noborder':''}"><span class="im">Faixa ${f.faixa}</span><span class="ii">sobre ${fc(f.base)}</span><span class="in">${fc(f.imp)}</span></div>`).join(""):'<p class="emptyx-s" style="padding:8px">Renta neta zerada ou negativa — sem imposto.</p>'}
+      ${bd.length>1?`<div class="irow irtot ir2"><span class="im">Total acumulado</span><span class="in">${fc(tax)}</span></div>`:""}
     </div>`;
   const exclToggle=$("#irpExclToggle");
   if(exclToggle)exclToggle.onclick=()=>{exclToggle.classList.toggle("open");$("#irpExclDetail").classList.toggle("open");};
 }
+/* ---- seletor de moeda do painel IRP ---- */
+function updateIrpCurBtn(){
+  const lbl={PYG:"₲ Guarani",USD:"U$ Dólar",BRL:"R$ Real"};
+  $("#irpCurLbl").textContent=lbl[irpCur];
+  $("#irpCurMenu").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
+}
+$("#irpCurBtn").onclick=()=>{$("#irpCurMenu").hidden=!$("#irpCurMenu").hidden;};
+$("#irpCurMenu").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{irpCur=b.dataset.cur;updateIrpCurBtn();$("#irpCurMenu").hidden=true;save();renderIRP();if(!$("#simModal").classList.contains("hidden"))renderSim();};
+});
+document.addEventListener("click",e=>{
+  const wrap=$("#irpCurWrap");
+  if(wrap&&!wrap.contains(e.target))$("#irpCurMenu").hidden=true;
+});
+updateIrpCurBtn();
 function doImportIRP(){if(typeof XLSX==="undefined"){toast("Abra no navegador para importar");return;}$("#irpFile").click();}
 $("#irpImport").onclick=doImportIRP;
 $("#irpFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;toast("Lendo arquivo da SET…");
@@ -1339,32 +1394,76 @@ function fillIRPCard(){
 }
 
 /* ---- simulador IRP ---- */
-function simMask(el){const d=(el.value||"").replace(/\D/g,"");el.value=d?parseInt(d,10).toLocaleString("es-PY"):"";const l=el.value.length;try{el.setSelectionRange(l,l);}catch(_){}}
-function simVal(id){const d=($("#"+id).value||"").replace(/\D/g,"");return d?parseInt(d,10):0;}
+function simMaskCur(el,cur){
+  if(cur==="BRL"){
+    const d=(el.value||"").replace(/\D/g,"");
+    el.value=d?(parseInt(d,10)/100).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}):"";
+  }else{
+    const d=(el.value||"").replace(/\D/g,"");
+    el.value=d?parseInt(d,10).toLocaleString("es-PY"):"";
+  }
+  const l=el.value.length;try{el.setSelectionRange(l,l);}catch(_){}
+}
+function simValPyg(id){
+  const v=parseAmt($("#"+id).value,irpCur);
+  return curToPyg(v,irpCur);
+}
+function simSetFieldPyg(id,pygVal){
+  $("#"+id).value=pygVal?fmtAmt(pygToCur(pygVal,irpCur),irpCur):"";
+}
+function updateSimCurUI(){
+  const lbl={PYG:"₲ Guarani",USD:"U$ Dólar",BRL:"R$ Real"};
+  $("#simCurLbl").textContent=lbl[irpCur];
+  $("#simCurMenu").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===irpCur));
+  $("#simIngTag").textContent=curLbl(irpCur);
+  $("#simEgTag").textContent=curLbl(irpCur);
+}
+function updateSimResetBtns(){
+  const hasOrig=!!irpData;
+  $("#simIngReset").hidden=!hasOrig;
+  $("#simEgReset").hidden=!hasOrig;
+}
 function renderSim(){
-  const ing=simVal("simIng"),eg=simVal("simEg");
+  const ing=simValPyg("simIng"),eg=simValPyg("simEg");
   if(!ing&&!eg){$("#simResult").innerHTML="";return;}
   const net=ing-eg,tax=irpTax(net),bd=irpBreakdown(net);
   const eff=ing>0?(tax/ing*100):0;
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
-  let body=`<div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fmtG(net)}</span></div>`;
-  bd.forEach(f=>{body+=`<div class="irow ir3"><span class="im">Faixa ${f.faixa}</span><span class="ii" style="color:var(--ink-dim)">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`;});
+  const fc=v=>fmtCur(v,irpCur);
+  let body=`<div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fc(net)}</span></div>`;
+  if(bd.length>1){bd.forEach(f=>{body+=`<div class="irow ir3"><span class="im">Faixa ${f.faixa}</span><span class="ii" style="color:var(--ink-dim)">sobre ${fc(f.base)}</span><span class="in">${fc(f.imp)}</span></div>`;});}
   if(!bd.length)body+=`<div class="irpNote">Sem renta neta tributável (ingressos menores ou iguais aos egressos).</div>`;
-  body+=`<div class="srTax"><span class="k">Imposto estimado · faixa ${faixa}</span><span class="v">${fmtG(tax)}</span></div>`;
+  body+=`<div class="srTax"><span class="k">Imposto estimado · faixa ${faixa}</span><span class="v">${fc(tax)}</span></div>`;
   if(ing>0)body+=`<div class="srEff">Alíquota efetiva: ${eff.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}% dos ingressos</div>`;
   $("#simResult").innerHTML=body;
 }
 function openSim(prefill){
-  if(prefill&&irpData){$("#simIng").value=Math.round(irpData.ingresos.total).toLocaleString("es-PY");$("#simEg").value=Math.round(irpData.egresos.total).toLocaleString("es-PY");}
-  $("#simUseReal").style.display=irpData?"block":"none";
+  updateSimCurUI();
+  if(prefill&&irpData){simSetFieldPyg("simIng",irpData.ingresos.total);simSetFieldPyg("simEg",irpData.egresos.total);}
+  updateSimResetBtns();
   renderSim();$("#simModal").classList.remove("hidden");
 }
 $("#irpSimOpen").onclick=()=>openSim(true);
 $("#simClose").onclick=()=>$("#simModal").classList.add("hidden");
 $("#simModal").onclick=e=>{if(e.target.id==="simModal")$("#simModal").classList.add("hidden");};
-$("#simIng").oninput=e=>{simMask(e.target);renderSim();};
-$("#simEg").oninput=e=>{simMask(e.target);renderSim();};
-$("#simUseReal").onclick=()=>{if(irpData){$("#simIng").value=Math.round(irpData.ingresos.total).toLocaleString("es-PY");$("#simEg").value=Math.round(irpData.egresos.total).toLocaleString("es-PY");renderSim();}};
+$("#simIng").oninput=e=>{simMaskCur(e.target,irpCur);renderSim();};
+$("#simEg").oninput=e=>{simMaskCur(e.target,irpCur);renderSim();};
+$("#simIngReset").onclick=()=>{if(irpData){simSetFieldPyg("simIng",irpData.ingresos.total);renderSim();}};
+$("#simEgReset").onclick=()=>{if(irpData){simSetFieldPyg("simEg",irpData.egresos.total);renderSim();}};
+$("#simCurBtn").onclick=()=>{$("#simCurMenu").hidden=!$("#simCurMenu").hidden;};
+$("#simCurMenu").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{
+    const ingPyg=simValPyg("simIng"),egPyg=simValPyg("simEg");
+    irpCur=b.dataset.cur;save();updateIrpCurBtn();updateSimCurUI();
+    $("#simIng").value=ingPyg?fmtAmt(pygToCur(ingPyg,irpCur),irpCur):"";
+    $("#simEg").value=egPyg?fmtAmt(pygToCur(egPyg,irpCur),irpCur):"";
+    $("#simCurMenu").hidden=true;renderSim();renderIRP();
+  };
+});
+document.addEventListener("click",e=>{
+  const wrap=$("#simCurWrap");
+  if(wrap&&!wrap.contains(e.target))$("#simCurMenu").hidden=true;
+});
 
 /* ---- init ---- */
 load();
