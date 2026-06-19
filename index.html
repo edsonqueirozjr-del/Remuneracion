@@ -26,8 +26,8 @@
   }
   .num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
   main{padding:16px;max-width:540px;margin:0 auto}
-  .hdr{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .hdrbtn{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:700;padding:7px 12px;border-radius:10px;cursor:pointer}
+  .hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+  .hdrbtn{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:700;padding:7px 12px;border-radius:10px;cursor:pointer;min-width:108px;text-align:center}
   .hdrbtn:active{border-color:var(--accent);color:var(--accent)}
   h1{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;margin:6px 0 2px;letter-spacing:-.01em}
   h1 .py{color:var(--pyg)}
@@ -67,40 +67,54 @@
   /* ---- módulo IRP ---- */
   /* ---- módulo IRP (tamanhos padronizados) ---- */
   /* escala: rótulo .66 · nota .74 · nº tabela .82 · nº padrão 1.0 · nº destaque 1.7 */
-  .irpbtns{display:flex;gap:8px}
+  .irpbtns{display:flex;gap:8px;align-items:stretch}
   .irpbtns .add{flex:1;margin-top:0}
-  .irpSimBtn{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:14px;padding:0 16px;cursor:pointer;font-family:inherit;font-size:.84rem;font-weight:700}
+  .irpSimBtn{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:14px;padding:0 16px;cursor:pointer;font-family:inherit;font-size:.84rem;font-weight:700;min-width:108px;text-align:center}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
-  .irpHero{background:linear-gradient(135deg,#14202b,#0d1117);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0 4px;position:relative;overflow:hidden}
+  .irpHero{background:linear-gradient(135deg,#14202b,#0d1117);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin:14px 0 4px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center}
   .irpHero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(55,214,160,.14);filter:blur(6px)}
   .irpHeroT{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;position:relative;z-index:1}
-  .irpHeroV{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.7rem;margin:5px 0 2px;color:var(--pyg);position:relative;z-index:1}
+  .irpHeroV{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.3rem,7vw,1.7rem);margin:7px 0 3px;color:var(--pyg);position:relative;z-index:1;white-space:nowrap}
   .irpHeroSub{font-size:.74rem;color:var(--ink-dim);position:relative;z-index:1}
-  .irpTax{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);position:relative;z-index:1}
+  .irpTax{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);position:relative;z-index:1;width:100%}
   .irpTax span{font-size:.74rem;color:var(--ink-dim)}
-  .irpTax b{font-family:'IBM Plex Mono',monospace;font-size:1.7rem;color:var(--accent);font-weight:700}
+  .irpTax b{font-family:'IBM Plex Mono',monospace;font-size:clamp(1.3rem,7vw,1.7rem);color:var(--accent);font-weight:700;white-space:nowrap}
   .irpCard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;margin-bottom:4px}
   .irpBig{display:flex;gap:12px}
   .irpBig>div{flex:1;padding:9px 0}
   .irpBig .k{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:4px}
   .irpBig .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1rem}
   .irpBig .v.pos{color:var(--accent)}
-  .irow{display:grid;grid-template-columns:1.05fr 1.25fr 1.25fr 1.25fr;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:.82rem}
+  .irow{display:grid;grid-template-columns:1.05fr 1.25fr 1.25fr 1.25fr;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:clamp(.7rem,3vw,.82rem)}
+  .irow.ir3{grid-template-columns:1fr 1.5fr 1.1fr}
+  .irow.ir2{grid-template-columns:1fr 1fr}
   .irow:last-child{border-bottom:0}
   .irow.irhead{color:var(--ink-faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;font-family:inherit;font-weight:700}
-  .irow .im{font-family:inherit;color:var(--ink-dim)}
-  .irow .ii{color:var(--accent);text-align:right}
-  .irow .ie{color:var(--danger);text-align:right}
-  .irow .in{text-align:right;font-weight:700}
+  .irow .im{font-family:inherit;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .irow .ii{color:var(--accent);text-align:right;white-space:nowrap}
+  .irow .ie{color:var(--danger);text-align:right;white-space:nowrap}
+  .irow .in{text-align:right;font-weight:700;white-space:nowrap}
   .irow .in.pos{color:var(--accent)} .irow .in.neg{color:var(--danger)}
   .irow.irtot{border-top:1px solid var(--line);border-bottom:0;margin-top:2px;padding-top:11px}
   .irow.irtot .im{color:var(--ink);font-weight:700;font-family:inherit}
   .irow.irtot .in{color:var(--accent);font-size:1rem}
   .irpNote{font-size:.74rem;color:var(--ink-faint);padding:9px 0 4px;line-height:1.5}
   .irpNote b{color:var(--ink-dim)}
+  .irpNote.clickable{cursor:pointer;border-radius:8px;margin:0 -6px;padding:9px 6px 4px 6px;transition:background .15s}
+  .irpNote.clickable:active{background:rgba(255,255,255,.05)}
+  .irpNote .chev{display:inline-block;margin-left:4px;font-size:.68rem;color:var(--ink-faint);transition:transform .15s}
+  .irpNote.open .chev{transform:rotate(180deg)}
+  .irpExclDetail{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-soft)}
+  .irpExclDetail.open{display:block}
+  .irpExclGroup{font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:8px 0 4px}
+  .irpExclGroup:first-child{margin-top:0}
+  .irpExclRow{display:flex;justify-content:space-between;gap:10px;font-size:.74rem;color:var(--ink-dim);padding:4px 0;border-bottom:1px solid var(--line-soft)}
+  .irpExclRow:last-child{border-bottom:0}
+  .irpExclRow .ien{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .irpExclRow .iev{font-family:'IBM Plex Mono',monospace;flex:none;white-space:nowrap}
 
   /* ---- simulador IRP ---- */
-  .simwrap{padding:16px 2px 2px}
+  .simwrap{padding:24px 2px 2px}
   .simfield{margin-bottom:14px}
   .simfield label{display:block;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:6px}
   .simin{display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
@@ -109,12 +123,12 @@
   .simUse{width:100%;border:1px dashed var(--line);background:transparent;color:var(--ink-dim);border-radius:11px;padding:10px;cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:700;margin-bottom:4px}
   .simUse:active{border-color:var(--accent);color:var(--accent)}
   .simResult{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px}
-  .simResult .srTop{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .simResult .srTop{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft);gap:10px}
   .simResult .srTop .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
-  .simResult .srTop .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1rem}
-  .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:13px 0 12px;border-top:1px solid var(--line);margin-top:2px}
+  .simResult .srTop .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.85rem,4vw,1rem);white-space:nowrap}
+  .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:13px 0 12px;border-top:1px solid var(--line);margin-top:2px;gap:10px}
   .simResult .srTax .k{font-size:.74rem;color:var(--ink-dim);font-weight:600}
-  .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.7rem;color:var(--accent)}
+  .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.2rem,6vw,1.5rem);color:var(--accent);white-space:nowrap}
   .simResult .srEff{text-align:right;font-size:.72rem;color:var(--ink-faint);padding-bottom:10px}
 
 
@@ -351,10 +365,9 @@
 </div>
 <main id="despMain">
   <div class="hdr">
-    <h1>Contas Fixas <span class="py">Paraguai</span></h1>
+    <h1>Salário</h1>
     <button class="hdrbtn" id="goIrp" title="Ir para IRP">📑 IRP</button>
   </div>
-  <p class="sub">Seu painel de contas fixas do Paraguai: acompanhe salário, despesas e saldo em Real, Dólar e Guarani. Tudo recalcula e salva sozinho.</p>
 
   <div class="sec"><span>Salário</span><span class="savehint" id="saveHint">salvo ✓</span></div>
   <div class="params">
@@ -398,7 +411,7 @@
 
 <main id="irpMain" hidden>
   <div class="hdr">
-    <h1>IRP <span class="py">2026</span></h1>
+    <h1>IRP</h1>
     <button class="hdrbtn" id="goDesp" title="Ir para Despesas">💸 Despesas</button>
   </div>
 
@@ -1198,7 +1211,7 @@ function parseIRPSheet(wb,wanted){
   const name=wb.SheetNames.find(n=>norm(n).includes(wanted));
   if(!name)return null;
   const arr=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:""});
-  let hi=-1,cT=-1,cImp=-1,cPer=-1,cO=-1,cP=-1,cQ=-1,cR=-1,cS=-1;
+  let hi=-1,cT=-1,cImp=-1,cPer=-1,cO=-1,cP=-1,cQ=-1,cR=-1,cS=-1,cNome=-1,cData=-1;
   for(let i=0;i<arr.length;i++){const h=arr[i].map(norm);
     const it=h.findIndex(x=>x.includes("total comprobante irp"));
     const ii=h.findIndex(x=>x==="imputa irp");
@@ -1209,18 +1222,27 @@ function parseIRPSheet(wb,wanted){
       cQ=h.findIndex(x=>x.includes("monto gravado 5"));
       cR=h.findIndex(x=>x.includes("iva 5"));
       cS=h.findIndex(x=>x.includes("no gravado")||x.includes("exento"));
+      cNome=h.findIndex(x=>x.includes("nombre o raz")&&x.includes("informado"));
+      cData=h.findIndex(x=>x.includes("fecha de emis"));
       break;}}
   if(hi<0)return null;
   const num=v=>{if(typeof v==="number")return v;const n=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(n)?0:n;};
-  const byMonth={};let total=0,count=0,excl=0;
+  const byMonth={};let total=0,count=0,excl=0;const exclRows=[];
   for(let i=hi+1;i<arr.length;i++){const row=arr[i];if(!row||!row.length)continue;
-    const imp=norm(row[cImp]);if(imp!=="si"){if(imp==="no")excl++;continue;}
+    const imp=norm(row[cImp]);
+    if(imp!=="si"){
+      if(imp==="no"){excl++;
+        let te=num(row[cT]);
+        if(!te&&(cO>=0))te=(num(row[cO])-num(row[cP]))+(num(row[cQ])-num(row[cR]))+num(row[cS]);
+        exclRows.push({nome:cNome>=0?String(row[cNome]||"").trim():"",data:cData>=0?String(row[cData]||"").trim():"",valor:te});
+      }
+      continue;}
     let t=num(row[cT]);
     if(!t&&(cO>=0))t=(num(row[cO])-num(row[cP]))+(num(row[cQ])-num(row[cR]))+num(row[cS]);
     if(!t)continue;
     const per=cPer>=0?String(row[cPer]||"").trim():"";const mk=per||"—";
     byMonth[mk]=(byMonth[mk]||0)+t;total+=t;count++;}
-  return {byMonth,total,count,excl};
+  return {byMonth,total,count,excl,exclRows};
 }
 function parseIRP(wb){
   const ing=parseIRPSheet(wb,"ventas"),eg=parseIRPSheet(wb,"compras");
@@ -1228,6 +1250,15 @@ function parseIRP(wb){
   return {ingresos:ing||{byMonth:{},total:0,count:0,excl:0},egresos:eg||{byMonth:{},total:0,count:0,excl:0},date:new Date().toLocaleDateString("pt-BR")};
 }
 function monthsSorted(o){return Object.keys(o).filter(k=>k!=="—").sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});}
+function renderExclDetail(d){
+  const ven=(d.ingresos.exclRows||[]),com=(d.egresos.exclRows||[]);
+  if(!ven.length&&!com.length)return '<p class="emptyx-s" style="padding:4px 0">Nenhum detalhe disponível.</p>';
+  const row=r=>`<div class="irpExclRow"><span class="ien">${r.data||"—"} · ${r.nome||"—"}</span><span class="iev">${fmtG(r.valor)}</span></div>`;
+  let h="";
+  if(ven.length)h+=`<div class="irpExclGroup">Ventas (${ven.length})</div>`+ven.map(row).join("");
+  if(com.length)h+=`<div class="irpExclGroup">Compras (${com.length})</div>`+com.map(row).join("");
+  return h;
+}
 function renderIRP(){
   const body=$("#irpBody");
   if(!irpData){body.innerHTML="";$("#irpShare").style.display="none";return;}
@@ -1253,7 +1284,8 @@ function renderIRP(){
     <div class="irpCard">
       <div class="irpBig"><div><span class="k">Ingressos (SI)</span><span class="v pos">${fmtG(ing)}</span></div>
         <div><span class="k">Egressos (SI)</span><span class="v">−${fmtG(eg)}</span></div></div>
-      <div class="irpNote">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.</div>
+      <div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
+      <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>
     </div>
 
     <div class="sec">Por mês</div>
@@ -1264,16 +1296,18 @@ function renderIRP(){
 
     <div class="sec">Cálculo do imposto (faixas)</div>
     <div class="irpCard">
-      ${bd.length?bd.map(f=>`<div class="irow"><span class="im">Faixa ${f.faixa}</span><span class="ii">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`).join(""):'<p class="emptyx-s" style="padding:8px">Renta neta zerada ou negativa — sem imposto.</p>'}
-      <div class="irow irtot"><span class="im">Total acumulado</span><span class="in">${fmtG(tax)}</span></div>
+      ${bd.length?bd.map(f=>`<div class="irow ir3"><span class="im">Faixa ${f.faixa}</span><span class="ii">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`).join(""):'<p class="emptyx-s" style="padding:8px">Renta neta zerada ou negativa — sem imposto.</p>'}
+      <div class="irow irtot ir2"><span class="im">Total acumulado</span><span class="in">${fmtG(tax)}</span></div>
     </div>
 
     <div class="sec">Projeção anual (estimativa)</div>
     <div class="irpCard">
-      <div class="irow"><span class="im">Renta neta projetada</span><span class="in">${fmtG(annNet)}</span></div>
-      <div class="irow"><span class="im">Imposto anual projetado</span><span class="in">${fmtG(annTax)}</span></div>
+      <div class="irow ir2"><span class="im">Renta neta projetada</span><span class="in">${fmtG(annNet)}</span></div>
+      <div class="irow ir2"><span class="im">Imposto anual projetado</span><span class="in">${fmtG(annTax)}</span></div>
       <div class="irpNote">Projeção simples (acumulado ÷ ${nM} × 12). O IRP é anual: fecha em 31/dez e declara-se em março. Confirme sempre no Marangatú da SET.</div>
     </div>`;
+  const exclToggle=$("#irpExclToggle");
+  if(exclToggle)exclToggle.onclick=()=>{exclToggle.classList.toggle("open");$("#irpExclDetail").classList.toggle("open");};
 }
 function doImportIRP(){if(typeof XLSX==="undefined"){toast("Abra no navegador para importar");return;}$("#irpFile").click();}
 $("#irpImport").onclick=doImportIRP;
@@ -1314,7 +1348,7 @@ function renderSim(){
   const eff=ing>0?(tax/ing*100):0;
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   let body=`<div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fmtG(net)}</span></div>`;
-  bd.forEach(f=>{body+=`<div class="irow" style="grid-template-columns:1fr 1.4fr 1fr"><span class="im">Faixa ${f.faixa}</span><span class="ii" style="color:var(--ink-dim)">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`;});
+  bd.forEach(f=>{body+=`<div class="irow ir3"><span class="im">Faixa ${f.faixa}</span><span class="ii" style="color:var(--ink-dim)">sobre ${fmtG(f.base)}</span><span class="in">${fmtG(f.imp)}</span></div>`;});
   if(!bd.length)body+=`<div class="irpNote">Sem renta neta tributável (ingressos menores ou iguais aos egressos).</div>`;
   body+=`<div class="srTax"><span class="k">Imposto estimado · faixa ${faixa}</span><span class="v">${fmtG(tax)}</span></div>`;
   if(ing>0)body+=`<div class="srEff">Alíquota efetiva: ${eff.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}% dos ingressos</div>`;
