@@ -94,14 +94,14 @@
   .irpBig .k{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:4px}
   .irpBig .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.82rem,4vw,1rem);white-space:nowrap}
   .irpBig .v.pos{color:var(--accent)}
-  .irow{display:grid;grid-template-columns:1.05fr 1.25fr 1.25fr 1.25fr;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:clamp(.7rem,3vw,.82rem)}
+  .irow{display:grid;grid-template-columns:.85fr 1.15fr 1.15fr 1.15fr;gap:5px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:clamp(.66rem,2.8vw,.82rem)}
   .irow.ir3{grid-template-columns:1fr 1.5fr 1.1fr}
   .irow.ir2{grid-template-columns:1fr 1fr}
   .irow:last-child{border-bottom:0}
   .irow.ir3:has(+.irow.irtot){border-bottom:0}
   .irow.noborder{border-bottom:0}
   .irow.irhead{color:var(--ink-faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;font-family:inherit;font-weight:700}
-  .irow .im{font-family:inherit;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .irow .im{font-family:inherit;color:var(--ink-dim);white-space:nowrap}
   .irow .ii{color:var(--accent);text-align:right;white-space:nowrap}
   .irow .ie{color:var(--danger);text-align:right;white-space:nowrap}
   .irow .in{text-align:right;font-weight:700;white-space:nowrap}
@@ -432,7 +432,7 @@
     <button class="add" id="irpImport">📥 Importar Resumo IRP</button>
     <button class="irpSimBtn" id="irpSimOpen">🧮 Simular</button>
   </div>
-  <div class="irpCurWrap" id="irpCurWrap">
+  <div class="irpCurWrap" id="irpCurWrap" hidden>
     <button class="irpCurBtn" id="irpCurBtn"><span>💱</span> Ver em <b id="irpCurLbl">₲ Guarani</b> <span class="chev">▾</span></button>
     <div class="irpCurMenu" id="irpCurMenu" hidden>
       <button data-cur="PYG">₲ Guarani</button>
@@ -1309,8 +1309,9 @@ function renderExclDetail(d){
 }
 function renderIRP(){
   const body=$("#irpBody");
-  if(!irpData){body.innerHTML="";$("#irpShare").style.display="none";return;}
+  if(!irpData){body.innerHTML="";$("#irpShare").style.display="none";$("#irpCurWrap").hidden=true;return;}
   $("#irpShare").style.display="block";
+  $("#irpCurWrap").hidden=false;
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
   const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
     .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
@@ -1331,8 +1332,8 @@ function renderIRP(){
     <div class="irpCard">
       <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
         <div><span class="k">Egressos (Compras)</span><span class="v">${fc(eg)}</span></div></div>
-      <div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
-      <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>
+      ${(((irpData.ingresos.excl||0)+(irpData.egresos.excl||0))>0)?`<div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
+      <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
     </div>
 
     <div class="sec">Por mês</div>
