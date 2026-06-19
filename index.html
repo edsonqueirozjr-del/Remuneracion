@@ -72,24 +72,33 @@
   .irpCurLabel{font-size:.74rem;color:var(--ink-dim);font-weight:600;flex:none}
   .irpCurSeg{display:flex;flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;overflow:hidden}
   .irpCurSeg button{flex:1;border:0;background:transparent;color:var(--ink-faint);font-family:inherit;font-weight:700;font-size:clamp(.62rem,2.6vw,.74rem);padding:8px 4px;cursor:pointer;transition:.12s;white-space:nowrap}
-  .irpCurSeg button.on{color:#06251b;background:var(--accent)}
+  .irpCurSeg button[data-cur="PYG"]{color:var(--pyg)}
+  .irpCurSeg button[data-cur="USD"]{color:var(--usd)}
+  .irpCurSeg button[data-cur="BRL"]{color:var(--brl)}
+  .irpCurSeg button.on[data-cur="PYG"]{background:var(--pyg);color:#1f1030}
+  .irpCurSeg button.on[data-cur="USD"]{background:var(--usd);color:#041f3d}
+  .irpCurSeg button.on[data-cur="BRL"]{background:var(--brl);color:#241a00}
   .irpbtns .add{flex:1;margin-top:0}
   .irpSimBtn{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:14px;padding:0 16px;cursor:pointer;font-family:inherit;font-size:.84rem;font-weight:700;min-width:108px;text-align:center}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
   .irpHero{background:linear-gradient(135deg,#14202b,#0d1117);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin:14px 0 4px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center}
   .irpHero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(55,214,160,.14);filter:blur(6px)}
   .irpHeroT{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;position:relative;z-index:1}
-  .irpHeroV{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.3rem,7vw,1.7rem);margin:7px 0 3px;color:var(--pyg);position:relative;z-index:1;white-space:nowrap}
+  .irpHeroV{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.3rem,7vw,1.7rem);margin:7px 0 3px;color:var(--ink);position:relative;z-index:1;white-space:nowrap}
+  .irpHeroV.pos{color:var(--accent)}
+  .irpHeroV.neg{color:var(--danger)}
   .irpHeroSub{font-size:.74rem;color:var(--ink-dim);position:relative;z-index:1}
   .irpTax{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);position:relative;z-index:1;width:100%}
   .irpTax span{font-size:.74rem;color:var(--ink-dim)}
-  .irpTax b{font-family:'IBM Plex Mono',monospace;font-size:clamp(1.3rem,7vw,1.7rem);color:var(--accent);font-weight:700;white-space:nowrap}
+  .irpTax b{font-family:'IBM Plex Mono',monospace;font-size:clamp(1.3rem,7vw,1.7rem);color:var(--ink);font-weight:700;white-space:nowrap}
+  .irpTax b.due{color:var(--danger)}
   .irpCard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;margin-bottom:4px}
   .irpBig{display:flex;gap:12px}
   .irpBig>div{flex:1;padding:9px 0;text-align:center;display:flex;flex-direction:column;align-items:center}
   .irpBig .k{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:4px}
   .irpBig .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.82rem,4vw,1rem);white-space:nowrap}
   .irpBig .v.pos{color:var(--accent)}
+  .irpBig .v.neg{color:var(--danger)}
   .irow{display:grid;grid-template-columns:.85fr 1.15fr 1.15fr 1.15fr;gap:5px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:clamp(.66rem,2.8vw,.82rem)}
   .irow.ir3{grid-template-columns:1fr 1.5fr 1.1fr}
   .irow.ir2{grid-template-columns:1fr 1fr}
@@ -137,7 +146,8 @@
   .simResult .srTop .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.85rem,4vw,1rem);white-space:nowrap}
   .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:13px 0 12px;margin-top:2px;gap:10px}
   .simResult .srTax .k{font-size:.74rem;color:var(--ink-dim);font-weight:600}
-  .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.2rem,6vw,1.5rem);color:var(--accent);white-space:nowrap}
+  .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.2rem,6vw,1.5rem);color:var(--ink);white-space:nowrap}
+  .simResult .srTax .v.due{color:var(--danger)}
   .simResult .srEff{text-align:right;font-size:.72rem;color:var(--ink-faint);padding-bottom:10px}
 
 
@@ -217,12 +227,22 @@
   #shareCard .vmain{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem;white-space:nowrap}
   #shareCard .vsub{display:block;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-faint);white-space:nowrap;margin-top:1px}
   #shareCard .stotbox{margin:14px 26px 0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:6px 16px}
+  #shareCard.share-irp{padding-bottom:28px}
+  #shareCard.share-irp .stotbox{margin:28px 26px 0;border-radius:18px;padding:16px 18px}
+  #shareCard.share-irp .stot{padding:16px 0}
+  #shareCard.share-irp .stot .lbl{font-size:.78rem}
+  #shareCard.share-irp .stot .vl{font-size:1rem}
   #shareCard .stot{display:flex;justify-content:space-between;align-items:center;padding:11px 0}
   #shareCard .stot+.stot{border-top:1px solid var(--line-soft)}
   #shareCard .stot .lbl{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;font-weight:700}
   #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:700;font-variant-numeric:tabular-nums;font-size:.92rem}
   #shareCard .stot.diff .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
+  #shareCard .vl.ing{color:var(--accent)}
+  #shareCard .vl.eg{color:var(--danger)}
+  #shareCard .vl.netpos{color:var(--accent)}
+  #shareCard .vl.netneg{color:var(--danger)}
+  #shareCard .vl.taxdue{color:var(--danger)}
   #shareCard .sfoot{padding:16px 26px 20px;color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace;line-height:1.5}
   #shareCard .sempty{padding:18px 26px;color:var(--ink-faint)}
   .xp.flash{animation:flash 1.4s ease}
@@ -789,6 +809,7 @@ function shareFoot(r){
   return `<div class="sfoot">Gerado em ${dt} · Cotação usada: R$ ${(r.brl||0).toLocaleString("pt-BR",{minimumFractionDigits:2})} · ₲ ${Math.round(r.pyg||0).toLocaleString("es-PY")}</div>`;
 }
 function fillShareCard(){
+  $("#shareCard").className="";
   const r=rate();let tU=0,tP=0,tB=0,xp="";
   rows.forEach(row=>{const u=toUSD(row.amt,row.cur,r);tU+=u;tP+=u*r.pyg;tB+=u*r.brl;
     xp+=`<div class="srow"><div class="snm"><span class="sdesc">${(row.name||"—")}</span></div><span class="vmain" style="color:var(--brl)">${fmt.BRL(u*r.brl)}</span></div>`;});
@@ -820,6 +841,7 @@ function shareRowsByMonth(items,color,showRef){
   return {html,grand};
 }
 function fillAcctCard(items){
+  $("#shareCard").className="";
   const r=rate();
   const {html,grand}=shareRowsByMonth(items||[],"var(--pyg)",true);
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
@@ -831,6 +853,7 @@ function fillAcctCard(items){
     shareFoot(r);
 }
 function fillReportCard(){
+  $("#shareCard").className="";
   const r=rate();
   const list=getFilteredTop();
   const {html,grand}=shareRowsByMonth(list,"var(--pyg)",false);
@@ -1307,6 +1330,8 @@ function renderIRP(){
   if(!irpData){body.innerHTML="";$("#irpCurWrap").hidden=true;return;}
   $("#irpCurWrap").hidden=false;
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
+  const netCls=net<0?"neg":net>0?"pos":"";
+  const taxCls=tax>0?"due":"";
   const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
     .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
   const fc=v=>fmtCur(v,irpCur);
@@ -1316,16 +1341,16 @@ function renderIRP(){
     <div class="sec">Ingressos × Egressos</div>
     <div class="irpCard">
       <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
-        <div><span class="k">Egressos (Compras)</span><span class="v">${fc(eg)}</span></div></div>
+        <div><span class="k">Egressos (Compras)</span><span class="v neg">${fc(eg)}</span></div></div>
       ${(((irpData.ingresos.excl||0)+(irpData.egresos.excl||0))>0)?`<div class="irpNote clickable" id="irpExclToggle">Excluídos por <b>Imputa IRP = NO</b>: ${irpData.ingresos.excl||0} em Ventas · ${irpData.egresos.excl||0} em Compras.<span class="chev">▾</span></div>
       <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
     </div>
 
     <div class="irpHero">
       <div class="irpHeroT">Renta neta acumulada</div>
-      <div class="irpHeroV">${fc(net)}</div>
+      <div class="irpHeroV ${netCls}">${fc(net)}</div>
       <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"}</div>
-      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b>${fc(tax)}</b></div>
+      <div class="irpTax"><span>Imposto estimado (acumulado)</span><b class="${taxCls}">${fc(tax)}</b></div>
     </div>
 
     <div class="sec">Por mês</div>
@@ -1366,17 +1391,21 @@ $("#irpFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)retur
     $("#irpFile").value="";};
   rd.readAsArrayBuffer(f);};
 function fillIRPCard(){
+  if(!irpData)return;
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
+  const netShareColor=net<0?"var(--danger)":net>0?"var(--accent)":"var(--ink)";
+  const taxShareColor=tax>0?"var(--danger)":"var(--ink)";
   const faixaAtual=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   const fc=v=>fmtCur(v,irpCur);
   const monthsCount=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])].length;
+  $("#shareCard").className="share-irp";
   $("#shareCard").innerHTML=
     shareHead("","IRP","Cálculo preliminar · "+(monthsCount||0)+" "+(monthsCount===1?"mês":"meses")+" · faixa atual "+faixaAtual)+
-    `<div class="stotbox">
+    `<div class="stotbox irpbox">
        <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
-       <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl">${fc(eg)}</span></div>
-       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:var(--pyg)">${fc(net)}</span></div>
-       <div class="stot diff big"><span class="lbl">Imposto estimado · faixa ${faixaAtual}</span><span class="vl">${fc(tax)}</span></div>
+       <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl" style="color:var(--danger)">${fc(eg)}</span></div>
+       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
+       <div class="stot"><span class="lbl">Imposto estimado · faixa ${faixaAtual}</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
      </div>`;
 }
 
@@ -1413,12 +1442,14 @@ function renderSim(){
   if(!ing&&!eg){$("#simResult").innerHTML="";return;}
   const net=ing-eg,tax=irpTax(net);
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
+  const netColor=net<0?'var(--danger)':net>0?'var(--accent)':'var(--ink)';
+  const taxCls=tax>0?"due":"";
   const fc=v=>fmtCur(v,irpCur);
   $("#simResult").innerHTML=`
     <div class="srTop"><span class="k">Ingressos</span><span class="v" style="color:var(--accent)">${fc(ing)}</span></div>
-    <div class="srTop"><span class="k">Egressos</span><span class="v">${fc(eg)}</span></div>
-    <div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fc(net)}</span></div>
-    <div class="srTax"><span class="k">Imposto estimado</span><span class="v">${fc(tax)}</span></div>
+    <div class="srTop"><span class="k">Egressos</span><span class="v" style="color:var(--danger)">${fc(eg)}</span></div>
+    <div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${netColor}">${fc(net)}</span></div>
+    <div class="srTax"><span class="k">Imposto estimado</span><span class="v ${taxCls}">${fc(tax)}</span></div>
     <div class="srEff">Faixa aplicada: ${faixa}</div>`;
 }
 function openSim(prefill){
@@ -1451,16 +1482,19 @@ $("#simCurSeg").addEventListener("click",e=>{
 
 function fillSimIRPCard(){
   const ing=simValPyg("simIng"),eg=simValPyg("simEg"),net=ing-eg,tax=irpTax(net);
+  const netShareColor=net<0?"var(--danger)":net>0?"var(--accent)":"var(--ink)";
+  const taxShareColor=tax>0?"var(--danger)":"var(--ink)";
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   const fc=v=>fmtCur(v,irpCur);
+  $("#shareCard").className="share-irp";
   $("#shareCard").innerHTML=
     shareHead("","Simulador IRP","Resumo preliminar · moeda "+irpCur)+
-    `<div class="stotbox">
+    `<div class="stotbox irpbox">
        <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
-       <div class="stot"><span class="lbl">Egressos</span><span class="vl">${fc(eg)}</span></div>
-       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:${net<0?'var(--danger)':'var(--pyg)'}">${fc(net)}</span></div>
-       <div class="stot"><span class="lbl">Imposto estimado</span><span class="vl">${fc(tax)}</span></div>
-       <div class="stot diff"><span class="lbl">Faixa (%)</span><span class="vl">${faixa}</span></div>
+       <div class="stot"><span class="lbl">Egressos</span><span class="vl" style="color:var(--danger)">${fc(eg)}</span></div>
+       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
+       <div class="stot"><span class="lbl">Imposto estimado</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
+       <div class="stot"><span class="lbl">Faixa (%)</span><span class="vl">${faixa}</span></div>
      </div>`;
 }
 $("#simShare").onclick=()=>{
