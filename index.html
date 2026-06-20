@@ -180,6 +180,7 @@
   .chip .k{color:var(--ink-faint);font-size:.66em;margin-right:4px}
 
   .addrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+  #extratoRow[hidden],#relatorioSec[hidden]{display:none}
   .add{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px dashed var(--line);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:600}
   .add:active{border-color:var(--accent);color:var(--accent)}
   .impmini{border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px 14px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;white-space:nowrap}
@@ -698,10 +699,13 @@ async function fetchRates(){
 }
 
 /* ---- render ---- */
-function renderRows(){
+function updateExtratoVisibility(){
   const hasExtrato=!!(imp&&imp.txns&&imp.txns.length);
   const er=$("#extratoRow");if(er)er.hidden=!hasExtrato;
   const rs=$("#relatorioSec");if(rs)rs.hidden=!hasExtrato;
+}
+function renderRows(){
+  updateExtratoVisibility();
   const c=$("#rows");c.innerHTML="";
   if(!rows.length){
     c.innerHTML="";
@@ -1065,6 +1069,7 @@ $("#fileInput").onchange=e=>{
         if(!txns.length){toast("Não reconheci o(s) extrato(s)");$("#fileInput").value="";return;}
         imp={month:"",count:txns.length,txns,totalGastos:txns.reduce((s,x)=>s+x.val,0)};
         save();
+        updateExtratoVisibility();
         toast(`Extrato importado · ${txns.length} lançamentos`);
         openTop();
       }
