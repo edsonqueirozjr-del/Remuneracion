@@ -15,11 +15,12 @@
     --ink:#e9eef5;--ink-dim:#8a98ac;--ink-faint:#5f6c80;
     --accent:#37d6a0;--accent-deep:#0f9d77;--danger:#ff6b6b;
     --usd:#5aa9ff;--pyg:#c792ea;--brl:#ffd166;
+    --stripe:rgba(255,255,255,.035);
   }
   html[data-theme="light"]{
     --bg:#f4f5f7;--panel:#ffffff;--panel-2:#eef0f4;--line:#dde1e8;--line-soft:#e7eaef;
     --ink:#1b2330;--ink-dim:#5c6678;--ink-faint:#8993a3;
-    --danger:#e0524f;
+    --danger:#e0524f;--stripe:rgba(0,0,0,.035);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0}
@@ -213,18 +214,17 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* cartão para gerar imagem (fica fora da tela) */
-  #shareCard{position:fixed;left:-9999px;top:0;width:440px;background:#0d1117;color:var(--ink);
-    padding:0;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line);border-radius:18px;overflow:hidden;
-    --bg:#0d1117;--panel:#171f2b;--panel-2:#1d2735;--line:#27303d;--line-soft:#202a37;
-    --ink:#e9eef5;--ink-dim:#8a98ac;--ink-faint:#5f6c80;--danger:#ff6b6b}
-  #shareCard .shead{display:flex;align-items:center;gap:14px;padding:24px 26px 20px;background:linear-gradient(135deg,#141c27,#0d1117);border-bottom:2px solid var(--accent)}
-  #shareCard .sbadge{flex:none;width:46px;height:46px;border-radius:13px;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+  #shareCard{position:fixed;left:-9999px;top:0;width:440px;background:var(--bg);color:var(--ink);
+    padding:0;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  #shareCard .shead{display:flex;align-items:center;gap:14px;padding:24px 26px 20px;background:linear-gradient(135deg,var(--panel),var(--bg));border-bottom:2px solid var(--accent)}
+  #shareCard .sbadge{flex:none;width:46px;height:46px;border-radius:13px;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--accent)}
+  #shareCard .sbadge svg{width:22px;height:22px}
   #shareCard .sct{font-family:'Fraunces',serif;font-weight:900;font-size:1.4rem;margin:0;line-height:1.1}
   #shareCard .sct b{color:var(--pyg)}
   #shareCard .sdate{color:var(--ink-faint);font-size:.78rem;margin:3px 0 0}
   #shareCard .sbody{padding:14px 26px 4px}
   #shareCard .srow{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:9px 12px;border-radius:9px}
-  #shareCard .srow:nth-child(even){background:rgba(255,255,255,.035)}
+  #shareCard .srow:nth-child(even){background:var(--stripe)}
   #shareCard .smonth{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px;padding:6px 12px;
     background:rgba(199,146,234,.12);border-radius:8px;font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--pyg);font-family:'IBM Plex Mono',monospace}
   #shareCard .smonth:first-child{margin-top:0}
@@ -931,7 +931,7 @@ function fillAcctCard(items){
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const meses=[...new Set((items||[]).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?monthLabel(m[3]+"-"+m[2]):"";}).filter(Boolean))].join(", ");
   $("#shareCard").innerHTML=
-    shareHead("🧾","Contabilidade · Saúde","Unimed &amp; Farmácia · "+(meses||dt))+
+    shareHead('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>',"Contabilidade · Saúde","Unimed &amp; Farmácia · "+(meses||dt))+
     `<div class="sbody">${html||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
     `<div class="stotbox"><div class="stot"><span class="lbl">Total (Guarani)</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(grand).toLocaleString("es-PY")}</span></div></div>`+
     shareFoot(r);
@@ -945,7 +945,7 @@ function fillReportCard(){
   const months=topMonths();const sel=topSel?[...topSel].sort():[];
   const meses=(!sel.length||sel.length===months.length)?"Todos os meses":sel.map(monthLabel).join(", ");
   $("#shareCard").innerHTML=
-    shareHead("📄","Relatório de despesas",meses+" · "+list.length+" lançamentos")+
+    shareHead('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>',"Relatório de despesas",meses+" · "+list.length+" lançamentos")+
     `<div class="sbody">${html||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
     `<div class="stotbox">
        <div class="stot"><span class="lbl">Total</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(grand).toLocaleString("es-PY")}</span></div>
@@ -956,7 +956,8 @@ function fillReportCard(){
 }
 async function imageFrom(fillFn){
   fillFn();
-  const canvas=await html2canvas($("#shareCard"),{backgroundColor:"#0d1117",scale:2,logging:false});
+  const bg=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||"#0d1117";
+  const canvas=await html2canvas($("#shareCard"),{backgroundColor:bg,scale:2,logging:false});
   return new Promise(res=>canvas.toBlob(b=>res(b),"image/png"));
 }
 async function shareImage(fillFn,fname,title){
@@ -1526,8 +1527,8 @@ function fillIRPCard(){
     `<div class="stotbox irpbox">
        <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
        <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl" style="color:var(--danger)">${fc(eg)}</span></div>
-       <div class="stot"><span class="lbl">Renda neta</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
-       <div class="stot"><span class="lbl">Imposto estimado · faixa ${faixaAtual}</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
+       <div class="stot"><span class="lbl">Neto</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
+       <div class="stot"><span class="lbl">Imposto · faixa ${faixaAtual}</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
      </div>`;
 }
 
