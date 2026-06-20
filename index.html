@@ -15,12 +15,12 @@
     --ink:#e9eef5;--ink-dim:#8a98ac;--ink-faint:#5f6c80;
     --accent:#37d6a0;--accent-deep:#0f9d77;--danger:#ff6b6b;
     --usd:#5aa9ff;--pyg:#c792ea;--brl:#ffd166;
-    --stripe:rgba(255,255,255,.035);
+    --stripe:rgba(255,255,255,.035);--row-div:rgba(255,255,255,.09);
   }
   html[data-theme="light"]{
     --bg:#f4f5f7;--panel:#ffffff;--panel-2:#eef0f4;--line:#dde1e8;--line-soft:#e7eaef;
     --ink:#1b2330;--ink-dim:#5c6678;--ink-faint:#8993a3;
-    --danger:#e0524f;--stripe:rgba(0,0,0,.035);
+    --danger:#e0524f;--stripe:rgba(0,0,0,.035);--row-div:rgba(0,0,0,.09);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0}
@@ -57,7 +57,7 @@
     border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);border-radius:13px;cursor:pointer;padding:0}
   .themeBtn:active{border-color:var(--accent);color:var(--accent)}
   .hdrGroup{display:flex;align-items:stretch;gap:8px}
-  .lockThemeBtn{position:static;height:48px;margin:18px auto 0}
+  .lockThemeBtn{position:static;width:auto;height:48px;margin:18px auto 0;padding:0 20px;gap:8px;font-family:inherit;font-size:.86rem;font-weight:600}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
@@ -75,6 +75,7 @@
   /* escala: rótulo .66 · nota .74 · nº tabela .82 · nº padrão 1.0 · nº destaque 1.7 */
   .irpbtns{display:flex;flex-direction:column;gap:8px}
   .irpCurWrap{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  #irpCurWrap[hidden],#irpSimOpen[hidden]{display:none}
   .irpCurLabel{font-size:.74rem;color:var(--ink-dim);font-weight:600;flex:none}
   .irpCurSeg{display:flex;flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;overflow:hidden}
   .irpCurSeg button{flex:1;border:0;background:transparent;color:var(--ink-faint);font-family:inherit;font-weight:700;font-size:clamp(.68rem,2.8vw,.82rem);padding:13px 4px;cursor:pointer;transition:.12s;white-space:nowrap}
@@ -120,7 +121,7 @@
   .irpNote{font-size:.74rem;color:var(--ink-faint);padding:9px 0 4px;line-height:1.5;text-align:center}
   .irpNote b{color:var(--ink-dim)}
   .irpNote.clickable{cursor:pointer;border-radius:8px;margin:0 -6px;padding:9px 6px 4px 6px;transition:background .15s}
-  .irpNote.clickable:active{background:rgba(255,255,255,.05)}
+  .irpNote.clickable:active{background:var(--row-div)}
   .irpNote .chev{display:inline-block;margin-left:4px;font-size:.68rem;color:var(--ink-faint);transition:transform .15s}
   .irpNote.open .chev{transform:rotate(180deg)}
   .irpExclDetail{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-soft)}
@@ -379,7 +380,7 @@
   .tdate{font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;padding:14px 2px 5px}
   .tdate:first-child{padding-top:2px}
   .ti{padding:7px 2px}
-  .ti+.ti{border-top:1px solid rgba(255,255,255,.045)}
+  .ti+.ti{border-top:1px solid var(--row-div)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1;display:flex;align-items:center;gap:5px;overflow:hidden}
   .ti .nm{color:var(--ink);font-size:.87rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
@@ -453,7 +454,7 @@
       <div class="pdot" data-n="7"></div><div class="pdot" data-n="8"></div><div class="pdot" data-n="9"></div>
     </div>
     <div class="lockerr" id="lockErr"></div>
-    <button class="themeBtn lockThemeBtn" id="themeBtn3" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+    <button class="themeBtn lockThemeBtn" id="themeBtn3" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg><span id="lockThemeLabel">Tema escuro</span></button>
   </div>
 </div>
 <main id="despMain">
@@ -541,7 +542,7 @@
   <input type="file" id="irpFile" accept=".xls,.xlsx" style="display:none">
 
   <div id="irpBody"></div>
-  <button class="irpSimBtn" id="irpSimOpen" style="margin-top:14px"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="11" x2="8.01" y2="11"></line><line x1="12" y1="11" x2="12.01" y2="11"></line><line x1="16" y1="11" x2="16.01" y2="11"></line><line x1="8" y1="15" x2="8.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line><line x1="16" y1="15" x2="16.01" y2="15"></line></svg>Simulador</button>
+  <button class="irpSimBtn" id="irpSimOpen" style="margin-top:14px" hidden><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="11" x2="8.01" y2="11"></line><line x1="12" y1="11" x2="12.01" y2="11"></line><line x1="16" y1="11" x2="16.01" y2="11"></line><line x1="8" y1="15" x2="8.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line><line x1="16" y1="15" x2="16.01" y2="15"></line></svg>Simulador</button>
 </main>
 
 <div class="toast" id="toast"></div>
@@ -889,12 +890,14 @@ $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.set
 
 /* ---- imagem para WhatsApp ---- */
 function shareHead(icon,title,sub){
+  const cs=getComputedStyle(document.documentElement);
+  const panel=cs.getPropertyValue("--panel").trim(),bg=cs.getPropertyValue("--bg").trim();
   const badge=icon?`<div class="sbadge">${icon}</div>`:"";
-  return `<div class="shead">${badge}<div><p class="sct">${title}</p><p class="sdate">${sub}</p></div></div>`;
+  return `<div class="shead" style="background:linear-gradient(135deg,${panel},${bg})">${badge}<div><p class="sct">${title}</p><p class="sdate">${sub}</p></div></div>`;
 }
 function shareFoot(r){
   const dt=new Date().toLocaleDateString("pt-BR");
-  return `<div class="sfoot">Gerado em ${dt} · Cotação usada: R$ ${(r.brl||0).toLocaleString("pt-BR",{minimumFractionDigits:2})} · ₲ ${Math.round(r.pyg||0).toLocaleString("es-PY")}</div>`;
+  return `<div class="sfoot">Gerado em ${dt}</div>`;
 }
 function fillShareCard(){
   $("#shareCard").className="";
@@ -996,7 +999,7 @@ function acctRenderResults(){
   box.innerHTML=base.length?base.map(t=>{
     const k=keyOf(t),auto=isUF(t),on=auto||extraKeys.has(k);
     return `<div class="ares ${on?"on":""} ${auto?"auto":""}" data-key="${k.replace(/"/g,'&quot;')}" data-auto="${auto?1:0}">
-      <div class="ares-nm"><span>${t.desc}</span><span class="ares-dt">${t.date} · ₲ ${Math.round(t.val).toLocaleString("es-PY")}${auto?" · auto":""}</span></div>
+      <div class="ares-nm"><span>${t.desc}</span><span class="ares-dt">${t.date} · ₲ ${Math.round(t.val).toLocaleString("es-PY")}</span></div>
       <span class="ares-btn">${on?"✓":"＋"}</span></div>`;
   }).join(""):'<p class="empty" style="padding:10px 2px">Nenhum lançamento nesse(s) mês(es).</p>';
   box.querySelectorAll(".ares").forEach(el=>el.onclick=()=>{
@@ -1021,13 +1024,7 @@ function openAcct(){
   $("#acctModal").classList.remove("hidden");
 }
 $("#saudeBtn").onclick=openAcct;
-function quickGenAcct(){
-  if(!imp||!imp.txns){toast("Importe uma fatura primeiro");return;}
-  const items=imp.txns.filter(isUF);
-  if(!items.length){toast("Nenhuma despesa de saúde encontrada");return;}
-  shareImage(()=>fillAcctCard(items),"contabilidade.png","Contabilidade · Saúde");
-}
-$("#acctQuickGen").onclick=quickGenAcct;
+$("#acctQuickGen").onclick=openAcct;
 $("#acctSearch").oninput=acctRenderResults;
 $("#acctClose").onclick=()=>$("#acctModal").classList.add("hidden");
 $("#acctModal").onclick=e=>{if(e.target.id==="acctModal")$("#acctModal").classList.add("hidden");};
@@ -1372,7 +1369,7 @@ function reportPDF(){
         <tr><td>Em Real</td><td></td><td class="r">R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2})}</td></tr>
         <tr><td>Em Dólar</td><td></td><td class="r">U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2})}</td></tr>
       </tfoot></table>
-    <div class="foot">Gerado em ${dt} · Cotação usada: R$ ${r.brl.toLocaleString("pt-BR",{minimumFractionDigits:2})} · ₲ ${Math.round(r.pyg).toLocaleString("es-PY")}</div>
+    <div class="foot">Gerado em ${dt}</div>
     <script>window.onload=function(){setTimeout(function(){window.print();},300);}<\/script>
   </body></html>`;
   const w=window.open("","_blank");
@@ -1453,8 +1450,9 @@ function renderExclDetail(d){
 }
 function renderIRP(){
   const body=$("#irpBody");
-  if(!irpData){body.innerHTML="";$("#irpCurWrap").hidden=true;return;}
+  if(!irpData){body.innerHTML="";$("#irpCurWrap").hidden=true;$("#irpSimOpen").hidden=true;return;}
   $("#irpCurWrap").hidden=false;
+  $("#irpSimOpen").hidden=false;
   const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
   const netCls=net<0?"neg":net>0?"pos":"";
   const taxCls=tax>0?"due":"";
@@ -1637,6 +1635,7 @@ $("#simShare").onclick=()=>{
 function applyTheme(t){
   document.documentElement.setAttribute("data-theme",t);
   try{localStorage.setItem("theme",t);}catch(e){}
+  const lbl=$("#lockThemeLabel");if(lbl)lbl.textContent=t==="light"?"Tema claro":"Tema escuro";
 }
 function toggleTheme(){
   const cur=document.documentElement.getAttribute("data-theme")==="light"?"dark":"light";
