@@ -21,6 +21,7 @@
     --bg:#f4f5f7;--panel:#ffffff;--panel-2:#eef0f4;--line:#dde1e8;--line-soft:#e7eaef;
     --ink:#1b2330;--ink-dim:#5c6678;--ink-faint:#8993a3;
     --danger:#e0524f;--stripe:rgba(0,0,0,.035);--row-div:rgba(0,0,0,.09);
+    --brl:#b45309;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0}
@@ -82,6 +83,7 @@
   .irpCurSeg button.on[data-cur="PYG"]{background:var(--pyg);color:#1f1030}
   .irpCurSeg button.on[data-cur="USD"]{background:var(--usd);color:#041f3d}
   .irpCurSeg button.on[data-cur="BRL"]{background:var(--brl);color:#241a00}
+  html[data-theme="light"] .irpCurSeg button.on[data-cur="BRL"]{color:#fff}
   .irpbtns .add{flex:none;width:100%;margin-top:0;border-style:solid;background:var(--panel);font-size:.88rem}
   .irpSimBtn{flex:none;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;text-align:center;white-space:nowrap}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
@@ -154,6 +156,7 @@
   .cseg button[data-c="USD"],.seg button[data-cur="USD"]{color:var(--usd)}
   .cseg button[data-c="PYG"],.seg button[data-cur="PYG"]{color:var(--pyg)}
   .cseg button.on[data-c="BRL"],.seg button.on[data-cur="BRL"]{background:var(--brl);color:#241a00}
+  html[data-theme="light"] .cseg button.on[data-c="BRL"],html[data-theme="light"] .seg button.on[data-cur="BRL"]{color:#fff}
   .cseg button.on[data-c="USD"],.seg button.on[data-cur="USD"]{background:var(--usd);color:#041f3d}
   .cseg button.on[data-c="PYG"],.seg button.on[data-cur="PYG"]{background:var(--pyg);color:#1f1030}
 
@@ -1023,15 +1026,19 @@ function parseFatura(arr){
     }
   } if(total!=null)break;}
   // cabeçalho da tabela
-  let hi=-1,colD=-1,colM=-1,colR=-1;
+  let hi=-1,colD=-1,colM=-1,colR=-1,colProc=-1,colTxn=-1;
   for(let i=0;i<arr.length;i++){const h=arr[i].map(norm);
     if(h.some(x=>x.includes("descripcion"))&&h.some(x=>x.includes("movimientos"))){
-      hi=i;colD=h.findIndex(x=>x.includes("descripcion"));colM=h.findIndex(x=>x.includes("movimientos"));colR=h.findIndex(x=>x.includes("referencia"));break;}}
+      hi=i;colD=h.findIndex(x=>x.includes("descripcion"));colM=h.findIndex(x=>x.includes("movimientos"));colR=h.findIndex(x=>x.includes("referencia"));
+      colProc=h.findIndex(x=>x.includes("proceso"));colTxn=h.findIndex(x=>x.includes("transac"));break;}}
   const txns=[],dateRe=/^\d{2}\/\d{2}\/\d{4}$/,mesCount={};
   if(hi>=0)for(let i=hi+1;i<arr.length;i++){
     const row=arr[i],mv=pNum(row[colM]);if(isNaN(mv))continue;
     const desc=String(row[colD]||"").replace(/\s+/g," ").trim();if(!desc)continue;
-    const dc=(row.find(x=>dateRe.test(String(x).trim()))||"").toString().trim();
+    const dProc=colProc>=0?String(row[colProc]||"").trim():"";
+    const dTxn=colTxn>=0?String(row[colTxn]||"").trim():"";
+    // prioriza Fecha Proceso; cai para Fecha de Transacción se ainda não processado
+    const dc=dateRe.test(dProc)?dProc:(dateRe.test(dTxn)?dTxn:(row.find(x=>dateRe.test(String(x).trim()))||"").toString().trim());
     const ref=colR>=0?String(row[colR]||"").trim():"";
     if(dc){const mm=dc.slice(3,5);mesCount[mm]=(mesCount[mm]||0)+1;}
     if(mv<0)txns.push({date:dc,desc,ref,val:Math.abs(mv)}); // só gastos
