@@ -340,7 +340,7 @@
   .mtabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0 5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .mtabs::-webkit-scrollbar{display:none}
   .mtab{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
-    font-size:.74rem;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap;cursor:pointer}
+    font-size:.78rem;font-weight:600;padding:11px 16px;border-radius:999px;white-space:nowrap;cursor:pointer}
   .mtab.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
   .topheadbtns{display:flex;gap:6px;flex:none}
   .gexp{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:7px;cursor:pointer;margin-left:6px}
@@ -361,7 +361,7 @@
   .searchwrap{position:relative}
   .searchwrap .search-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-faint);pointer-events:none}
   .topfilter .frow{display:flex;gap:6px}
-  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.78rem;font-weight:600;padding:11px;border-radius:11px;cursor:pointer}
+  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.86rem;font-weight:600;padding:11px;border-radius:11px;cursor:pointer}
   .topfilter .frow button:active{border-color:var(--accent);color:var(--accent)}
   .topbtns{display:flex;gap:8px;margin-top:10px}
   .topbtns .applybtn{flex:1;margin-top:0;font-size:.86rem;padding:13px}
@@ -380,7 +380,7 @@
   .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.87rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
   .ti .more{flex:none;width:24px;height:24px;border:0;background:transparent;color:var(--ink-faint);border-radius:7px;font-size:1rem;line-height:1;cursor:pointer;padding:0;letter-spacing:1px}
   .ti .more:active{background:var(--panel-2);color:var(--accent)}
-  .ti .conv2{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-dim);margin-top:2px;padding-left:20px}
+  .ti .conv2{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-dim);margin-top:2px}
   .ti .conv2 .pct{color:var(--ink-faint);margin-left:8px}
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
   .tiMenu{position:fixed;z-index:120;min-width:148px;background:var(--panel);border:1px solid var(--line);border-radius:12px;
@@ -539,7 +539,7 @@
     <div class="acctadd">
       <div class="searchwrap">
         <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="search" id="acctSearch" placeholder="Incluir outras despesas (ex.: nome da farmácia)…">
+        <input type="search" id="acctSearch" placeholder="Buscar despesa…">
       </div>
       <div class="acctresults" id="acctResults"></div>
       <div class="acctextra" id="acctExtra"></div>
@@ -586,7 +586,7 @@
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
       <div class="topfilter">
-        <div class="searchwrap">
+        <div class="searchwrap" hidden>
           <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input type="search" id="fSearch" placeholder="Buscar despesa…">
         </div>
@@ -598,7 +598,6 @@
       </div>
       <div class="toplist" id="topList"></div>
       <div class="tiMenu hidden" id="tiMenu">
-        <button data-act="info">Ver detalhes</button>
         <button data-act="edit">Editar</button>
         <button data-act="delete">Excluir</button>
       </div>
@@ -1149,7 +1148,7 @@ function renderTopList(){
   const totG=list.reduce((s,x)=>s+x.val,0);
   const tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
   $("#topHeroVal").textContent="₲ "+Math.round(totG).toLocaleString("es-PY");
-  $("#topSub").innerHTML=`${list.length} lançamentos${grouped?" · agrupado por nome":""} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  $("#topSub").innerHTML=`${list.length} lançamentos${grouped?" · agrupado por nome":""} · <span style="color:var(--brl)">R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
   $("#applyBtnLabel").textContent=totG?`Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")}`:"Aplicar";
   if(grouped){
     const g=groupedTop(list);
@@ -1176,7 +1175,7 @@ function renderTopList(){
     html+=`<div class="ti"><div class="top1">
         <span class="nmw"><span class="nm">${x.desc}</span></span>
         <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
-          <button class="more" data-key="${key.replace(/"/g,'&quot;')}" data-ref="${String(x.ref||"—").replace(/"/g,'&quot;')}" title="Mais ações">⋮</button></span></div>
+          <button class="more" data-key="${key.replace(/"/g,'&quot;')}" title="Mais ações">⋮</button></span></div>
       <div class="conv2">${showDateHeaders?"":dm+" · "}<span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
   });
   $("#topList").innerHTML=html;
@@ -1220,8 +1219,8 @@ function editTxn(k){
   if(!(v>0)){toast("Valor inválido");return;}
   t.val=v;imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Valor atualizado");
 }
-let tiMenuKey=null,tiMenuRef=null;
-function closeTiMenu(){$("#tiMenu").classList.add("hidden");tiMenuKey=null;tiMenuRef=null;}
+let tiMenuKey=null;
+function closeTiMenu(){$("#tiMenu").classList.add("hidden");tiMenuKey=null;}
 $("#topList").onclick=e=>{
   const gexp=e.target.closest(".gexp");
   if(gexp){const p=$("#gdates-"+gexp.dataset.g);if(p){p.hidden=!p.hidden;gexp.classList.toggle("open",!p.hidden);}return;}
@@ -1230,13 +1229,14 @@ $("#topList").onclick=e=>{
   const more=e.target.closest(".more");
   if(more){
     e.stopPropagation();
-    tiMenuKey=more.dataset.key;tiMenuRef=more.dataset.ref;
-    const menu=$("#tiMenu"),r=more.getBoundingClientRect(),mw=160;
-    menu.style.top=Math.round(r.bottom+6)+"px";
+    tiMenuKey=more.dataset.key;
+    const menu=$("#tiMenu"),r=more.getBoundingClientRect(),mw=150,mh=92;
     let left=Math.round(r.right-mw);
     if(left<10)left=10;
     if(left+mw>window.innerWidth-10)left=window.innerWidth-10-mw;
     menu.style.left=left+"px";
+    if(r.bottom+6+mh>window.innerHeight){menu.style.top=Math.round(r.top-6-mh)+"px";}
+    else{menu.style.top=Math.round(r.bottom+6)+"px";}
     menu.classList.remove("hidden");
     return;
   }
@@ -1244,10 +1244,9 @@ $("#topList").onclick=e=>{
 $("#tiMenu").onclick=e=>{
   const b=e.target.closest("button[data-act]");
   if(!b)return;
-  const act=b.dataset.act,k=tiMenuKey,ref=tiMenuRef;
+  const act=b.dataset.act,k=tiMenuKey;
   closeTiMenu();
-  if(act==="info"){toast("Ref. "+(ref||"—"));}
-  else if(act==="edit"){editTxn(k);}
+  if(act==="edit"){editTxn(k);}
   else if(act==="delete"){
     if(!confirm("Tem certeza que deseja excluir este lançamento?"))return;
     imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
