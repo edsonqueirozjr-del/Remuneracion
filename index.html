@@ -52,11 +52,11 @@
     border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;
     font-size:.88rem;font-weight:600;text-transform:none;letter-spacing:0}
   .sharefull:active{border-color:var(--accent);color:var(--accent)}
-  .themeBtn{flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  .themeBtn{flex:none;width:48px;display:flex;align-items:center;justify-content:center;
     border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);border-radius:13px;cursor:pointer;padding:0}
   .themeBtn:active{border-color:var(--accent);color:var(--accent)}
-  .hdrGroup{display:flex;align-items:center;gap:8px}
-  .lockThemeBtn{position:absolute;top:18px;right:18px}
+  .hdrGroup{display:flex;align-items:stretch;gap:8px}
+  .lockThemeBtn{position:static;height:48px;margin:18px auto 0}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
@@ -263,7 +263,14 @@
     background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
   #acctModal.hidden,#simModal.hidden{display:none}
   #acctModal .acctcard{max-width:540px;height:93vh;max-height:93vh;border-radius:0;border-top-left-radius:22px;border-top-right-radius:22px;
-    padding:calc(env(safe-area-inset-top) + 22px) 18px calc(env(safe-area-inset-bottom) + 18px)}
+    padding:calc(env(safe-area-inset-top) + 22px) 18px calc(env(safe-area-inset-bottom) + 18px);
+    display:flex;flex-direction:column;overflow:hidden}
+  #acctModal .accthead,#acctModal .acctmonths{flex:none}
+  #acctModal .acctadd{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  #acctModal .acctadd .searchwrap{flex:none}
+  #acctModal .acctresults{flex:1;min-height:0;max-height:none;overflow-y:auto}
+  #acctModal .acctextra{flex:none}
+  #acctModal #acctGen{flex:none}
   .acctcard{width:100%;max-width:380px;max-height:88vh;overflow-y:auto;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:18px;scrollbar-width:none}
   .acctcard::-webkit-scrollbar{display:none}
   .accthead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
@@ -375,7 +382,7 @@
   .ti+.ti{border-top:1px solid rgba(255,255,255,.045)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1;display:flex;align-items:center;gap:5px;overflow:hidden}
-  .ti .nm{color:var(--ink);font-size:.87rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .ti .nm{color:var(--ink);font-size:.87rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
   .ti .dt{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.7rem}
   .ti .vr{display:flex;align-items:center;gap:5px;flex:none}
   .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.87rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -393,8 +400,6 @@
   .tiMenu button[data-act="delete"]:active{color:var(--danger)}
   .applybtn{margin-top:12px;flex:none;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);font-family:inherit;font-weight:600;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
   .applybtn:active{border-color:var(--accent);color:var(--accent)}
-  #applyBtn{border-color:rgba(55,214,160,.45);background:rgba(55,214,160,.1);color:var(--accent);font-weight:700}
-  #applyBtn:active{filter:brightness(1.15)}
 
 
   /* ---- ajustes exclusivos para web/desktop ---- */
@@ -436,7 +441,6 @@
 <body>
 <div id="lock">
   <div class="lockcard">
-    <button class="themeBtn lockThemeBtn" id="themeBtn3" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
     <div class="lockbtns">
       <button class="lockbtn modsel on" id="enterDesp">💸 Salário</button>
       <button class="lockbtn modsel alt" id="enterIrp">📑 IRP</button>
@@ -449,6 +453,7 @@
       <div class="pdot" data-n="7"></div><div class="pdot" data-n="8"></div><div class="pdot" data-n="9"></div>
     </div>
     <div class="lockerr" id="lockErr"></div>
+    <button class="themeBtn lockThemeBtn" id="themeBtn3" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
   </div>
 </div>
 <main id="despMain">
@@ -1235,9 +1240,33 @@ function editTxn(k){
   if(!(v>0)){toast("Valor inválido");return;}
   t.val=v;imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Valor atualizado");
 }
+function renameDesc(oldDesc){
+  const novo=prompt("Renomear lançamento (atualiza em todos os lugares com este nome):",oldDesc);
+  if(novo===null)return;
+  const nv=novo.trim();
+  if(!nv||nv===oldDesc)return;
+  const key=norm(oldDesc);
+  let count=0;
+  imp.txns.forEach(t=>{if(norm(t.desc)===key){t.desc=nv;count++;}});
+  save();mtabsRefresh();renderTopList();
+  toast(count>1?`Renomeado em ${count} lançamentos`:"Lançamento renomeado");
+}
 let tiMenuKey=null;
 function closeTiMenu(){$("#tiMenu").classList.add("hidden");tiMenuKey=null;}
+let nmPressTimer=null,nmPressFired=false;
+$("#topList").addEventListener("pointerdown",e=>{
+  const nm=e.target.closest(".nm");
+  if(!nm)return;
+  nmPressFired=false;
+  nmPressTimer=setTimeout(()=>{nmPressFired=true;renameDesc(nm.textContent);},550);
+});
+const cancelNmPress=()=>{if(nmPressTimer){clearTimeout(nmPressTimer);nmPressTimer=null;}};
+$("#topList").addEventListener("pointerup",cancelNmPress);
+$("#topList").addEventListener("pointercancel",cancelNmPress);
+$("#topList").addEventListener("pointermove",cancelNmPress);
+$("#topList").addEventListener("contextmenu",e=>{if(e.target.closest(".nm"))e.preventDefault();});
 $("#topList").onclick=e=>{
+  if(nmPressFired){nmPressFired=false;return;}
   const gexp=e.target.closest(".gexp");
   if(gexp){const p=$("#gdates-"+gexp.dataset.g);if(p){p.hidden=!p.hidden;gexp.classList.toggle("open",!p.hidden);}return;}
   const edt=e.target.closest(".edt");
