@@ -364,7 +364,7 @@
   .ti .tbar{height:4px;border-radius:4px;background:var(--panel-2);margin-top:6px;overflow:hidden}
   .ti .tbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent))}
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
-  .applybtn{margin-top:12px;flex:none;border:0;background:var(--accent);color:#06251b;font-family:inherit;font-weight:700;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer}
+  .applybtn{margin-top:12px;flex:none;border:0;background:var(--accent);color:#06251b;font-family:inherit;font-weight:700;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
   .applybtn:active{filter:brightness(1.08)}
 
 
@@ -546,7 +546,7 @@
   <div class="topcard">
     <div class="tophead">
       <div><div class="topttl" id="topTitle">Top gastos</div><div class="topsub" id="topSub"></div></div>
-      <span class="topheadbtns"><button class="topclose" id="acctBtn" title="Contábil (Saúde)"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg></button><button class="topclose" id="topImport" title="Importar mais"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg></button><button class="topclose" id="topClear" title="Excluir extrato importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button><button class="topclose" id="topClose">✕</button></span>
+      <span class="topheadbtns"><button class="topclose" id="topClose">✕</button></span>
     </div>
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
@@ -561,8 +561,8 @@
       <div class="toplist" id="topList"></div>
     </div>
     <div class="topbtns">
-      <button class="applybtn alt" id="reportBtn">📄 Relatório</button>
-      <button class="applybtn" id="applyBtn">✓ Aplicar como despesa</button>
+      <button class="applybtn alt" id="reportBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>Relatório</button>
+      <button class="applybtn" id="applyBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span id="applyBtnLabel">Aplicar</span></button>
     </div>
   </div>
 </div>
@@ -957,7 +957,6 @@ function openAcct(){
   acctRenderResults();
   $("#acctModal").classList.remove("hidden");
 }
-$("#acctBtn").onclick=openAcct;
 $("#saudeBtn").onclick=openAcct;
 $("#acctSearch").oninput=acctRenderResults;
 $("#acctClose").onclick=()=>$("#acctModal").classList.add("hidden");
@@ -1103,7 +1102,7 @@ function renderTopList(){
   const totG=list.reduce((s,x)=>s+x.val,0);
   const tUsd=r.pyg?totG/r.pyg:0,tBrl=tUsd*r.brl;
   $("#topSub").innerHTML=`${list.length} lançamentos${grouped?" · agrupado por nome":""}<br>₲ ${Math.round(totG).toLocaleString("es-PY")} · R$ ${tBrl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} · U$ ${tUsd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-  $("#applyBtn").textContent=totG?`✓ Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")} como despesa`:"✓ Aplicar como despesa";
+  $("#applyBtnLabel").textContent=totG?`Aplicar ₲ ${Math.round(totG).toLocaleString("es-PY")}`:"Aplicar";
   if(grouped){
     const g=groupedTop(list);
     $("#topList").innerHTML=g.length?g.map((x,gi)=>{
@@ -1155,9 +1154,6 @@ function openTop(pre,info){
   const months=topMonths();
   topSel=(pre&&months.includes(pre))?new Set([pre]):new Set(months); // padrão: Todos
   $(".topcard").classList.toggle("info",!!info);
-  $("#topImport").style.display=info?"none":"";
-  $("#acctBtn").style.display=info?"none":"";
-  $("#topClear").style.display=info?"none":"";
   if(info)topSort="date";
   $("#topTitle").textContent=info?("Detalhes · "+(pre?monthLabel(pre):"Extrato")):"Extrato";
   mtabsRefresh();
@@ -1185,13 +1181,11 @@ $("#topList").onclick=e=>{
     const k=exc.dataset.key;imp.txns=imp.txns.filter(t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`!==k);
     imp.totalGastos=imp.txns.reduce((s,x)=>s+x.val,0);save();mtabsRefresh();renderTopList();toast("Lançamento removido");}
 };
-$("#topImport").onclick=doImport;
 function clearExtrato(){
   if(!imp){toast("Nenhum extrato importado");return;}
   if(!confirm("Excluir TODO o extrato importado? Os lançamentos serão removidos (as despesas já aplicadas continuam).")){return;}
   imp=null;save();renderRows();$("#topModal").classList.add("hidden");toast("Extrato importado excluído");
 }
-$("#topClear").onclick=clearExtrato;
 $("#extratoDelBtn").onclick=clearExtrato;
 $("#topClose").onclick=()=>$("#topModal").classList.add("hidden");
 $("#topModal").onclick=e=>{if(e.target.id==="topModal")$("#topModal").classList.add("hidden");};
