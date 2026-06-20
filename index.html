@@ -188,11 +188,9 @@
   #addRow,#importBtn{border-style:dashed;background:var(--bg)}
   .delsq{flex:none;width:46px;height:46px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .delsq:active{border-color:var(--danger);color:var(--danger)}
-  #extratoRow{display:grid;grid-template-columns:46px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:stretch}
-  .extratoGroup{display:contents;min-width:0}
-  #extratoBtn,#saudeBtn{width:100%;transition:color .25s}
+  .extratoGroup{flex:1;display:flex;gap:8px;min-width:0}
+  #extratoBtn,#saudeBtn{transition:color .25s}
   #extratoRow.has-data #extratoBtn,#extratoRow.has-data #saudeBtn{color:var(--accent)}
-  #extratoRow.has-data #extratoDelBtn svg{color:var(--danger)}
   .btnicon{width:16px;height:16px;flex:none}
 
 
@@ -291,8 +289,6 @@
   .lockbtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
   .lockbtn:active{filter:brightness(1.08)}
   .lockerr{color:var(--danger);font-size:.8rem;margin-top:10px;min-height:1.1em}
-  .tempUnlock{margin-top:12px;width:100%;border:1px dashed var(--line);background:transparent;color:var(--ink-dim);font-family:inherit;font-size:.82rem;font-weight:700;padding:11px 12px;border-radius:12px;cursor:pointer}
-  .tempUnlock:active{border-color:var(--accent);color:var(--accent)}
   @keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 
   /* estado vazio */
@@ -420,7 +416,6 @@
       <div class="pdot" data-n="7"></div><div class="pdot" data-n="8"></div><div class="pdot" data-n="9"></div>
     </div>
     <div class="lockerr" id="lockErr"></div>
-    <button class="tempUnlock" id="skipLock" type="button">Entrar sem senha</button>
   </div>
 </div>
 <main id="despMain">
@@ -590,7 +585,6 @@ function setMod(m){chosenMod=m;
   $("#lockErr").textContent="";}
 $("#enterDesp").onclick=()=>setMod("desp");
 $("#enterIrp").onclick=()=>setMod("irp");
-$("#skipLock").onclick=()=>{showView(chosenMod==="irp"?"irp":"desp");unlock();};
 (function initPattern(){
   const grid=$("#pattern"),svg=$("#patSvg");let seq=[],drawing=false;
   function centers(){const r=grid.getBoundingClientRect();const cs=[];for(let i=0;i<9;i++){const cx=(i%3)*100+50,cy=Math.floor(i/3)*100+50;cs.push({n:i+1,cx,cy,px:r.left+(i%3+0.5)*r.width/3,py:r.top+(Math.floor(i/3)+0.5)*r.height/3});}return cs;}
