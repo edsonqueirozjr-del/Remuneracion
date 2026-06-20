@@ -251,7 +251,7 @@
   .acctmonths::-webkit-scrollbar{display:none}
   .acctmonths .empty2{color:var(--ink-faint);font-size:.85rem}
   .acctadd{border-top:1px solid var(--line);padding-top:14px;margin-bottom:14px}
-  .acctadd #acctSearch{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:inherit;font-size:.86rem;padding:11px 12px;outline:none}
+  .acctadd #acctSearch{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:inherit;font-size:.86rem;padding:11px 12px 11px 36px;outline:none}
   .acctadd #acctSearch:focus{border-color:var(--accent)}
   .acctresults{max-height:210px;overflow-y:auto;margin-top:8px;display:flex;flex-direction:column;gap:6px}
   .ares{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer}
@@ -502,16 +502,19 @@
 <div id="acctModal" class="hidden">
   <div class="acctcard">
     <div class="accthead">
-      <div><div class="topttl">Contabilidade — Saúde</div><div class="topsub">Escolha os meses e inclua despesas extras se precisar</div></div>
+      <div><div class="topttl">Contabilidade · Saúde</div><div class="topsub">Escolha os meses e inclua despesas extras se precisar</div></div>
       <button class="topclose" id="acctClose">✕</button>
     </div>
     <div class="acctmonths" id="acctMonths"></div>
     <div class="acctadd">
-      <input type="search" id="acctSearch" placeholder="🔎 Incluir outras despesas (ex.: nome da farmácia)…">
+      <div class="searchwrap">
+        <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="search" id="acctSearch" placeholder="Incluir outras despesas (ex.: nome da farmácia)…">
+      </div>
       <div class="acctresults" id="acctResults"></div>
       <div class="acctextra" id="acctExtra"></div>
     </div>
-    <button class="applybtn" id="acctGen">📷 Gerar resumo</button>
+    <button class="applybtn" id="acctGen" style="width:100%"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Gerar resumo</button>
   </div>
 </div>
 
@@ -880,7 +883,7 @@ function fillAcctCard(items){
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const meses=[...new Set((items||[]).map(t=>{const m=String(t.date).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);return m?monthLabel(m[3]+"-"+m[2]):"";}).filter(Boolean))].join(", ");
   $("#shareCard").innerHTML=
-    shareHead("🧾","Contabilidade — Saúde","Unimed &amp; Farmácia · "+(meses||dt))+
+    shareHead("🧾","Contabilidade · Saúde","Unimed &amp; Farmácia · "+(meses||dt))+
     `<div class="sbody">${html||'<p class="sempty">Sem lançamentos.</p>'}</div>`+
     `<div class="stotbox"><div class="stot"><span class="lbl">Total (Guarani)</span><span class="vl" style="color:var(--pyg)">₲ ${Math.round(grand).toLocaleString("es-PY")}</span></div></div>`+
     shareFoot(r);
@@ -974,7 +977,7 @@ $("#acctGen").onclick=()=>{
   const items=imp.txns.filter(t=>(isUF(t)&&inMonth(t))||extraKeys.has(keyOf(t)));
   if(!items.length){toast("Nada para gerar — escolha meses ou adicione despesas");return;}
   $("#acctModal").classList.add("hidden");
-  shareImage(()=>fillAcctCard(items),"contabilidade.png","Contabilidade — Saúde");
+  shareImage(()=>fillAcctCard(items),"contabilidade.png","Contabilidade · Saúde");
 };
 
 /* ---- importar fatura (extrato de cartão) ---- */
