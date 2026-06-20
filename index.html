@@ -27,6 +27,7 @@
   .num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
   main{padding:16px;max-width:540px;margin:0 auto}
   .hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+  .hdr h1{margin:0}
   .hdrbtn{flex:none;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.82rem;font-weight:700;padding:13px 16px;border-radius:13px;cursor:pointer;min-width:108px;text-align:center}
   .hdrbtn:active{border-color:var(--accent);color:var(--accent)}
   h1{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;margin:6px 0 2px;letter-spacing:-.01em}
@@ -39,6 +40,10 @@
   .clearBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
     font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
   .clearBtn:active{border-color:var(--danger);color:var(--danger)}
+  .sharefull{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;margin-top:10px;
+    border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;
+    font-size:.88rem;font-weight:600;text-transform:none;letter-spacing:0}
+  .sharefull:active{border-color:var(--accent);color:var(--accent)}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
@@ -48,14 +53,11 @@
   .pcard .tag{font-size:.72rem;font-weight:700}
   .pcard input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;
     font-size:.92rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:1px 0}
-  .salinfo{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim)}
+  .salinfo{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);min-height:1.05em}
   #salCard.needsal{border-color:var(--usd);box-shadow:0 0 0 1px var(--usd) inset}
   #salCard.needsal .salinfo{color:var(--usd)}
-  .fxbtn{flex:none;border:0;background:transparent;font-size:1.15rem;line-height:1;padding:2px 3px;cursor:pointer;
-    animation:fxpulse 2.4s ease-in-out infinite;transform-origin:center}
+  .fxbtn{flex:none;border:0;background:transparent;font-size:1.15rem;line-height:1;padding:2px 3px;cursor:pointer;transform-origin:center}
   .fxbtn:active{transform:scale(.82)}
-  @keyframes fxpulse{0%,100%{transform:scale(1) rotate(-7deg)}50%{transform:scale(1.16) rotate(7deg)}}
-  @media (prefers-reduced-motion: reduce){.fxbtn{animation:none}}
   #fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200;display:none}
   #fw.on{display:block}
 
@@ -138,11 +140,11 @@
   .simResult .srTop{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft);gap:10px}
   .simResult .srTop .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
   .simResult .srTop .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.85rem,4vw,1rem);white-space:nowrap}
-  .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:13px 0 12px;margin-top:2px;gap:10px}
-  .simResult .srTax .k{font-size:.74rem;color:var(--ink-dim);font-weight:600}
-  .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.2rem,6vw,1.5rem);color:var(--ink);white-space:nowrap}
-  .simResult .srTax .v.due{color:var(--danger)}
+  .simResult .srTax{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line-soft);gap:10px}
+  .simResult .srTax .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
+  .simResult .srTax .v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(.85rem,4vw,1rem);color:var(--ink);white-space:nowrap}
   .simResult .srEff{text-align:right;font-size:.72rem;color:var(--ink-faint);padding-bottom:10px}
+  .simResult .sec{margin:4px 4px 8px}
 
 
   .fxreset{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--accent);
@@ -288,7 +290,7 @@
   .pdot.on{border-color:var(--usd);background:var(--usd)}
   .pdot.ok{border-color:var(--accent);background:var(--accent)}
   .pdot.err{border-color:var(--danger);background:var(--danger)}
-  .lockpick{color:var(--ink-dim);font-size:.78rem;margin:16px 0 8px;letter-spacing:.04em}
+  .lockpick{color:var(--ink);font-size:1.02rem;font-weight:600;margin:22px 0;letter-spacing:.01em;text-align:center}
   .lockbtns{display:flex;gap:10px}
   .lockbtn{flex:1;background:var(--accent);color:#06251b;font-weight:700;border:0;border-radius:12px;padding:14px 10px;cursor:pointer;font-family:inherit;font-size:.92rem}
   .lockbtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
@@ -462,7 +464,7 @@
   </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 
-  <div class="sec"><span>Resumo</span><button class="clearBtn" id="shareBtn">📷 Compartilhar</button></div>
+  <div class="sec">Resumo</div>
   <div class="resumo">
     <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
       <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
@@ -471,6 +473,7 @@
     <div class="rrow"><span class="lbl">Diferença</span><span class="v" id="rDiff"></span>
       <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
   </div>
+  <button class="clearBtn sharefull" id="shareBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Compartilhar</button>
 </main>
 
 <main id="irpMain" hidden>
@@ -480,7 +483,7 @@
   </div>
 
   <div class="irpbtns">
-    <button class="add" id="irpImport"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg>Importar Resumo IRP</button>
+    <button class="add" id="irpImport"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg>Importar IRP</button>
     <button class="irpSimBtn" id="irpSimOpen"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="11" x2="8.01" y2="11"></line><line x1="12" y1="11" x2="12.01" y2="11"></line><line x1="16" y1="11" x2="16.01" y2="11"></line><line x1="8" y1="15" x2="8.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line><line x1="16" y1="15" x2="16.01" y2="15"></line></svg>Simular</button>
   </div>
   <div class="irpCurWrap" id="irpCurWrap" hidden>
@@ -538,7 +541,7 @@
           <button class="simResetField" id="simEgReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
 
       <div class="simResult" id="simResult"></div>
-      <button class="clearBtn" id="simShare" style="width:100%;margin-top:10px;padding:11px">📷 Compartilhar resumo</button>
+      <button class="clearBtn sharefull" id="simShare" style="margin-top:10px"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Compartilhar</button>
     </div>
   </div>
 </div>
@@ -843,7 +846,7 @@ function fillShareCard(){
   const ccol={BRL:"var(--brl)",USD:"var(--usd)",PYG:"var(--pyg)"};
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   $("#shareCard").innerHTML=
-    shareHead("💸","Contas Fixas <b>Paraguai</b>",dt)+
+    shareHead("","Contas Fixas <b>Paraguai</b>",dt)+
     `<div class="sbody">${xp||'<p class="sempty">Sem despesas.</p>'}</div>`+
     `<div class="stotbox">
        <div class="stot"><span class="lbl">Total despesas</span><span class="vl" style="color:${ccol[sv.tot]}">${fmt[sv.tot](TOT[sv.tot])}</span></div>
@@ -1372,8 +1375,9 @@ function renderIRP(){
         <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
       </div>
 
+      <div class="sec">Resumo</div>
       <div class="irpHero">
-        <div class="irpHeroT">Renta neta acumulada</div>
+        <div class="irpHeroT">Renda neta acumulada</div>
         <div class="irpHeroV ${netCls}">${fc(net)}</div>
         <div class="irpHeroSub">${months.length} ${months.length===1?"mês":"meses"}</div>
         <div class="irpTax"><span class="irpHeroT">Imposto${net>0?" · faixa "+(net<=50000000?"8%":net<=150000000?"9%":"10%"):""}</span><b class="${taxCls}">${fc(tax)}</b></div>
@@ -1431,7 +1435,7 @@ function fillIRPCard(){
     `<div class="stotbox irpbox">
        <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
        <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl" style="color:var(--danger)">${fc(eg)}</span></div>
-       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
+       <div class="stot"><span class="lbl">Renda neta</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
        <div class="stot"><span class="lbl">Imposto estimado · faixa ${faixaAtual}</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
      </div>`;
 }
@@ -1470,13 +1474,13 @@ function renderSim(){
   const net=ing-eg,tax=irpTax(net);
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   const netColor=net<0?'var(--danger)':net>0?'var(--accent)':'var(--ink)';
-  const taxCls=tax>0?"due":"";
   const fc=v=>fmtCur(v,irpCur);
   $("#simResult").innerHTML=`
+    <div class="sec">Ingressos × Egressos</div>
     <div class="srTop"><span class="k">Ingressos</span><span class="v" style="color:var(--accent)">${fc(ing)}</span></div>
     <div class="srTop"><span class="k">Egressos</span><span class="v" style="color:var(--danger)">${fc(eg)}</span></div>
-    <div class="srTop"><span class="k">Renta neta</span><span class="v" style="color:${netColor}">${fc(net)}</span></div>
-    <div class="srTax"><span class="k">Imposto estimado</span><span class="v ${taxCls}">${fc(tax)}</span></div>
+    <div class="srTop"><span class="k">Neto</span><span class="v" style="color:${netColor}">${fc(net)}</span></div>
+    <div class="srTax"><span class="k">Imposto</span><span class="v">${fc(tax)}</span></div>
     <div class="srEff">Faixa aplicada: ${faixa}</div>`;
 }
 function openSim(prefill){
@@ -1510,7 +1514,6 @@ $("#simCurSeg").addEventListener("click",e=>{
 function fillSimIRPCard(){
   const ing=simValPyg("simIng"),eg=simValPyg("simEg"),net=ing-eg,tax=irpTax(net);
   const netShareColor=net<0?"var(--danger)":net>0?"var(--accent)":"var(--ink)";
-  const taxShareColor=tax>0?"var(--danger)":"var(--ink)";
   const faixa=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
   const fc=v=>fmtCur(v,irpCur);
   $("#shareCard").className="share-irp";
@@ -1519,8 +1522,8 @@ function fillSimIRPCard(){
     `<div class="stotbox irpbox">
        <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
        <div class="stot"><span class="lbl">Egressos</span><span class="vl" style="color:var(--danger)">${fc(eg)}</span></div>
-       <div class="stot"><span class="lbl">Renta neta</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
-       <div class="stot"><span class="lbl">Imposto estimado</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
+       <div class="stot"><span class="lbl">Neto</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
+       <div class="stot"><span class="lbl">Imposto</span><span class="vl" style="color:var(--ink)">${fc(tax)}</span></div>
        <div class="stot"><span class="lbl">Faixa (%)</span><span class="vl">${faixa}</span></div>
      </div>`;
 }
