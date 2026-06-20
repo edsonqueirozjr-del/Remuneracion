@@ -39,11 +39,6 @@
   .clearBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
     font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
   .clearBtn:active{border-color:var(--danger);color:var(--danger)}
-  #filterToggle:active{border-color:var(--accent);color:var(--accent)}
-  .rowfilterwrap{margin:0 0 8px}
-  .rowfilterwrap[hidden]{display:none}
-  .rowfilterwrap input{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:inherit;font-size:.86rem;padding:9px 12px;outline:none}
-  .rowfilterwrap input:focus{border-color:var(--accent)}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
@@ -201,6 +196,8 @@
   .add:active{border-color:var(--accent);color:var(--accent)}
   .impmini{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px 14px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;white-space:nowrap}
   .impmini:active{border-color:var(--accent);color:var(--accent)}
+  .addrow .add,.addrow .impmini{flex:1;border:1.5px solid var(--line);padding:13px;font-size:.88rem;display:flex;align-items:center;justify-content:center;gap:7px}
+  .btnicon{width:16px;height:16px;flex:none}
 
 
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#06251b;font-weight:700;font-size:.85rem;padding:11px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:40}
@@ -457,13 +454,11 @@
     <button class="fxreset" id="fxReset" style="display:none">↻ Cotação do dia</button>
   </div>
 
-  <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span>
-    <span class="secbtns"><button class="clearBtn" id="filterToggle" title="Filtrar despesas">🔎 Filtrar</button></span></div>
-  <div class="rowfilterwrap" id="rowFilterWrap" hidden><input type="search" id="rowFilter" placeholder="Filtrar despesas pelo nome…"></div>
+  <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span></div>
   <div id="rows"></div>
   <div class="addrow">
-    <button class="add" id="addRow">＋ Adicionar despesa</button>
-    <button class="impmini" id="importBtn" title="Importar extrato">📥 Importar</button>
+    <button class="add" id="addRow"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Adicionar despesa</button>
+    <button class="impmini" id="importBtn" title="Importar extrato"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg>Importar</button>
   </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 
@@ -708,17 +703,11 @@ async function fetchRates(){
 function renderRows(){
   const c=$("#rows");c.innerHTML="";
   if(!rows.length){
-    c.innerHTML=`<div class="emptyx"><div class="emptyx-ico">🗒️</div>
-      <p class="emptyx-t">Nenhuma despesa ainda</p>
-      <p class="emptyx-s">Toque em <b>＋ Adicionar despesa</b> ou <b>📥 Importar extrato</b> para começar.</p></div>`;
+    c.innerHTML="";
     $("#rowcount").textContent="";
     calc();return;
   }
-  const fq=norm(($("#rowFilter")&&$("#rowFilter").value)||"");
-  let shown=0;
   rows.forEach((row,i)=>{
-    if(fq&&!norm(row.name).includes(fq))return;
-    shown++;
     const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${curLbl(cu)}</button>`).join("");
     const el=document.createElement("div");el.className="xp"+((row.name||"").trim()?"":" needname");
     el.innerHTML=`
@@ -738,7 +727,6 @@ function renderRows(){
       </div>`;
     c.appendChild(el);
   });
-  if(fq&&!shown)c.innerHTML='<div class="emptyx"><p class="emptyx-s">Nenhuma despesa encontrada com esse filtro.</p></div>';
   $("#rowcount").textContent="· "+rows.length;
   bind();calc();
 }
@@ -789,7 +777,7 @@ function calc(){
   });
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
-  const si=$("#salInfo");if(si)si.textContent=salUsd?`${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"⬆ Insira o salário para começar a análise";
+  const si=$("#salInfo");if(si)si.textContent=salUsd?`${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"";
   const sc=$("#salCard");if(sc)sc.classList.toggle("needsal",!salUsd);
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
@@ -825,15 +813,12 @@ function addManualRow(){
       if(inp)setTimeout(()=>inp.focus(),250);}
     return;
   }
-  if($("#rowFilter"))$("#rowFilter").value="";
   rows.push({name:"",amt:0,cur:"PYG"});renderRows();
   window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
   setTimeout(()=>{const last=$("#rows").lastElementChild;const inp=last&&last.querySelector(".name");if(inp)inp.focus();},300);
 }
 $("#addRow").onclick=addManualRow;
 $("#importBtn").onclick=()=>{if(imp&&imp.txns&&imp.txns.length)openTop();else doImport();};
-$("#filterToggle").onclick=()=>{const w=$("#rowFilterWrap");w.hidden=!w.hidden;if(!w.hidden)$("#rowFilter").focus();else{$("#rowFilter").value="";renderRows();}};
-$("#rowFilter").oninput=renderRows;
 $("#usdBrl").oninput=()=>{updateFxReset();calc();};
 $("#usdPyg").oninput=e=>{const d=(e.target.value||"").replace(/\D/g,"");e.target.value=d?parseInt(d,10).toLocaleString("pt-BR"):"";const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}updateFxReset();calc();};
 $("#salary").oninput=e=>{fmtSal();const l=e.target.value.length;try{e.target.setSelectionRange(l,l);}catch(_){}calc();};
