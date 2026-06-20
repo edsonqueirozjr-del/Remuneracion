@@ -34,7 +34,7 @@
   h1 .py{color:var(--pyg)}
   .sub{color:var(--ink-dim);font-size:.86rem;margin:0 0 18px}
   .sec{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:18px 4px 8px;display:flex;justify-content:space-between;align-items:center}
-  .secsub{color:var(--ink-dim);letter-spacing:.04em}
+  .secsub{color:inherit}
   .secbtns{display:flex;gap:6px}
   .clearBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
     font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
@@ -52,18 +52,13 @@
   .pcard .tag{font-size:.72rem;font-weight:700}
   .pcard input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;
     font-size:.92rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:1px 0}
+  .pcard input::placeholder{color:var(--ink);opacity:1;font-size:.84rem}
   .salinfo{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);min-height:1.05em}
-  #salCard.needsal{border-color:var(--usd);box-shadow:0 0 0 1px var(--usd) inset}
-  #salCard.needsal .salinfo{color:var(--usd)}
-  .fxbtn{flex:none;border:0;background:transparent;font-size:1.15rem;line-height:1;padding:2px 3px;cursor:pointer;transform-origin:center}
-  .fxbtn:active{transform:scale(.82)}
-  #fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200;display:none}
-  #fw.on{display:block}
 
   /* ---- módulo IRP ---- */
   /* ---- módulo IRP (tamanhos padronizados) ---- */
   /* escala: rótulo .66 · nota .74 · nº tabela .82 · nº padrão 1.0 · nº destaque 1.7 */
-  .irpbtns{display:flex;gap:8px;align-items:stretch}
+  .irpbtns{display:flex;flex-direction:column;gap:8px}
   .irpCurWrap{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .irpCurLabel{font-size:.74rem;color:var(--ink-dim);font-weight:600;flex:none}
   .irpCurSeg{display:flex;flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;overflow:hidden}
@@ -74,8 +69,8 @@
   .irpCurSeg button.on[data-cur="PYG"]{background:var(--pyg);color:#1f1030}
   .irpCurSeg button.on[data-cur="USD"]{background:var(--usd);color:#041f3d}
   .irpCurSeg button.on[data-cur="BRL"]{background:var(--brl);color:#241a00}
-  .irpbtns .add{flex:1;margin-top:0;border-style:solid;background:var(--panel);font-size:.88rem}
-  .irpSimBtn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;text-align:center;white-space:nowrap}
+  .irpbtns .add{flex:none;width:100%;margin-top:0;border-style:solid;background:var(--panel);font-size:.88rem}
+  .irpSimBtn{flex:none;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;text-align:center;white-space:nowrap}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
   .irpHero{background:linear-gradient(135deg,#14202b,#0d1117);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin:14px 0 4px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center}
   .irpHero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(55,214,160,.14);filter:blur(6px)}
@@ -137,7 +132,6 @@
   .simResult{margin-top:14px}
   .simResult .sec{margin:18px 4px 8px}
   .simResult .sec:first-child{margin-top:4px}
-  .srEff{text-align:left;font-size:.72rem;color:var(--ink-faint);padding:0 0 4px;position:relative;z-index:1;width:100%}
 
 
   .fxreset{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--accent);
@@ -153,8 +147,8 @@
   .rrow .v{flex:1;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;transition:color .3s}
   #rDiff.pos{color:var(--accent)}
   #rDiff.neg{color:var(--danger)}
-  .cseg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
-  .cseg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.62rem;padding:5px 7px;cursor:pointer;transition:.12s}
+  .cseg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;overflow:hidden;flex:none}
+  .cseg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.7rem;padding:7px 9px;cursor:pointer;transition:.12s}
   .cseg button.on{color:#06251b;background:var(--accent)}
   .cseg button[data-c="BRL"],.seg button[data-cur="BRL"]{color:var(--brl)}
   .cseg button[data-c="USD"],.seg button[data-cur="USD"]{color:var(--usd)}
@@ -194,8 +188,9 @@
   #addRow,#importBtn{border-style:dashed;background:var(--bg)}
   .delsq{flex:none;width:46px;height:46px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .delsq:active{border-color:var(--danger);color:var(--danger)}
-  #extratoBtn,#saudeBtn{transition:border-color .25s,color .25s}
-  #extratoRow.has-data #extratoBtn,#extratoRow.has-data #saudeBtn{border-color:var(--accent);color:var(--accent)}
+  .extratoGroup{flex:1;display:flex;gap:8px;min-width:0}
+  #extratoBtn,#saudeBtn{transition:color .25s}
+  #extratoRow.has-data #extratoBtn,#extratoRow.has-data #saudeBtn{color:var(--accent)}
   .btnicon{width:16px;height:16px;flex:none}
 
 
@@ -433,8 +428,7 @@
   <div class="params">
     <div class="pcard full" id="salCard">
       <div class="row"><span class="tag" style="color:var(--usd)">U$</span>
-        <input class="num" id="salary" inputmode="numeric" placeholder="Digite o salário" value="">
-        <button class="fxbtn" id="fxBtn" title="Comemorar!" aria-label="Fogos">🎉</button></div>
+        <input class="num" id="salary" inputmode="numeric" placeholder="Digite o salário" value=""></div>
       <div class="salinfo" id="salInfo"></div>
     </div>
   </div>
@@ -457,19 +451,14 @@
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 
   <div class="addrow" id="extratoRow">
-    <button class="add" id="extratoBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-3 2-3-2-3 2-2-2V3z"></path><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Extrato</button>
-    <button class="delsq" id="extratoDelBtn" title="Excluir extrato importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+    <div class="extratoGroup">
+      <button class="delsq" id="extratoDelBtn" title="Excluir extrato importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+      <button class="add" id="extratoBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-3 2-3-2-3 2-2-2V3z"></path><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Extrato</button>
+    </div>
     <button class="impmini" id="saudeBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>Saúde</button>
   </div>
 
   <div class="sec">Resumo</div>
-  <div class="irpCurWrap">
-    <div class="irpCurSeg" id="salCurSeg">
-      <button data-cur="PYG">₲ Guarani</button>
-      <button data-cur="USD">U$ Dólar</button>
-      <button data-cur="BRL">R$ Real</button>
-    </div>
-  </div>
   <div class="resumo">
     <div class="rrow"><span class="lbl">Total desp.</span><span class="v" id="rTot"></span>
       <div class="cseg" data-sv="tot"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
@@ -503,7 +492,6 @@
   <div id="irpBody"></div>
 </main>
 
-<canvas id="fw"></canvas>
 <div class="toast" id="toast"></div>
 
 <div id="acctModal" class="hidden">
@@ -538,10 +526,10 @@
           <button data-cur="BRL">R$ Real</button>
         </div>
       </div>
-      <div class="simfield"><label>Ingressos no ano (faturas que você emite)</label>
+      <div class="simfield"><label>Ingressos</label>
         <div class="simin"><span class="tag" id="simIngTag" style="color:var(--accent)">₲</span><input id="simIng" inputmode="numeric" placeholder="0">
           <button class="simResetField" id="simIngReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
-      <div class="simfield"><label>Egressos dedutíveis (gastos com Imputa IRP = SI)</label>
+      <div class="simfield"><label>Egressos</label>
         <div class="simin"><span class="tag" id="simEgTag" style="color:var(--danger)">₲</span><input id="simEg" inputmode="numeric" placeholder="0">
           <button class="simResetField" id="simEgReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
 
@@ -786,7 +774,6 @@ function calc(){
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
   const si=$("#salInfo");if(si)si.textContent=salUsd?`${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"";
-  const sc=$("#salCard");if(sc)sc.classList.toggle("needsal",!salUsd);
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
   const d=SAL[sv.diff]-TOT[sv.diff];
@@ -797,17 +784,7 @@ function calc(){
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700);}
 
 /* ---- eventos ---- */
-function markSv(){document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===sv[k]));});updateSalCurUI();}
-function updateSalCurUI(){
-  const all=(sv.tot===sv.sal&&sv.sal===sv.diff)?sv.tot:null;
-  const seg=$("#salCurSeg");if(seg)seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.cur===all));
-}
-$("#salCurSeg").addEventListener("click",e=>{
-  const b=e.target.closest("button[data-cur]");
-  if(!b)return;
-  sv.tot=sv.sal=sv.diff=b.dataset.cur;
-  markSv();calc();
-});
+function markSv(){document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===sv[k]));});}
 document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sv[k]=b.dataset.c;markSv();calc();});});
 $("#fxReset").onclick=()=>{
   if(!liveRates)return;
@@ -1281,28 +1258,6 @@ function reportPDF(){
   toast("Use 'Salvar como PDF' na impressão");
 }
 
-/* ---- fogos de artifício 🎉 ---- */
-const fwc=$("#fw");let fwP=[],fwRAF=null,fwEnd=0;
-function fwResize(){fwc.width=window.innerWidth;fwc.height=window.innerHeight;}
-function launchFireworks(){
-  fwResize();fwc.classList.add("on");const ctx=fwc.getContext("2d");
-  const cols=["#ffd166","#37d6a0","#5aa9ff","#c792ea","#ff6b6b","#ff9b76"];
-  const burst=(x,y)=>{const n=42;for(let i=0;i<n;i++){const a=Math.PI*2*i/n,sp=2+Math.random()*4.5;
-    fwP.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,col:cols[(Math.random()*cols.length)|0],size:1.5+Math.random()*2.5});}};
-  fwEnd=Date.now()+2400;
-  burst(window.innerWidth*0.5,window.innerHeight*0.34);
-  const timer=setInterval(()=>{if(Date.now()>fwEnd-300){clearInterval(timer);return;}
-    burst(window.innerWidth*(0.15+Math.random()*0.7),window.innerHeight*(0.16+Math.random()*0.34));},250);
-  if(fwRAF)return;
-  const frame=()=>{ctx.clearRect(0,0,fwc.width,fwc.height);
-    fwP.forEach(p=>{p.vy+=0.05;p.x+=p.vx;p.y+=p.vy;p.vx*=0.985;p.vy*=0.985;p.life-=0.011;
-      ctx.globalAlpha=Math.max(p.life,0);ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,7);ctx.fill();});
-    fwP=fwP.filter(p=>p.life>0);
-    if(fwP.length||Date.now()<fwEnd){fwRAF=requestAnimationFrame(frame);}
-    else{ctx.clearRect(0,0,fwc.width,fwc.height);ctx.globalAlpha=1;fwRAF=null;fwc.classList.remove("on");}};
-  frame();
-}
-$("#fxBtn").onclick=()=>{launchFireworks();toast("🎉 Boa!");};
 
 /* ====== MÓDULO IRP ====== */
 const fmtG=v=>"₲ "+Math.round(v||0).toLocaleString("es-PY");
@@ -1493,17 +1448,11 @@ function renderSim(){
   const netCls=net<0?"neg":net>0?"pos":"";
   const fc=v=>fmtCur(v,irpCur);
   $("#simResult").innerHTML=`
-    <div class="sec">Ingressos × Egressos</div>
-    <div class="irpCard">
-      <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
-        <div><span class="k">Egressos</span><span class="v neg">${fc(eg)}</span></div></div>
-    </div>
-    <div class="sec">Resumo</div>
+    <div class="sec"><span>Resumo <span class="secsub">· faixa ${faixa}</span></span></div>
     <div class="irpHero">
       <div class="irpHeroT">Neto</div>
       <div class="irpHeroV ${netCls}">${fc(net)}</div>
       <div class="irpTax"><span class="irpHeroT">Imposto</span><b>${fc(tax)}</b></div>
-      <div class="srEff">Faixa aplicada: ${faixa}</div>
     </div>`;
 }
 function openSim(prefill){
