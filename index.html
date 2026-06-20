@@ -306,13 +306,14 @@
   #topModal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;
     background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
   #topModal.hidden{display:none}
-  .topcard{width:100%;max-width:540px;max-height:86vh;display:flex;flex-direction:column;
+  .topcard{width:100%;max-width:540px;max-height:94vh;display:flex;flex-direction:column;
     background:var(--bg);border:1px solid var(--line);border-top-left-radius:22px;border-top-right-radius:22px;
     padding:18px 18px calc(env(safe-area-inset-bottom) + 18px)}
   .tophead{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
   .topttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem}
   .topsub{color:var(--ink-dim);font-size:.78rem;margin-top:2px}
-  .topclose{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .topclose{flex:none;width:36px;height:36px;border:1.5px solid transparent;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .topclose:active{border-color:var(--accent);color:var(--accent)}
   .topscroll{flex:1;min-height:0;overflow-y:auto}
   .toplist{padding-top:6px}
   .mtabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -335,14 +336,14 @@
   .modsel.on{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
   .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
   .topfilter input[type=search]:focus{border-color:var(--accent)}
-  .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px;outline:none}
+  .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px 10px 36px;outline:none;width:100%}
+  .searchwrap{position:relative}
+  .searchwrap .search-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-faint);pointer-events:none}
   .topfilter .frow{display:flex;gap:8px}
   .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
   .topfilter .frow button:active{border-color:var(--accent);color:var(--accent)}
   .topbtns{display:flex;gap:8px;margin-top:10px}
   .topbtns .applybtn{flex:1;margin-top:0;font-size:.82rem;padding:11px}
-  .applybtn.alt{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
-  .applybtn.alt:active{border-color:var(--accent);color:var(--accent)}
   .topcard.info #applyBtn{display:none}
   .gct{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--ink-faint);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:6px}
   #fGroup.on{border-color:var(--accent);color:var(--accent);background:rgba(55,214,160,.12)}
@@ -356,7 +357,7 @@
   .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.9rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
   .ti .acts{display:flex;gap:4px}
   .ti .acts button{width:26px;height:26px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-faint);border-radius:7px;font-size:.78rem;line-height:1;cursor:pointer;padding:0;position:relative}
-  .ti .acts .cod:hover,.ti .acts .cod:focus{border-color:var(--accent);color:var(--accent)}
+  .ti .acts .cod:hover,.ti .acts .cod:focus,.ti .acts .cod:active{border-color:var(--accent);color:var(--accent)}
   .ti .acts .edt:active{border-color:var(--usd);color:var(--usd)}
   .ti .acts .exc:active{border-color:var(--danger);color:var(--danger)}
   .ti .acts .cod[data-tip]:hover::after,.ti .acts .cod.show::after{content:"Ref. " attr(data-tip);position:absolute;right:0;bottom:130%;background:#000;color:#fff;border:1px solid var(--line);padding:6px 9px;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;white-space:nowrap;z-index:5}
@@ -365,8 +366,8 @@
   .ti .tbar{height:4px;border-radius:4px;background:var(--panel-2);margin-top:6px;overflow:hidden}
   .ti .tbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent))}
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
-  .applybtn{margin-top:12px;flex:none;border:0;background:var(--accent);color:#06251b;font-family:inherit;font-weight:700;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
-  .applybtn:active{filter:brightness(1.08)}
+  .applybtn{margin-top:12px;flex:none;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);font-family:inherit;font-weight:600;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+  .applybtn:active{border-color:var(--accent);color:var(--accent)}
 
 
   /* ---- ajustes exclusivos para web/desktop ---- */
@@ -552,7 +553,10 @@
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
       <div class="topfilter">
-        <input type="search" id="fSearch" placeholder="🔎 Buscar despesa…">
+        <div class="searchwrap">
+          <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" id="fSearch" placeholder="Buscar despesa…">
+        </div>
         <div class="frow">
           <button id="fSort">⇅ Data</button>
           <button id="fGroup">⊞ Agrupar</button>
