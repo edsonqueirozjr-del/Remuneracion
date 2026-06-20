@@ -179,16 +179,17 @@
   .chip.usd{color:var(--usd)} .chip.pyg{color:var(--pyg)} .chip.brl{color:var(--brl)}
   .chip .k{color:var(--ink-faint);font-size:.66em;margin-right:4px}
 
-  .addrow{display:flex;gap:8px;margin-top:4px}
-  .add{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px dashed var(--line);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:600}
+  .addrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+  .add{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px dashed var(--line);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:600}
   .add:active{border-color:var(--accent);color:var(--accent)}
-  .impmini{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px 14px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;white-space:nowrap}
+  .impmini{border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px 14px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;white-space:nowrap}
   .impmini:active{border-color:var(--accent);color:var(--accent)}
-  .addrow .add,.addrow .impmini{flex:1;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;font-size:.88rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+  .addrow .add,.addrow .impmini{border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;font-size:.88rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;min-width:0}
   #addRow,#importBtn{border-style:dashed;background:var(--bg)}
   .delsq{flex:none;width:46px;height:46px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .delsq:active{border-color:var(--danger);color:var(--danger)}
-  .extratoGroup{flex:1;display:flex;gap:8px;min-width:0}
+  .extratoGroup{display:flex;gap:8px;min-width:0}
+  .extratoGroup .add{flex:1;min-width:0}
   #extratoBtn,#saudeBtn{transition:color .25s}
   #extratoRow.has-data #extratoBtn,#extratoRow.has-data #saudeBtn{color:var(--accent)}
   .btnicon{width:16px;height:16px;flex:none}
