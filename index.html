@@ -52,10 +52,11 @@
     border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;
     font-size:.88rem;font-weight:600;text-transform:none;letter-spacing:0}
   .sharefull:active{border-color:var(--accent);color:var(--accent)}
-  .themeBtn{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;margin-top:10px;
-    border:1.5px solid var(--line);background:transparent;color:var(--ink-faint);border-radius:13px;padding:11px;
-    font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+  .themeBtn{flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);border-radius:13px;cursor:pointer;padding:0}
   .themeBtn:active{border-color:var(--accent);color:var(--accent)}
+  .hdrGroup{display:flex;align-items:center;gap:8px}
+  .lockThemeBtn{position:absolute;top:18px;right:18px}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
@@ -293,7 +294,7 @@
     background:radial-gradient(700px 400px at 50% 0%,rgba(55,214,160,.10),transparent 60%),var(--bg)}
   #lock.hidden{display:none}
   .lockcard{width:100%;max-width:330px;background:linear-gradient(180deg,var(--panel),var(--bg));border:1px solid var(--line);
-    border-radius:20px;padding:30px 24px;text-align:center;box-shadow:0 30px 70px -30px #000}
+    border-radius:20px;padding:30px 24px;text-align:center;box-shadow:0 30px 70px -30px #000;position:relative}
   .lockcard h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:8px 0 2px}
   .lockcard .locksub{color:var(--ink-dim);font-size:.84rem;margin:0 0 18px}
   .pattern{position:relative;width:240px;height:240px;margin:0 auto;touch-action:none}
@@ -435,6 +436,7 @@
 <body>
 <div id="lock">
   <div class="lockcard">
+    <button class="themeBtn lockThemeBtn" id="themeBtn3" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
     <div class="lockbtns">
       <button class="lockbtn modsel on" id="enterDesp">💸 Salário</button>
       <button class="lockbtn modsel alt" id="enterIrp">📑 IRP</button>
@@ -452,7 +454,10 @@
 <main id="despMain">
   <div class="hdr">
     <h1>Salário</h1>
-    <button class="hdrbtn" id="goIrp" title="Ir para IRP"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>IRP</button>
+    <div class="hdrGroup">
+      <button class="themeBtn" id="themeBtn1" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+      <button class="hdrbtn" id="goIrp" title="Ir para IRP"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>IRP</button>
+    </div>
   </div>
 
   <div class="sec"><span>Salário</span></div>
@@ -487,7 +492,10 @@
       <button class="delsq" id="extratoDelBtn" title="Excluir extrato importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
       <button class="add" id="extratoBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-3 2-3-2-3 2-2-2V3z"></path><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Extrato</button>
     </div>
-    <button class="impmini" id="saudeBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>Saúde</button>
+    <div class="extratoGroup">
+      <button class="impmini" id="saudeBtn" style="flex:1"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>Saúde</button>
+      <button class="delsq" id="acctQuickGen" title="Gerar resumo"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg></button>
+    </div>
   </div>
 
 
@@ -501,13 +509,15 @@
       <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
   </div>
   <button class="clearBtn sharefull" id="shareBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Compartilhar</button>
-  <button class="themeBtn" id="themeBtn1" title="Mudar tema"><svg class="btnicon themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></svg><span class="themeLabel">Tema</span></button>
 </main>
 
 <main id="irpMain" hidden>
   <div class="hdr">
     <h1>IRP</h1>
-    <button class="hdrbtn" id="goDesp" title="Ir para Despesas"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>Despesas</button>
+    <div class="hdrGroup">
+      <button class="themeBtn" id="themeBtn2" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+      <button class="hdrbtn" id="goDesp" title="Ir para Despesas"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>Despesas</button>
+    </div>
   </div>
 
   <div class="irpbtns">
@@ -524,7 +534,6 @@
 
   <div id="irpBody"></div>
   <button class="irpSimBtn" id="irpSimOpen" style="margin-top:14px"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="11" x2="8.01" y2="11"></line><line x1="12" y1="11" x2="12.01" y2="11"></line><line x1="16" y1="11" x2="16.01" y2="11"></line><line x1="8" y1="15" x2="8.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line><line x1="16" y1="15" x2="16.01" y2="15"></line></svg>Simulador</button>
-  <button class="themeBtn" id="themeBtn2" title="Mudar tema"><svg class="btnicon themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></svg><span class="themeLabel">Tema</span></button>
 </main>
 
 <div class="toast" id="toast"></div>
@@ -823,7 +832,7 @@ function calc(){
   });
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
-  const si=$("#salInfo");if(si)si.textContent=salUsd?`${fmt.BRL(SAL.BRL)} · ${fmt.PYG(SAL.PYG)}`:"";
+  const si=$("#salInfo");if(si)si.innerHTML=salUsd?`<span style="color:var(--brl)">${fmt.BRL(SAL.BRL)}</span> · <span style="color:var(--pyg)">${fmt.PYG(SAL.PYG)}</span>`:"";
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
   const d=SAL[sv.diff]-TOT[sv.diff];
@@ -1003,6 +1012,13 @@ function openAcct(){
   $("#acctModal").classList.remove("hidden");
 }
 $("#saudeBtn").onclick=openAcct;
+function quickGenAcct(){
+  if(!imp||!imp.txns){toast("Importe uma fatura primeiro");return;}
+  const items=imp.txns.filter(isUF);
+  if(!items.length){toast("Nenhuma despesa de saúde encontrada");return;}
+  shareImage(()=>fillAcctCard(items),"contabilidade.png","Contabilidade · Saúde");
+}
+$("#acctQuickGen").onclick=quickGenAcct;
 $("#acctSearch").oninput=acctRenderResults;
 $("#acctClose").onclick=()=>$("#acctModal").classList.add("hidden");
 $("#acctModal").onclick=e=>{if(e.target.id==="acctModal")$("#acctModal").classList.add("hidden");};
@@ -1580,14 +1596,9 @@ $("#simShare").onclick=()=>{
 };
 
 /* ---- tema claro/escuro ---- */
-const SUN_ICON='<circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-const MOON_ICON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
 function applyTheme(t){
   document.documentElement.setAttribute("data-theme",t);
   try{localStorage.setItem("theme",t);}catch(e){}
-  const showSun=t==="dark"; // mostra sol (ação: ir pro claro) quando está no escuro
-  document.querySelectorAll(".themeIcon").forEach(svg=>svg.innerHTML=showSun?SUN_ICON:MOON_ICON);
-  document.querySelectorAll(".themeLabel").forEach(s=>s.textContent=showSun?"Tema claro":"Tema escuro");
 }
 function toggleTheme(){
   const cur=document.documentElement.getAttribute("data-theme")==="light"?"dark":"light";
