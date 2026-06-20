@@ -315,7 +315,7 @@
   #topModal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;
     background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
   #topModal.hidden{display:none}
-  .topcard{width:100%;max-width:540px;max-height:96vh;display:flex;flex-direction:column;
+  .topcard{width:100%;max-width:540px;max-height:93vh;display:flex;flex-direction:column;
     background:var(--bg);border:1px solid var(--line);border-top-left-radius:22px;border-top-right-radius:22px;
     padding:calc(env(safe-area-inset-top) + 22px) 18px calc(env(safe-area-inset-bottom) + 18px)}
   .tophead{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
@@ -331,9 +331,6 @@
   .mtab{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
     font-size:.74rem;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap;cursor:pointer}
   .mtab.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
-  #catChips{padding-top:0;padding-bottom:8px}
-  #catChips .mtab{padding:5px 10px;font-size:.68rem;font-weight:500;background:transparent;border-color:var(--line-soft);color:var(--ink-faint)}
-  #catChips .mtab.on{background:transparent;border-color:var(--accent);color:var(--accent);font-weight:600}
   .topheadbtns{display:flex;gap:6px;flex:none}
   .gexp{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:7px;cursor:pointer;margin-left:6px}
   .gexp.open{border-color:var(--accent);color:var(--accent)}
@@ -353,10 +350,10 @@
   .searchwrap{position:relative}
   .searchwrap .search-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-faint);pointer-events:none}
   .topfilter .frow{display:flex;gap:6px}
-  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.7rem;font-weight:600;padding:7px;border-radius:9px;cursor:pointer}
+  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.78rem;font-weight:600;padding:11px;border-radius:11px;cursor:pointer}
   .topfilter .frow button:active{border-color:var(--accent);color:var(--accent)}
   .topbtns{display:flex;gap:8px;margin-top:10px}
-  .topbtns .applybtn{flex:1;margin-top:0;font-size:.8rem;padding:10px}
+  .topbtns .applybtn{flex:1;margin-top:0;font-size:.86rem;padding:13px}
   .topcard.info #applyBtn{display:none}
   .gct{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--ink-faint);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:6px}
   #fGroup.on{border-color:var(--accent);color:var(--accent);background:rgba(55,214,160,.12)}
@@ -366,7 +363,6 @@
   .ti+.ti{border-top:1px solid rgba(255,255,255,.045)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1;display:flex;align-items:center;gap:5px;overflow:hidden}
-  .ti .catic{flex:none;font-size:.72rem;opacity:.5;line-height:1}
   .ti .nm{color:var(--ink);font-size:.87rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .ti .dt{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.7rem}
   .ti .vr{display:flex;align-items:center;gap:5px;flex:none}
@@ -576,7 +572,6 @@
     </div>
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
-      <div class="mtabs" id="catChips"></div>
       <div class="topfilter">
         <div class="searchwrap">
           <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -1118,44 +1113,13 @@ function isoDMY(s){const m=String(s||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);re
 let topSel=null; // Set de "yyyy-mm" selecionados (null/contém todos = Todos)
 let topSort="date"; // "date" ou "val"
 let grouped=false; // agrupa por nome
-let topCat=""; // categoria selecionada ("" = Todos)
-const CAT_RULES=[
-  {key:"ia",label:"IA",icon:"🤖",kw:["anthropic","claude","openai","chatgpt","gemini","copilot","midjourney"]},
-  {key:"rest",label:"Alimentação",icon:"🍽️",kw:["restauran","food","ifood","burger","pizza","lanch","grill","comida"]},
-  {key:"cafe",label:"Café",icon:"☕",kw:["starbucks","cafe","café","coffee"]},
-  {key:"hotel",label:"Hotel",icon:"🏨",kw:["hotel","hostel","booking","airbnb","pousada"]},
-  {key:"tax",label:"Impostos",icon:"🏛️",kw:["iva","ley","imposto","tax","municipal","tasa"]},
-  {key:"transp",label:"Transporte",icon:"🚗",kw:["uber","eazy","taxi","stib","bus","metro","combustivel","gasolina","posto","parking","estacionamento"]},
-  {key:"shop",label:"Compras",icon:"🛒",kw:["shop","market","mercado","amazon","store","depot","compra","super"]},
-  {key:"serv",label:"Serviços",icon:"📄",kw:["servi","fatura","mensalidade","assinatura","subscription","seguro"]}
-];
-function categorize(desc){
-  const n=norm(desc);
-  for(const c of CAT_RULES){if(c.kw.some(k=>n.includes(k)))return c;}
-  return {key:"outros",label:"Outros",icon:"📌"};
-}
-function catList(){
-  if(!imp||!imp.txns)return[];
-  const m=new Map();
-  imp.txns.forEach(t=>{const c=categorize(t.desc);if(!m.has(c.key))m.set(c.key,c);});
-  return [...m.values()];
-}
-function catChipsRefresh(){
-  const cats=catList();
-  let html=`<button class="mtab ${!topCat?"on":""}" data-cat="">Todos</button>`;
-  html+=cats.map(c=>`<button class="mtab ${topCat===c.key?"on":""}" data-cat="${c.key}">${c.icon} ${c.label}</button>`).join("");
-  $("#catChips").innerHTML=html;
-  $("#catChips").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{topCat=b.dataset.cat;catChipsRefresh();renderTopList();});
-}
 function topMonths(){return [...new Set(imp.txns.map(t=>{const i=isoDMY(t.date);return i?i.slice(0,7):"";}).filter(Boolean))].sort().reverse();}
 function getFilteredTop(){
   const q=norm($("#fSearch")?$("#fSearch").value:"");
   const list=imp.txns.map(t=>({...t,iso:isoDMY(t.date)})).filter(t=>{
     const mk=t.iso?t.iso.slice(0,7):"";
     if(topSel&&topSel.size&&!topSel.has(mk))return false;
-    const cat=categorize(t.desc);
-    if(topCat&&cat.key!==topCat)return false;
-    if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q)&&!norm(cat.label).includes(q))return false;
+    if(q&&!norm(t.desc).includes(q)&&!String(t.ref||"").includes(q))return false;
     return true;
   });
   if(topSort==="val")list.sort((a,b)=>b.val-a.val);
@@ -1178,12 +1142,11 @@ function renderTopList(){
     const g=groupedTop(list);
     $("#topList").innerHTML=g.length?g.map((x,gi)=>{
       const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl;
-      const cat=categorize(x.desc);
       const datas=x.items.slice().sort((a,b)=>isoDMY(a.date).localeCompare(isoDMY(b.date)))
         .map(t=>{const u=r.pyg?t.val/r.pyg:0,b2=u*r.brl,k=`${t.date}|${t.ref}|${t.val}|${t.desc}`;
           return `<div class="gd"><span class="gd-dt">${t.date}</span><span style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span><span style="color:var(--brl)">R$ ${b2.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><span style="color:var(--usd)">U$ ${u.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><button class="edt gd-edt" data-key="${k.replace(/"/g,'&quot;')}" title="Editar valor em ₲">✎</button></div>`;}).join("");
       return `<div class="ti"><div class="top1">
-          <span class="nmw"><span class="catic">${cat.icon}</span><span class="nm">${x.desc}</span></span>
+          <span class="nmw"><span class="nm">${x.desc}</span></span>
           <span class="vr"><button class="gexp" data-g="${gi}" title="Ver datas">${x.count}× ▾</button><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></span></div>
         <div class="conv2"><span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>
         <div class="gdates" id="gdates-${gi}" hidden>${datas}</div></div>`;
@@ -1196,10 +1159,9 @@ function renderTopList(){
   list.forEach(x=>{
     const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl,dm=x.date?x.date.slice(0,5):"";
     const key=`${x.date}|${x.ref}|${x.val}|${x.desc}`;
-    const cat=categorize(x.desc);
     if(showDateHeaders&&dm&&dm!==lastDate){html+=`<div class="tdate">${dm}</div>`;lastDate=dm;}
     html+=`<div class="ti"><div class="top1">
-        <span class="nmw"><span class="catic">${cat.icon}</span><span class="nm">${x.desc}</span></span>
+        <span class="nmw"><span class="nm">${x.desc}</span></span>
         <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
           <button class="more" data-key="${key.replace(/"/g,'&quot;')}" data-ref="${String(x.ref||"—").replace(/"/g,'&quot;')}" title="Mais ações">⋮</button></span></div>
       <div class="conv2">${showDateHeaders?"":dm+" · "}<span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
@@ -1229,14 +1191,12 @@ function openTop(pre,info){
   if($("#fSearch"))$("#fSearch").value="";
   topInfo=!!info;
   grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";$("#fSort").style.display="";
-  topCat="";
   const months=topMonths();
   topSel=(pre&&months.includes(pre))?new Set([pre]):new Set(months); // padrão: Todos
   $(".topcard").classList.toggle("info",!!info);
   if(info)topSort="date";
   $("#topTitle").textContent=info?("Detalhes · "+(pre?monthLabel(pre):"Extrato")):"Extrato";
   mtabsRefresh();
-  catChipsRefresh();
   renderTopList();
   $("#topModal").classList.remove("hidden");
 }
@@ -1300,7 +1260,6 @@ $("#fClear").onclick=()=>{
   if(!confirm("Tem certeza que deseja limpar os filtros?"))return;
   $("#fSearch").value="";topSort="date";$("#fSort").textContent="⇅ Data";$("#fSort").style.display="";
   grouped=false;$("#fGroup").classList.remove("on");$("#fGroup").textContent="⊞ Agrupar";
-  topCat="";catChipsRefresh();
   topSel=new Set(topMonths());mtabsRefresh();renderTopList();};
 $("#applyBtn").onclick=applyToCard;
 $("#reportBtn").onclick=()=>{
