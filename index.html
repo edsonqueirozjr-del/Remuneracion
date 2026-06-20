@@ -16,6 +16,11 @@
     --accent:#37d6a0;--accent-deep:#0f9d77;--danger:#ff6b6b;
     --usd:#5aa9ff;--pyg:#c792ea;--brl:#ffd166;
   }
+  html[data-theme="light"]{
+    --bg:#f4f5f7;--panel:#ffffff;--panel-2:#eef0f4;--line:#dde1e8;--line-soft:#e7eaef;
+    --ink:#1b2330;--ink-dim:#5c6678;--ink-faint:#8993a3;
+    --danger:#e0524f;
+  }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0}
   body{
@@ -47,6 +52,10 @@
     border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;
     font-size:.88rem;font-weight:600;text-transform:none;letter-spacing:0}
   .sharefull:active{border-color:var(--accent);color:var(--accent)}
+  .themeBtn{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;margin-top:10px;
+    border:1.5px solid var(--line);background:transparent;color:var(--ink-faint);border-radius:13px;padding:11px;
+    font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+  .themeBtn:active{border-color:var(--accent);color:var(--accent)}
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
@@ -76,7 +85,7 @@
   .irpbtns .add{flex:none;width:100%;margin-top:0;border-style:solid;background:var(--panel);font-size:.88rem}
   .irpSimBtn{flex:none;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:13px;padding:13px;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;text-align:center;white-space:nowrap}
   .irpSimBtn:active{border-color:var(--accent);color:var(--accent)}
-  .irpHero{background:linear-gradient(135deg,#14202b,#0d1117);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin:14px 0 4px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .irpHero{background:linear-gradient(135deg,var(--panel),var(--bg));border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin:14px 0 4px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center}
   .irpHeroT{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;position:relative;z-index:1}
   .irpHeroV{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.3rem,7vw,1.7rem);margin:7px 0 3px;color:var(--ink);position:relative;z-index:1;white-space:nowrap}
   .irpHeroV.pos{color:var(--accent)}
@@ -141,7 +150,7 @@
     font-family:inherit;font-size:.76rem;font-weight:700;padding:9px;border-radius:10px;cursor:pointer}
   .fxreset:active{filter:brightness(1.1)}
 
-  .resumo{background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+  .resumo{background:linear-gradient(180deg,var(--panel),var(--bg));border:1px solid var(--line);border-radius:18px;padding:16px 18px}
   .rhead{margin-bottom:10px}
   .rhead .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem}
   .rrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
@@ -172,7 +181,7 @@
   .xp .del:active{background:rgba(255,107,107,.18);color:var(--danger)}
   .entry{display:flex;gap:8px;align-items:stretch}
   .amtbox{flex:1;display:flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:0 11px}
-  .amtbox input{width:100%;border:0;background:transparent;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:1.02rem;font-weight:500;outline:none;text-align:right;font-variant-numeric:tabular-nums;padding:9px 0}
+  .amtbox input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:1.02rem;font-weight:500;outline:none;text-align:right;font-variant-numeric:tabular-nums;padding:9px 0}
   .amtbox:focus-within{border-color:var(--accent)}
   .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:none}
   .seg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.72rem;padding:0 10px;cursor:pointer;transition:.12s}
@@ -204,7 +213,9 @@
 
   /* cartão para gerar imagem (fica fora da tela) */
   #shareCard{position:fixed;left:-9999px;top:0;width:440px;background:#0d1117;color:var(--ink);
-    padding:0;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+    padding:0;font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    --bg:#0d1117;--panel:#171f2b;--panel-2:#1d2735;--line:#27303d;--line-soft:#202a37;
+    --ink:#e9eef5;--ink-dim:#8a98ac;--ink-faint:#5f6c80;--danger:#ff6b6b}
   #shareCard .shead{display:flex;align-items:center;gap:14px;padding:24px 26px 20px;background:linear-gradient(135deg,#141c27,#0d1117);border-bottom:2px solid var(--accent)}
   #shareCard .sbadge{flex:none;width:46px;height:46px;border-radius:13px;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
   #shareCard .sct{font-family:'Fraunces',serif;font-weight:900;font-size:1.4rem;margin:0;line-height:1.1}
@@ -281,7 +292,7 @@
   #lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;
     background:radial-gradient(700px 400px at 50% 0%,rgba(55,214,160,.10),transparent 60%),var(--bg)}
   #lock.hidden{display:none}
-  .lockcard{width:100%;max-width:330px;background:linear-gradient(180deg,var(--panel),#10161f);border:1px solid var(--line);
+  .lockcard{width:100%;max-width:330px;background:linear-gradient(180deg,var(--panel),var(--bg));border:1px solid var(--line);
     border-radius:20px;padding:30px 24px;text-align:center;box-shadow:0 30px 70px -30px #000}
   .lockcard h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:8px 0 2px}
   .lockcard .locksub{color:var(--ink-dim);font-size:.84rem;margin:0 0 18px}
@@ -490,6 +501,7 @@
       <div class="cseg" data-sv="diff"><button data-c="BRL">R$</button><button data-c="USD">U$</button><button data-c="PYG">₲</button></div></div>
   </div>
   <button class="clearBtn sharefull" id="shareBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Compartilhar</button>
+  <button class="themeBtn" id="themeBtn1" title="Mudar tema"><svg class="btnicon themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></svg><span class="themeLabel">Tema</span></button>
 </main>
 
 <main id="irpMain" hidden>
@@ -512,6 +524,7 @@
 
   <div id="irpBody"></div>
   <button class="irpSimBtn" id="irpSimOpen" style="margin-top:14px"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="11" x2="8.01" y2="11"></line><line x1="12" y1="11" x2="12.01" y2="11"></line><line x1="16" y1="11" x2="16.01" y2="11"></line><line x1="8" y1="15" x2="8.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line><line x1="16" y1="15" x2="16.01" y2="15"></line></svg>Simulador</button>
+  <button class="themeBtn" id="themeBtn2" title="Mudar tema"><svg class="btnicon themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></svg><span class="themeLabel">Tema</span></button>
 </main>
 
 <div class="toast" id="toast"></div>
@@ -1567,8 +1580,25 @@ $("#simShare").onclick=()=>{
   shareImage(fillSimIRPCard,"simulador-irp.png","Simulador IRP");
 };
 
+/* ---- tema claro/escuro ---- */
+const SUN_ICON='<circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+const MOON_ICON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  try{localStorage.setItem("theme",t);}catch(e){}
+  const showSun=t==="dark"; // mostra sol (ação: ir pro claro) quando está no escuro
+  document.querySelectorAll(".themeIcon").forEach(svg=>svg.innerHTML=showSun?SUN_ICON:MOON_ICON);
+  document.querySelectorAll(".themeLabel").forEach(s=>s.textContent=showSun?"Tema claro":"Tema escuro");
+}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute("data-theme")==="light"?"dark":"light";
+  applyTheme(cur);
+}
+document.querySelectorAll(".themeBtn").forEach(b=>b.onclick=toggleTheme);
+
 /* ---- init ---- */
 load();
+{let t="dark";try{t=localStorage.getItem("theme")||"dark";}catch(e){}applyTheme(t);}
 fmtSal();
 {const d=($("#usdPyg").value||"").replace(/\D/g,"");if(d)$("#usdPyg").value=parseInt(d,10).toLocaleString("pt-BR");}
 markSv();
