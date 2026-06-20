@@ -317,20 +317,23 @@
   #topModal.hidden{display:none}
   .topcard{width:100%;max-width:540px;max-height:96vh;display:flex;flex-direction:column;
     background:var(--bg);border:1px solid var(--line);border-top-left-radius:22px;border-top-right-radius:22px;
-    padding:18px 18px calc(env(safe-area-inset-bottom) + 18px)}
+    padding:calc(env(safe-area-inset-top) + 22px) 18px calc(env(safe-area-inset-bottom) + 18px)}
   .tophead{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
   .topttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;color:var(--ink-dim)}
-  .topHeroVal{font-family:'IBM Plex Mono',monospace;font-size:1.7rem;font-weight:700;color:var(--pyg);margin-top:2px;font-variant-numeric:tabular-nums;line-height:1.1}
-  .topsub{color:var(--ink-faint);font-size:.74rem;margin-top:4px}
+  .topHeroVal{font-family:'IBM Plex Mono',monospace;font-size:1.48rem;font-weight:700;color:var(--pyg);margin-top:3px;font-variant-numeric:tabular-nums;line-height:1.1}
+  .topsub{color:var(--ink-faint);font-size:.74rem;margin-top:5px}
   .topclose{flex:none;width:36px;height:36px;border:1.5px solid transparent;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .topclose:active{border-color:var(--accent);color:var(--accent)}
   .topscroll{flex:1;min-height:0;overflow-y:auto;position:relative}
   .toplist{padding-top:4px}
-  .mtabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .mtabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0 5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .mtabs::-webkit-scrollbar{display:none}
   .mtab{flex:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
-    font-size:.78rem;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;cursor:pointer}
+    font-size:.74rem;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap;cursor:pointer}
   .mtab.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
+  #catChips{padding-top:0;padding-bottom:8px}
+  #catChips .mtab{padding:5px 10px;font-size:.68rem;font-weight:500;background:transparent;border-color:var(--line-soft);color:var(--ink-faint)}
+  #catChips .mtab.on{background:transparent;border-color:var(--accent);color:var(--accent);font-weight:600}
   .topheadbtns{display:flex;gap:6px;flex:none}
   .gexp{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:7px;cursor:pointer;margin-left:6px}
   .gexp.open{border-color:var(--accent);color:var(--accent)}
@@ -344,13 +347,13 @@
   .gdates .gd-edt:active{border-color:var(--usd);color:var(--usd)}
   .modsel{opacity:.5;transition:opacity .15s}
   .modsel.on{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
-  .topfilter{display:flex;flex-direction:column;gap:8px;padding:2px 0 8px}
+  .topfilter{display:flex;flex-direction:column;gap:6px;padding:2px 0 6px}
   .topfilter input[type=search]:focus{border-color:var(--accent)}
-  .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.88rem;padding:10px 12px 10px 36px;outline:none;width:100%}
+  .topfilter #fSearch{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:.85rem;padding:9px 12px 9px 34px;outline:none;width:100%}
   .searchwrap{position:relative}
   .searchwrap .search-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-faint);pointer-events:none}
-  .topfilter .frow{display:flex;gap:8px}
-  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.76rem;font-weight:600;padding:9px;border-radius:10px;cursor:pointer}
+  .topfilter .frow{display:flex;gap:6px}
+  .topfilter .frow button{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.7rem;font-weight:600;padding:7px;border-radius:9px;cursor:pointer}
   .topfilter .frow button:active{border-color:var(--accent);color:var(--accent)}
   .topbtns{display:flex;gap:8px;margin-top:10px}
   .topbtns .applybtn{flex:1;margin-top:0;font-size:.8rem;padding:10px}
@@ -360,10 +363,10 @@
   .tdate{font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;padding:14px 2px 5px}
   .tdate:first-child{padding-top:2px}
   .ti{padding:7px 2px}
-  .ti+.ti{border-top:1px solid var(--line-soft)}
+  .ti+.ti{border-top:1px solid rgba(255,255,255,.045)}
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
-  .ti .nmw{min-width:0;flex:1;display:flex;align-items:center;gap:6px;overflow:hidden}
-  .ti .catic{flex:none;font-size:.82rem;opacity:.8;line-height:1}
+  .ti .nmw{min-width:0;flex:1;display:flex;align-items:center;gap:5px;overflow:hidden}
+  .ti .catic{flex:none;font-size:.72rem;opacity:.5;line-height:1}
   .ti .nm{color:var(--ink);font-size:.87rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .ti .dt{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.7rem}
   .ti .vr{display:flex;align-items:center;gap:5px;flex:none}
@@ -382,6 +385,8 @@
   .tiMenu button[data-act="delete"]:active{color:var(--danger)}
   .applybtn{margin-top:12px;flex:none;border:1.5px solid var(--line);background:var(--panel);color:var(--ink-dim);font-family:inherit;font-weight:600;font-size:.92rem;padding:14px;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
   .applybtn:active{border-color:var(--accent);color:var(--accent)}
+  #applyBtn{border-color:rgba(55,214,160,.45);background:rgba(55,214,160,.1);color:var(--accent);font-weight:700}
+  #applyBtn:active{filter:brightness(1.15)}
 
 
   /* ---- ajustes exclusivos para web/desktop ---- */
