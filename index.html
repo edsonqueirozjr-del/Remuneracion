@@ -250,8 +250,8 @@
   #acctModal{position:fixed;inset:0;z-index:95;display:flex;align-items:flex-end;justify-content:center;
     background:rgba(5,8,12,.75);backdrop-filter:blur(4px)}
   #acctModal.hidden,#simModal.hidden{display:none}
-  #acctModal .acctcard{max-width:540px;max-height:96vh;border-radius:0;border-top-left-radius:22px;border-top-right-radius:22px;
-    padding:18px 18px calc(env(safe-area-inset-bottom) + 18px)}
+  #acctModal .acctcard{max-width:540px;max-height:93vh;border-radius:0;border-top-left-radius:22px;border-top-right-radius:22px;
+    padding:calc(env(safe-area-inset-top) + 22px) 18px calc(env(safe-area-inset-bottom) + 18px)}
   .acctcard{width:100%;max-width:380px;max-height:88vh;overflow-y:auto;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:18px;scrollbar-width:none}
   .acctcard::-webkit-scrollbar{display:none}
   .accthead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
@@ -531,7 +531,7 @@
       <div class="acctresults" id="acctResults"></div>
       <div class="acctextra" id="acctExtra"></div>
     </div>
-    <button class="applybtn" id="acctGen" style="width:100%;padding:11px"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Gerar resumo</button>
+    <button class="applybtn" id="acctGen" style="width:100%;padding:13px;font-size:.86rem"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Gerar resumo</button>
   </div>
 </div>
 
