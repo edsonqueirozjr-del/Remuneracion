@@ -41,11 +41,9 @@
   .hdrbtn{flex:none;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-size:.82rem;font-weight:700;padding:13px 16px;border-radius:13px;cursor:pointer;min-width:108px;text-align:center}
   .hdrbtn:active{border-color:var(--accent);color:var(--accent)}
   h1{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;margin:6px 0 2px;letter-spacing:-.01em}
-  h1 .py{color:var(--pyg)}
   .sub{color:var(--ink-dim);font-size:.86rem;margin:0 0 18px}
   .sec{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:18px 4px 8px;display:flex;justify-content:space-between;align-items:center}
   .secsub{color:inherit}
-  .secbtns{display:flex;gap:6px}
   .clearBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
     font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
   .clearBtn:active{border-color:var(--danger);color:var(--danger)}
@@ -76,7 +74,6 @@
   .irpbtns{display:flex;flex-direction:column;gap:8px}
   .irpCurWrap{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   #irpCurWrap[hidden],#irpSimOpen[hidden]{display:none}
-  .irpCurLabel{font-size:.74rem;color:var(--ink-dim);font-weight:600;flex:none}
   .irpCurSeg{display:flex;flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;overflow:hidden}
   .irpCurSeg button{flex:1;border:0;background:transparent;color:var(--ink-faint);font-family:inherit;font-weight:700;font-size:clamp(.68rem,2.8vw,.82rem);padding:13px 4px;cursor:pointer;transition:.12s;white-space:nowrap}
   .irpCurSeg button[data-cur="PYG"]{color:var(--pyg)}
@@ -104,20 +101,13 @@
   .irpBig .v.pos{color:var(--accent)}
   .irpBig .v.neg{color:var(--danger)}
   .irow{display:grid;grid-template-columns:.85fr 1.15fr 1.15fr 1.15fr;gap:5px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-family:'IBM Plex Mono',monospace;font-size:clamp(.66rem,2.8vw,.82rem)}
-  .irow.ir3{grid-template-columns:1fr 1.5fr 1.1fr}
-  .irow.ir2{grid-template-columns:1fr 1fr}
   .irow:last-child{border-bottom:0}
-  .irow.ir3:has(+.irow.irtot){border-bottom:0}
-  .irow.noborder{border-bottom:0}
   .irow.irhead{color:var(--ink-faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;font-family:inherit;font-weight:700}
   .irow .im{font-family:inherit;color:var(--ink-dim);white-space:nowrap}
   .irow .ii{color:var(--accent);text-align:right;white-space:nowrap}
   .irow .ie{color:var(--danger);text-align:right;white-space:nowrap}
   .irow .in{text-align:right;font-weight:700;white-space:nowrap}
   .irow .in.pos{color:var(--accent)} .irow .in.neg{color:var(--danger)}
-  .irow.irtot{border-top:1px solid var(--line);border-bottom:0;margin-top:2px;padding-top:11px}
-  .irow.irtot .im{color:var(--ink);font-weight:700;font-family:inherit}
-  .irow.irtot .in{color:var(--accent);font-size:1rem}
   .irpNote{font-size:.74rem;color:var(--ink-faint);padding:9px 0 4px;line-height:1.5;text-align:center}
   .irpNote b{color:var(--ink-dim)}
   .irpNote.clickable{cursor:pointer;border-radius:8px;margin:0 -6px;padding:9px 6px 4px 6px;transition:background .15s}
@@ -126,8 +116,6 @@
   .irpNote.open .chev{transform:rotate(180deg)}
   .irpExclDetail{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-soft)}
   .irpExclDetail.open{display:block}
-  .irpExclGroup{font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:8px 0 4px}
-  .irpExclGroup:first-child{margin-top:0}
   .irpExclRow{display:flex;justify-content:space-between;gap:10px;font-size:.74rem;color:var(--ink-dim);padding:4px 0;border-bottom:1px solid var(--line-soft)}
   .irpExclRow:last-child{border-bottom:0}
   .irpExclRow .ien{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -142,20 +130,17 @@
   .simin input{flex:1;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;outline:none;font-variant-numeric:tabular-nums;min-width:0}
   .simResetField{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:.9rem;line-height:1}
   .simResetField:active{border-color:var(--accent);color:var(--accent)}
-  .simUse{width:100%;border:1px dashed var(--line);background:transparent;color:var(--ink-dim);border-radius:11px;padding:10px;cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:700;margin-bottom:4px}
-  .simUse:active{border-color:var(--accent);color:var(--accent)}
   .simResult{margin-top:14px}
   .simResult .sec{margin:18px 4px 8px}
   .simResult .sec:first-child{margin-top:4px}
 
 
+  .fxnote{grid-column:1/-1;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);min-height:1.05em}
   .fxreset{grid-column:1/-1;border:1px solid var(--line);background:var(--panel-2);color:var(--accent);
     font-family:inherit;font-size:.76rem;font-weight:700;padding:9px;border-radius:10px;cursor:pointer}
   .fxreset:active{filter:brightness(1.1)}
 
   .resumo{background:linear-gradient(180deg,var(--panel),var(--bg));border:1px solid var(--line);border-radius:18px;padding:16px 18px}
-  .rhead{margin-bottom:10px}
-  .rhead .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem}
   .rrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
   .rrow:last-child{border-bottom:0}
   .rrow .lbl{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-dim);font-weight:600;flex:none}
@@ -232,9 +217,7 @@
   #shareCard .snm{min-width:0;display:flex;flex-direction:column;gap:2px}
   #shareCard .sdesc{color:var(--ink);font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #shareCard .sdt{color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace}
-  #shareCard .sref{color:var(--ink-faint);font-size:.68rem;font-family:'IBM Plex Mono',monospace}
   #shareCard .vmain{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem;white-space:nowrap}
-  #shareCard .vsub{display:block;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-faint);white-space:nowrap;margin-top:1px}
   #shareCard .stotbox{margin:14px 26px 0;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:6px 16px}
   #shareCard.share-irp{padding-bottom:28px}
   #shareCard.share-irp .stotbox{margin:28px 26px 0;border-radius:18px;padding:16px 18px}
@@ -247,11 +230,6 @@
   #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:700;font-variant-numeric:tabular-nums;font-size:.92rem}
   #shareCard .stot.diff.pos .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
-  #shareCard .vl.ing{color:var(--accent)}
-  #shareCard .vl.eg{color:var(--danger)}
-  #shareCard .vl.netpos{color:var(--accent)}
-  #shareCard .vl.netneg{color:var(--danger)}
-  #shareCard .vl.taxdue{color:var(--danger)}
   #shareCard .sfoot{padding:16px 26px 20px;color:var(--ink-faint);font-size:.7rem;font-family:'IBM Plex Mono',monospace;line-height:1.5}
   #shareCard .sempty{padding:18px 26px;color:var(--ink-faint)}
   .xp.flash{animation:flash 1.4s ease}
@@ -277,7 +255,6 @@
   .accthead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
   .acctmonths{display:flex;gap:6px;overflow-x:auto;padding:14px 0 6px;scrollbar-width:none}
   .acctmonths::-webkit-scrollbar{display:none}
-  .acctmonths .empty2{color:var(--ink-faint);font-size:.85rem}
   .acctadd{border-top:1px solid var(--line);padding-top:14px;margin-bottom:14px}
   .acctadd #acctSearch{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:inherit;font-size:.86rem;padding:11px 12px 11px 36px;outline:none}
   .acctadd #acctSearch:focus{border-color:var(--accent)}
@@ -293,9 +270,6 @@
   .ares-btn{flex:none;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-weight:700}
   .ares.on .ares-btn{background:var(--accent);color:#06251b;border-color:var(--accent)}
   .acctextra{color:var(--accent);font-size:.76rem;font-weight:600;margin-top:8px;min-height:1em}
-  .mchip{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;font-weight:600;
-    font-size:.84rem;padding:9px 14px;border-radius:11px;cursor:pointer;transition:.12s}
-  .mchip.on{background:var(--accent);color:#06251b;border-color:var(--accent)}
 
   /* tela de senha */
   #lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;
@@ -304,7 +278,6 @@
   .lockcard{width:100%;max-width:330px;background:linear-gradient(180deg,var(--panel),var(--bg));border:1px solid var(--line);
     border-radius:20px;padding:30px 24px;text-align:center;box-shadow:0 30px 70px -30px #000;position:relative}
   .lockcard h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:8px 0 2px}
-  .lockcard .locksub{color:var(--ink-dim);font-size:.84rem;margin:0 0 18px}
   .pattern{position:relative;width:240px;height:240px;margin:0 auto;touch-action:none}
   .patsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
   .pdot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--panel-2);border:2px solid var(--line);transform:translate(-50%,-50%)}
@@ -323,9 +296,6 @@
   @keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 
   /* estado vazio */
-  .emptyx{text-align:center;padding:30px 18px;border:1.5px dashed var(--line);border-radius:16px;background:var(--panel)}
-  .emptyx-ico{font-size:2rem}
-  .emptyx-t{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;margin:8px 0 4px}
   .emptyx-s{color:var(--ink-dim);font-size:.84rem;margin:0;line-height:1.5}
   .emptyx-s b{color:var(--ink)}
 
@@ -375,7 +345,6 @@
   .topbtns{display:flex;gap:8px;margin-top:10px}
   .topbtns .applybtn{flex:1;margin-top:0;font-size:.86rem;padding:13px}
   .topcard.info #applyBtn{display:none}
-  .gct{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--ink-faint);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:6px}
   #fGroup.on{border-color:var(--accent);color:var(--accent);background:rgba(55,214,160,.12)}
   .tdate{font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;padding:14px 2px 5px}
   .tdate:first-child{padding-top:2px}
@@ -384,13 +353,11 @@
   .ti .top1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .ti .nmw{min-width:0;flex:1;display:flex;align-items:center;gap:5px;overflow:hidden}
   .ti .nm{color:var(--ink);font-size:.87rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
-  .ti .dt{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:.7rem}
   .ti .vr{display:flex;align-items:center;gap:5px;flex:none}
   .ti .vl{font-family:'IBM Plex Mono',monospace;font-size:.87rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
   .ti .more{flex:none;width:24px;height:24px;border:0;background:transparent;color:var(--ink-faint);border-radius:7px;font-size:1rem;line-height:1;cursor:pointer;padding:0;letter-spacing:1px}
   .ti .more:active{background:var(--panel-2);color:var(--accent)}
   .ti .conv2{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-dim);margin-top:2px}
-  .ti .conv2 .pct{color:var(--ink-faint);margin-left:8px}
   .toplist .empty{color:var(--ink-faint);text-align:center;padding:26px;font-size:.86rem}
   .tiMenu{position:fixed;z-index:120;min-width:148px;background:var(--panel);border:1px solid var(--line);border-radius:12px;
     padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:2px}
@@ -461,7 +428,7 @@
   <div class="hdr">
     <h1>Salário</h1>
     <div class="hdrGroup">
-      <button class="themeBtn" id="themeBtn1" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+      <button class="themeBtn" id="themeBtn1" title="Mudar tema" aria-label="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
       <button class="hdrbtn" id="goIrp" title="Ir para IRP"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>IRP</button>
     </div>
   </div>
@@ -482,6 +449,7 @@
     <div class="pcard"><label>Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
       <input class="num" id="usdPyg" inputmode="numeric" value="6060"></div></div>
     <button class="fxreset" id="fxReset" style="display:none">↻ Cotação do dia</button>
+    <div class="fxnote" id="fxNote"></div>
   </div>
 
   <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span></div>
@@ -495,12 +463,12 @@
   <div class="sec" id="relatorioSec" hidden>Relatório</div>
   <div class="addrow" id="extratoRow" hidden>
     <div class="extratoGroup">
-      <button class="delsq" id="extratoDelBtn" title="Excluir extrato importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+      <button class="delsq" id="extratoDelBtn" title="Excluir extrato importado" aria-label="Excluir extrato importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
       <button class="add" id="extratoBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-3 2-3-2-3 2-2-2V3z"></path><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Extrato</button>
     </div>
     <div class="extratoGroup">
       <button class="impmini" id="saudeBtn" style="flex:1"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>Saúde</button>
-      <button class="delsq" id="acctQuickGen" title="Gerar resumo"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg></button>
+      <button class="delsq" id="acctQuickGen" title="Gerar resumo" aria-label="Gerar resumo"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg></button>
     </div>
   </div>
 
@@ -521,7 +489,7 @@
   <div class="hdr">
     <h1>IRP</h1>
     <div class="hdrGroup">
-      <button class="themeBtn" id="themeBtn2" title="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+      <button class="themeBtn" id="themeBtn2" title="Mudar tema" aria-label="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
       <button class="hdrbtn" id="goDesp" title="Ir para Despesas"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>Despesas</button>
     </div>
   </div>
@@ -529,7 +497,7 @@
   <div class="irpbtns">
     <div class="extratoGroup">
       <button class="add" id="irpImport"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg>Importar IRP</button>
-      <button class="delsq" id="irpClearBtn" title="Excluir IRP importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+      <button class="delsq" id="irpClearBtn" title="Excluir IRP importado" aria-label="Excluir IRP importado"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
     </div>
   </div>
   <div class="irpCurWrap" id="irpCurWrap" hidden>
@@ -551,12 +519,12 @@
   <div class="acctcard">
     <div class="accthead">
       <div><div class="topttl">Contabilidade · Saúde</div></div>
-      <button class="topclose" id="acctClose">✕</button>
+      <button class="topclose" id="acctClose" aria-label="Fechar">✕</button>
     </div>
     <div class="acctmonths" id="acctMonths"></div>
     <div class="acctadd">
       <div class="searchwrap">
-        <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="search" id="acctSearch" placeholder="Buscar despesa…">
       </div>
       <div class="acctresults" id="acctResults"></div>
@@ -572,7 +540,7 @@
   <div class="acctcard">
     <div class="accthead">
       <div><div class="topttl">Simulador IRP</div></div>
-      <button class="topclose" id="simClose">✕</button>
+      <button class="topclose" id="simClose" aria-label="Fechar">✕</button>
     </div>
     <div class="simwrap">
       <div class="irpCurWrap" id="simCurWrap" style="margin-top:0;margin-bottom:22px">
@@ -584,10 +552,10 @@
       </div>
       <div class="simfield"><label>Ingressos</label>
         <div class="simin"><span class="tag" id="simIngTag" style="color:var(--accent)">₲</span><input id="simIng" inputmode="numeric" placeholder="0">
-          <button class="simResetField" id="simIngReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
+          <button class="simResetField" id="simIngReset" title="Voltar ao valor original importado" aria-label="Voltar ao valor original importado" hidden>↺</button></div></div>
       <div class="simfield"><label>Egressos</label>
         <div class="simin"><span class="tag" id="simEgTag" style="color:var(--danger)">₲</span><input id="simEg" inputmode="numeric" placeholder="0">
-          <button class="simResetField" id="simEgReset" title="Voltar ao valor original importado" hidden>↺</button></div></div>
+          <button class="simResetField" id="simEgReset" title="Voltar ao valor original importado" aria-label="Voltar ao valor original importado" hidden>↺</button></div></div>
 
       <div class="simResult" id="simResult"></div>
       <button class="clearBtn sharefull" id="simShare" style="margin-top:10px"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><line x1="12" y1="2" x2="12" y2="15"></line></svg>Compartilhar</button>
@@ -599,13 +567,13 @@
   <div class="topcard">
     <div class="tophead">
       <div><div class="topttl" id="topTitle">Extrato</div><div class="topHeroVal" id="topHeroVal">₲ 0</div><div class="topsub" id="topSub"></div></div>
-      <span class="topheadbtns"><button class="topclose" id="topClose">✕</button></span>
+      <span class="topheadbtns"><button class="topclose" id="topClose" aria-label="Fechar">✕</button></span>
     </div>
     <div class="topscroll">
       <div class="mtabs" id="mtabs"></div>
       <div class="topfilter">
         <div class="searchwrap" hidden>
-          <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <svg class="btnicon search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input type="search" id="fSearch" placeholder="Buscar despesa…">
         </div>
         <div class="frow">
@@ -638,10 +606,11 @@ let liveRates=null; // {brl,pyg,date}
 const $=s=>document.querySelector(s);
 
 /* ---- tela de bloqueio (padrão de deslizar) ---- */
-const PATTERN="1235789";
+// código guardado como hash (djb2) em vez de texto puro, pra não ficar legível em "Ver código-fonte"
+const PATTERN_HASH="4dw7sm";
+function hashPattern(s){let h=5381;for(let i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h.toString(36);}
 let chosenMod="desp"; // módulo escolhido antes do padrão
 function unlock(){$("#lock").classList.add("hidden");try{sessionStorage.setItem("unlocked","1");}catch(_){}}
-function showChooser(){clearPattern();$("#lockErr").textContent="";try{sessionStorage.removeItem("unlocked");}catch(_){}$("#lock").classList.remove("hidden");}
 function setMod(m){chosenMod=m;
   $("#enterDesp").classList.toggle("on",m==="desp");$("#enterDesp").classList.toggle("alt",m!=="desp");
   $("#enterIrp").classList.toggle("on",m==="irp");$("#enterIrp").classList.toggle("alt",m!=="irp");
@@ -664,7 +633,7 @@ $("#enterIrp").onclick=()=>setMod("irp");
   function start(x,y){drawing=true;seq=[];hit(x,y);draw();}
   function move(x,y){if(!drawing)return;hit(x,y);draw(toVB(x,y));}
   function end(){if(!drawing)return;drawing=false;const code=seq.join("");
-    if(code===PATTERN){
+    if(hashPattern(code)===PATTERN_HASH){
       grid.querySelectorAll(".pdot.on").forEach(d=>d.classList.add("ok"));
       setTimeout(()=>{showView(chosenMod==="irp"?"irp":"desp");unlock();},150);
     }
@@ -753,8 +722,11 @@ async function fetchRates(){
       const dt=d.time_last_update_utc?new Date(d.time_last_update_utc):new Date();
       liveRates={brl:+d.rates.BRL.toFixed(2),pyg:Math.round(d.rates.PYG),date:dt.toLocaleDateString("pt-BR")};
       applyLive(); // padrão = cotação do dia
+      const n=$("#fxNote");if(n)n.textContent=`Cotação atualizada hoje (${liveRates.date})`;
     }
-  }catch(e){/* offline: mantém os valores atuais */}
+  }catch(e){
+    const n=$("#fxNote");if(n)n.textContent="Sem internet — usando a última cotação salva neste aparelho";
+  }
 }
 
 /* ---- render ---- */
@@ -777,8 +749,8 @@ function renderRows(){
     el.innerHTML=`
       <div class="head">
         <input class="name" value="${(row.name||"").replace(/"/g,'&quot;')}" data-i="${i}" data-k="name" placeholder="Insira uma despesa">
-        ${(norm(row.name).includes("cartao")||norm(row.name).includes("credito"))?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato">ⓘ</button>`:""}
-        <button class="del" data-del="${i}">×</button>
+        ${(norm(row.name).includes("cartao")||norm(row.name).includes("credito"))?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato" aria-label="Ver detalhes do extrato">ⓘ</button>`:""}
+        <button class="del" data-del="${i}" title="Excluir despesa" aria-label="Excluir despesa">×</button>
       </div>
       <div class="entry">
         <div class="amtbox"><input class="num" inputmode="numeric" value="${fmtAmt(row.amt,row.cur)}" data-i="${i}" data-k="amt"></div>
@@ -1072,13 +1044,6 @@ function parseFatura(arr){
   return {total,month:monthLabel,count:txns.length,txns,totalGastos};
 }
 
-function applyImport(res){
-  if(res.total==null&&!res.txns.length){toast("Não reconheci a fatura");return;}
-  imp=res;
-  save();
-  toast(`Fatura importada${res.month?" · "+res.month:""}`);
-  openTop();
-}
 function applyToCard(){
   if(!imp){toast("Importe um extrato primeiro");return;}
   const list=getFilteredTop();
@@ -1096,15 +1061,6 @@ function applyToCard(){
   toast("✓ Aplicado: "+name);
   const card=document.querySelectorAll(".xp")[i];
   if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.classList.add("flash");setTimeout(()=>card.classList.remove("flash"),1400);}
-}
-
-function monthFromName(name){
-  const n=norm(name);
-  const map={enero:1,janeiro:1,febrero:2,fevereiro:2,marzo:3,marco:3,abril:4,mayo:5,maio:5,junio:6,junho:6,julio:7,julho:7,agosto:8,septiembre:9,setembro:9,octubre:10,outubro:10,noviembre:11,novembro:11,diciembre:12,dezembro:12};
-  for(const k in map){if(n.includes(k))return MESES[map[k]-1].replace(/^\w/,c=>c.toUpperCase());}
-  const m=n.match(/(20\d\d)[-_.]?(\d{2})|(\d{2})[-_.]?(20\d\d)/);
-  if(m){const mo=+(m[2]||m[3]);if(mo>=1&&mo<=12)return MESES[mo-1].replace(/^\w/,c=>c.toUpperCase());}
-  return "";
 }
 
 function doImport(){
@@ -1178,7 +1134,7 @@ function renderTopList(){
       const usd=r.pyg?x.val/r.pyg:0,brl=usd*r.brl;
       const datas=x.items.slice().sort((a,b)=>isoDMY(a.date).localeCompare(isoDMY(b.date)))
         .map(t=>{const u=r.pyg?t.val/r.pyg:0,b2=u*r.brl,k=`${t.date}|${t.ref}|${t.val}|${t.desc}`;
-          return `<div class="gd"><span class="gd-dt">${t.date}</span><span style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span><span style="color:var(--brl)">R$ ${b2.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><span style="color:var(--usd)">U$ ${u.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><button class="edt gd-edt" data-key="${k.replace(/"/g,'&quot;')}" title="Editar valor em ₲">✎</button></div>`;}).join("");
+          return `<div class="gd"><span class="gd-dt">${t.date}</span><span style="color:var(--pyg)">₲ ${Math.round(t.val).toLocaleString("es-PY")}</span><span style="color:var(--brl)">R$ ${b2.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><span style="color:var(--usd)">U$ ${u.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span><button class="edt gd-edt" data-key="${k.replace(/"/g,'&quot;')}" title="Editar valor em ₲" aria-label="Editar valor">✎</button></div>`;}).join("");
       return `<div class="ti"><div class="top1">
           <span class="nmw"><span class="nm">${x.desc}</span></span>
           <span class="vr"><button class="gexp" data-g="${gi}" title="Ver datas">${x.count}× ▾</button><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span></span></div>
@@ -1197,7 +1153,7 @@ function renderTopList(){
     html+=`<div class="ti"><div class="top1">
         <span class="nmw"><span class="nm">${x.desc}</span></span>
         <span class="vr"><span class="vl" style="color:var(--pyg)">₲ ${Math.round(x.val).toLocaleString("es-PY")}</span>
-          <button class="more" data-key="${key.replace(/"/g,'&quot;')}" title="Mais ações">⋮</button></span></div>
+          <button class="more" data-key="${key.replace(/"/g,'&quot;')}" title="Mais ações" aria-label="Mais ações">⋮</button></span></div>
       <div class="conv2">${showDateHeaders?"":dm+" · "}<span style="color:var(--brl)">R$ ${brl.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span> · <span style="color:var(--usd)">U$ ${usd.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div></div>`;
   });
   $("#topList").innerHTML=html;
@@ -1390,14 +1346,6 @@ function irpTax(net){
   if(net>B2)t+=(net-B2)*0.10;
   return t;
 }
-function irpBreakdown(net){
-  const B1=50000000,B2=150000000,out=[];
-  if(net<=0)return out;
-  out.push({faixa:"8%",base:Math.min(net,B1),imp:Math.min(net,B1)*0.08});
-  if(net>B1)out.push({faixa:"9%",base:Math.min(net,B2)-B1,imp:(Math.min(net,B2)-B1)*0.09});
-  if(net>B2)out.push({faixa:"10%",base:net-B2,imp:(net-B2)*0.10});
-  return out;
-}
 // lê uma aba (Ventas/Compras) e soma a coluna "Total Comprobante IRP" por período, só Imputa IRP = SI
 function parseIRPSheet(wb,wanted){
   const name=wb.SheetNames.find(n=>norm(n).includes(wanted));
@@ -1519,24 +1467,6 @@ $("#irpFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)retur
     }catch(err){toast("Não consegui ler esse arquivo");}
     $("#irpFile").value="";};
   rd.readAsArrayBuffer(f);};
-function fillIRPCard(){
-  if(!irpData)return;
-  const ing=irpData.ingresos.total,eg=irpData.egresos.total,net=ing-eg,tax=irpTax(net);
-  const netShareColor=net<0?"var(--danger)":net>0?"var(--accent)":"var(--ink)";
-  const taxShareColor=tax>0?"var(--danger)":"var(--ink)";
-  const faixaAtual=net<=0?"—":net<=50000000?"8%":net<=150000000?"9%":"10%";
-  const fc=v=>fmtCur(v,irpCur);
-  const monthsCount=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])].length;
-  $("#shareCard").className="share-irp";
-  $("#shareCard").innerHTML=
-    shareHead("","IRP","Cálculo preliminar · "+(monthsCount||0)+" "+(monthsCount===1?"mês":"meses")+" · faixa atual "+faixaAtual)+
-    `<div class="stotbox irpbox">
-       <div class="stot"><span class="lbl">Ingressos</span><span class="vl" style="color:var(--accent)">${fc(ing)}</span></div>
-       <div class="stot"><span class="lbl">Egressos (Compras)</span><span class="vl" style="color:var(--danger)">${fc(eg)}</span></div>
-       <div class="stot"><span class="lbl">Neto</span><span class="vl" style="color:${netShareColor}">${fc(net)}</span></div>
-       <div class="stot"><span class="lbl">Imposto · faixa ${faixaAtual}</span><span class="vl" style="color:${taxShareColor}">${fc(tax)}</span></div>
-     </div>`;
-}
 
 /* ---- simulador IRP ---- */
 function simMaskCur(el,cur){
