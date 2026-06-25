@@ -45,6 +45,11 @@
   .sub{color:var(--ink-dim);font-size:.86rem;margin:0 0 18px}
   .sec{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:18px 4px 8px;display:flex;justify-content:space-between;align-items:center}
   .secsub{color:inherit}
+  .foldBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
+    font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:7px 11px;border-radius:9px;cursor:pointer}
+  .foldBtn:active{border-color:var(--accent);color:var(--accent)}
+  .foldBtn[hidden]{display:none}
+  #expensesPanel.collapsed{display:none}
   .clearBtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);font-family:inherit;
     font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:9px;cursor:pointer}
   .clearBtn:active{border-color:var(--danger);color:var(--danger)}
@@ -455,11 +460,13 @@
     <div class="fxnote" id="fxNote"></div>
   </div>
 
-  <div class="sec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span></div>
-  <div id="rows"></div>
-  <div class="addrow">
-    <button class="add" id="addRow"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Adicionar despesa</button>
-    <button class="impmini" id="importBtn" title="Importar extrato"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg>Importar extrato</button>
+  <div class="sec expensesSec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="foldBtn" id="expensesToggle" type="button" aria-expanded="false">Expandir ▾</button></div>
+  <div id="expensesPanel" class="collapsed">
+    <div id="rows"></div>
+    <div class="addrow">
+      <button class="add" id="addRow"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Adicionar despesa</button>
+      <button class="impmini" id="importBtn" title="Importar extrato"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="M7 9l5 5 5-5"></path><path d="M5 20h14"></path></svg>Importar extrato</button>
+    </div>
   </div>
   <input type="file" id="fileInput" accept=".xls,.xlsx" multiple style="display:none">
 
@@ -606,6 +613,7 @@ let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
 let irpData=null; // {ingresos:{byMonth,total},egresos:{byMonth,total},date}
 let irpCur="PYG"; // moeda de exibição do painel IRP: PYG/USD/BRL (dados internos sempre em ₲)
 let liveRates=null; // {brl,pyg,date}
+let expensesCollapsed=true; // despesas iniciam recolhidas por padrão
 const $=s=>document.querySelector(s);
 
 /* ---- tela de bloqueio (padrão de deslizar) ---- */
@@ -738,12 +746,24 @@ function updateExtratoVisibility(){
   const er=$("#extratoRow");if(er)er.hidden=!hasExtrato;
   const rs=$("#relatorioSec");if(rs)rs.hidden=!hasExtrato;
 }
+function syncExpensesCollapse(){
+  const panel=$("#expensesPanel"),btn=$("#expensesToggle");
+  const hasRows=rows.length>0;
+  if(btn){
+    btn.hidden=!hasRows;
+    btn.textContent=expensesCollapsed?"Expandir ▾":"Recolher ▴";
+    btn.setAttribute("aria-expanded",String(!expensesCollapsed));
+    btn.title=expensesCollapsed?"Mostrar despesas":"Ocultar despesas";
+  }
+  if(panel)panel.classList.toggle("collapsed",hasRows&&expensesCollapsed);
+}
 function renderRows(){
   updateExtratoVisibility();
   const c=$("#rows");c.innerHTML="";
   if(!rows.length){
     c.innerHTML="";
     $("#rowcount").textContent="";
+    syncExpensesCollapse();
     calc();return;
   }
   rows.forEach((row,i)=>{
@@ -767,6 +787,7 @@ function renderRows(){
     c.appendChild(el);
   });
   $("#rowcount").textContent="· "+rows.length;
+  syncExpensesCollapse();
   bind();calc();
 }
 function bind(){
@@ -827,6 +848,8 @@ function calc(){
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700);}
 
 /* ---- eventos ---- */
+const expensesToggle=$("#expensesToggle");
+if(expensesToggle)expensesToggle.onclick=()=>{expensesCollapsed=!expensesCollapsed;syncExpensesCollapse();};
 function markSv(){document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===sv[k]));});}
 document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sv[k]=b.dataset.c;markSv();calc();});});
 $("#fxReset").onclick=()=>{
@@ -842,6 +865,8 @@ function showView(v){
 $("#goIrp").onclick=()=>showView("irp");
 $("#goDesp").onclick=()=>showView("desp");
 function addManualRow(){
+  expensesCollapsed=false;
+  syncExpensesCollapse();
   const bad=rows.findIndex(r=>!(r.name||"").trim()||!(r.amt>0));
   if(bad>=0){
     toast("Preencha o nome e o valor da despesa atual antes de adicionar outra");
@@ -1063,6 +1088,7 @@ function applyToCard(){
   let i=rows.findIndex(r=>norm(r.name)===norm(name));
   if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
   else{rows.push({name,amt:val,cur:"PYG"});i=rows.length-1;}
+  expensesCollapsed=false;
   renderRows();
   $("#topModal").classList.add("hidden");
   toast("✓ Aplicado: "+name);
