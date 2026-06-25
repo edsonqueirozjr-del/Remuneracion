@@ -386,6 +386,23 @@
   .applybtn:active{border-color:var(--accent);color:var(--accent)}
 
 
+  /* menu de configurações / backup */
+  .settingsBtn{flex:none;width:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);border-radius:13px;cursor:pointer;padding:0}
+  .settingsBtn:active{border-color:var(--accent);color:var(--accent)}
+  #settingsModal{position:fixed;inset:0;z-index:98;display:flex;align-items:flex-end;justify-content:center;background:rgba(5,8,12,.75);backdrop-filter:blur(4px);padding:18px}
+  #settingsModal.hidden{display:none}
+  .settingsCard{width:100%;max-width:420px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 28px 80px rgba(0,0,0,.45)}
+  .settingsHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .settingsTitle{font-family:'Fraunces',serif;font-size:1.18rem;font-weight:700;margin:0;color:var(--ink)}
+  .settingsSub{color:var(--ink-faint);font-size:.78rem;margin:4px 0 0;line-height:1.35}
+  .settingsClose{flex:none;width:36px;height:36px;border:1.5px solid transparent;border-radius:10px;background:var(--panel-2);color:var(--ink-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .settingsClose:active{border-color:var(--accent);color:var(--accent)}
+  .settingsActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .settingsAction{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:13px;padding:14px 10px;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;text-align:center}
+  .settingsAction:active{border-color:var(--accent);color:var(--accent)}
+  .settingsHint{color:var(--ink-faint);font-size:.74rem;line-height:1.45;margin:12px 2px 0;text-align:center}
+
+
   /* ---- ajustes exclusivos para web/desktop ---- */
   @media (min-width: 768px){
     body{padding-top:24px;padding-bottom:40px}
@@ -445,6 +462,7 @@
     <h1>Salário</h1>
     <div class="hdrGroup">
       <button class="themeBtn" id="themeBtn1" title="Mudar tema" aria-label="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+      <button class="settingsBtn" id="settingsBtn1" title="Configurações" aria-label="Configurações"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.04 4.3l.06.06A1.65 1.65 0 0 0 8.92 4a1.65 1.65 0 0 0 1-1.51V2.4a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.24.6.82 1 1.47 1H21a2 2 0 1 1 0 4h-.09c-.65 0-1.23.4-1.51 1Z"></path></svg></button>
       <button class="hdrbtn" id="goIrp" title="Ir para IRP"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>IRP</button>
     </div>
   </div>
@@ -508,6 +526,7 @@
     <h1>IRP</h1>
     <div class="hdrGroup">
       <button class="themeBtn" id="themeBtn2" title="Mudar tema" aria-label="Mudar tema"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg></button>
+      <button class="settingsBtn" id="settingsBtn2" title="Configurações" aria-label="Configurações"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.04 4.3l.06.06A1.65 1.65 0 0 0 8.92 4a1.65 1.65 0 0 0 1-1.51V2.4a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.24.6.82 1 1.47 1H21a2 2 0 1 1 0 4h-.09c-.65 0-1.23.4-1.51 1Z"></path></svg></button>
       <button class="hdrbtn" id="goDesp" title="Ir para Despesas"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>Despesas</button>
     </div>
   </div>
@@ -610,6 +629,25 @@
       <button class="applybtn alt" id="reportBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>Relatório</button>
       <button class="applybtn" id="applyBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span id="applyBtnLabel">Aplicar</span></button>
     </div>
+  </div>
+</div>
+
+
+<div id="settingsModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="settingsCard">
+    <div class="settingsHead">
+      <div>
+        <h2 class="settingsTitle" id="settingsTitle">Configurações</h2>
+        <p class="settingsSub">Exportar e importar backup dos dados deste aplicativo.</p>
+      </div>
+      <button class="settingsClose" id="settingsClose" title="Fechar" aria-label="Fechar">×</button>
+    </div>
+    <div class="settingsActions">
+      <button class="settingsAction" id="exportJsonBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>Exportar JSON</button>
+      <button class="settingsAction" id="importJsonBtn"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"></path><path d="m7 14 5-5 5 5"></path><path d="M5 3h14"></path></svg>Importar JSON</button>
+    </div>
+    <p class="settingsHint">Na importação, os dados do arquivo sobrepõem os dados iguais e mantêm o que já existe neste aparelho.</p>
+    <input type="file" id="dataImportFile" accept=".json,application/json" hidden>
   </div>
 </div>
 
@@ -1601,6 +1639,85 @@ $("#simShare").onclick=()=>{
   if(!ing&&!eg){toast("Informe ingressos ou egressos no simulador");return;}
   shareImage(fillSimIRPCard,"simulador-irp.png","Simulador IRP");
 };
+
+
+/* ---- exportar / importar backup JSON ---- */
+function settingsOpen(){const m=$("#settingsModal");if(m)m.classList.remove("hidden");}
+function settingsClose(){const m=$("#settingsModal");if(m)m.classList.add("hidden");}
+function currentBackupData(){
+  save();
+  let data={};
+  try{data=JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){data={};}
+  let theme=document.documentElement.getAttribute("data-theme")||"dark";
+  try{theme=localStorage.getItem("theme")||theme;}catch(e){}
+  return {app:"contas-fixas-paraguai",version:1,exportedAt:new Date().toISOString(),theme,data};
+}
+function backupFilename(){
+  const d=new Date();
+  const yyyy=d.getFullYear(),mm=String(d.getMonth()+1).padStart(2,"0"),dd=String(d.getDate()).padStart(2,"0");
+  return `contas-fixas-paraguai-${yyyy}-${mm}-${dd}.json`;
+}
+function exportJson(){
+  const backup=currentBackupData();
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=backupFilename();
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),800);
+  settingsClose();toast("Backup JSON exportado");
+}
+function mergeRowsForImport(currentRows,importedRows){
+  const out=(Array.isArray(currentRows)?currentRows:[]).map(r=>Object.assign({},r,{open:false}));
+  (Array.isArray(importedRows)?importedRows:[]).forEach(r=>{
+    if(!r||typeof r!=="object")return;
+    const nr=Object.assign({},r,{open:false});
+    const key=norm(nr.name||"");
+    if(key){
+      const idx=out.findIndex(x=>norm(x&&x.name||"")===key);
+      if(idx>=0)out[idx]=Object.assign({},out[idx],nr,{open:false});
+      else out.push(nr);
+    }else if(nr.amt>0){out.push(nr);}
+  });
+  return out;
+}
+function importBackupObject(payload){
+  const incoming=(payload&&payload.data&&typeof payload.data==="object")?payload.data:payload;
+  if(!incoming||typeof incoming!=="object")throw new Error("Arquivo inválido");
+  let current={};
+  try{current=JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){current={};}
+  const merged=Object.assign({},current);
+  Object.keys(incoming).forEach(k=>{
+    const v=incoming[k];
+    if(v===undefined||v===null)return;
+    if(k==="rows"&&Array.isArray(v))merged.rows=mergeRowsForImport(current.rows||rows,v);
+    else if(k==="sv"&&typeof v==="object")merged.sv=Object.assign({},current.sv||sv,v);
+    else merged[k]=v;
+  });
+  localStorage.setItem(KEY,JSON.stringify(merged));
+  if(payload&&payload.theme){applyTheme(payload.theme==="light"?"light":"dark");}
+  load();fmtSal();markSv();renderRows();updateIrpCurBtn();renderIRP();updateFxReset();calc();
+}
+function importJsonFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const payload=JSON.parse(String(reader.result||"{}"));
+      importBackupObject(payload);
+      settingsClose();toast("Backup importado");
+    }catch(e){toast("JSON inválido");}
+    const inp=$("#dataImportFile");if(inp)inp.value="";
+  };
+  reader.onerror=()=>{toast("Não foi possível ler o arquivo");};
+  reader.readAsText(file);
+}
+document.querySelectorAll(".settingsBtn").forEach(b=>b.onclick=settingsOpen);
+$("#settingsClose").onclick=settingsClose;
+$("#settingsModal").addEventListener("click",e=>{if(e.target.id==="settingsModal")settingsClose();});
+$("#exportJsonBtn").onclick=exportJson;
+$("#importJsonBtn").onclick=()=>$("#dataImportFile").click();
+$("#dataImportFile").addEventListener("change",e=>importJsonFile(e.target.files&&e.target.files[0]));
 
 /* ---- tema claro/escuro ---- */
 function applyTheme(t){
