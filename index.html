@@ -474,6 +474,21 @@
   #irpMain .irpHeroV,#irpMain .irpTax b{font-family:var(--num-font);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0}
   #irpMain .irpExclRow .iev{font-family:var(--num-font);font-weight:700;font-variant-numeric:tabular-nums}
 
+
+  /* IRP · Por mês: tabela com largura própria e rolagem lateral no mobile */
+  #irpMain .irpMonthCard{padding:10px 12px;overflow:hidden}
+  #irpMain .irpMonthScroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:1px}
+  #irpMain .irpMonthScroll::-webkit-scrollbar{display:none}
+  #irpMain .irpMonthTable{min-width:620px}
+  #irpMain .irpMonthTable .irow{grid-template-columns:92px 150px 150px 150px;gap:18px;padding:12px 0}
+  #irpMain .irpMonthTable .irow.irhead{padding-top:7px;padding-bottom:10px}
+  #irpMain .irpMonthTable .im{text-align:left}
+  #irpMain .irpMonthTable .ii,#irpMain .irpMonthTable .ie,#irpMain .irpMonthTable .in{text-align:right}
+  @media (min-width: 768px){
+    #irpMain .irpMonthTable{min-width:0;width:100%}
+    #irpMain .irpMonthTable .irow{grid-template-columns:1fr 1.35fr 1.35fr 1.35fr;gap:18px}
+  }
+
 </style>
 </head>
 <body>
@@ -1573,9 +1588,13 @@ function renderIRP(){
     </div>
 
     <div class="sec">Por mês</div>
-    <div class="irpCard">
-      <div class="irow irhead"><span class="im">Mês</span><span class="ii">Ingressos</span><span class="ie">Egressos</span><span class="in">Neto</span></div>
-      ${monthRows||'<p class="emptyx-s" style="padding:8px">Sem períodos detectados.</p>'}
+    <div class="irpCard irpMonthCard">
+      <div class="irpMonthScroll">
+        <div class="irpMonthTable">
+          <div class="irow irhead"><span class="im">Mês</span><span class="ii">Ingressos</span><span class="ie">Egressos</span><span class="in">Neto</span></div>
+          ${monthRows||'<p class="emptyx-s" style="padding:8px">Sem períodos detectados.</p>'}
+        </div>
+      </div>
     </div>
 
     <div class="sec"><span>Resumo <span class="secsub">· ${months.length} ${months.length===1?"mês":"meses"}</span></span></div>
