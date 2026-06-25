@@ -170,7 +170,14 @@
   .xp.needname .name{color:var(--brl)}
   .xp.needname .name::placeholder{color:var(--brl);opacity:.85}
   .xp .head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .xp.collapsed .head{margin-bottom:0}
+  .xp.collapsed .entry,.xp.collapsed .chips{display:none}
   .xp .name{flex:1;border:0;background:transparent;color:var(--ink);font-size:.95rem;font-weight:600;outline:none;padding:3px 0;min-width:0}
+  .xp .xpSum{flex:none;max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:.84rem;font-weight:700;font-variant-numeric:tabular-nums}
+  .xp:not(.collapsed) .xpSum{display:none}
+  .xp .xpSum.usd{color:var(--usd)} .xp .xpSum.pyg{color:var(--pyg)} .xp .xpSum.brl{color:var(--brl)}
+  .xp .fold{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:.86rem;line-height:1;cursor:pointer;padding:0}
+  .xp .fold:active{border-color:var(--accent);color:var(--accent)}
   .xp .det{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:.82rem;line-height:1;cursor:pointer;padding:0}
   .xp .det:active{border-color:var(--accent);color:var(--accent)}
   .xp .del{flex:none;width:30px;height:30px;border:0;border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:1.15rem;line-height:1;cursor:pointer}
@@ -461,8 +468,8 @@
     <div class="fxnote" id="fxNote"></div>
   </div>
 
-  <div class="sec expensesSec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span><button class="foldBtn" id="expensesToggle" type="button" aria-expanded="false">Expandir ▾</button></div>
-  <div id="expensesPanel" class="collapsed">
+  <div class="sec expensesSec"><span>Despesas <span id="rowcount" style="color:var(--ink-faint)"></span></span></div>
+  <div id="expensesPanel">
     <div id="rows"></div>
     <div class="addrow">
       <button class="add" id="addRow"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Adicionar despesa</button>
@@ -614,7 +621,6 @@ let imp=null; // fatura importada: {month,total,count,ranked,totalGastos,date}
 let irpData=null; // {ingresos:{byMonth,total},egresos:{byMonth,total},date}
 let irpCur="PYG"; // moeda de exibição do painel IRP: PYG/USD/BRL (dados internos sempre em ₲)
 let liveRates=null; // {brl,pyg,date}
-let expensesCollapsed=true; // despesas iniciam recolhidas por padrão
 const $=s=>document.querySelector(s);
 
 /* ---- tela de bloqueio (padrão de deslizar) ---- */
@@ -703,7 +709,7 @@ function save(){
 }
 function load(){
   try{const s=JSON.parse(localStorage.getItem(KEY));if(s){
-    if(Array.isArray(s.rows))rows=s.rows;
+    if(Array.isArray(s.rows))rows=s.rows.map(r=>Object.assign({},r,{open:false}));
     if(s.sv)sv=Object.assign(sv,s.sv);
     else if(s.view)sv={tot:s.view,sal:s.view,diff:s.view};
     if(s.imp)imp=s.imp;
@@ -748,15 +754,8 @@ function updateExtratoVisibility(){
   const rs=$("#relatorioSec");if(rs)rs.hidden=!hasExtrato;
 }
 function syncExpensesCollapse(){
-  const panel=$("#expensesPanel"),btn=$("#expensesToggle");
-  const hasRows=rows.length>0;
-  if(btn){
-    btn.hidden=!hasRows;
-    btn.textContent=expensesCollapsed?"Expandir ▾":"Recolher ▴";
-    btn.setAttribute("aria-expanded",String(!expensesCollapsed));
-    btn.title=expensesCollapsed?"Mostrar despesas":"Ocultar despesas";
-  }
-  if(panel)panel.classList.toggle("collapsed",hasRows&&expensesCollapsed);
+  const panel=$("#expensesPanel");
+  if(panel)panel.classList.remove("collapsed");
 }
 function renderRows(){
   updateExtratoVisibility();
@@ -768,11 +767,16 @@ function renderRows(){
     calc();return;
   }
   rows.forEach((row,i)=>{
+    if(!CURS.includes(row.cur))row.cur="PYG";
     const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${curLbl(cu)}</button>`).join("");
-    const el=document.createElement("div");el.className="xp"+((row.name||"").trim()?"":" needname");
+    const open=row.open===true;
+    const sumVal=row.amt?fmt[row.cur](row.amt):"";
+    const el=document.createElement("div");el.className="xp"+((row.name||"").trim()?"":" needname")+(open?"":" collapsed");
     el.innerHTML=`
       <div class="head">
         <input class="name" value="${(row.name||"").replace(/"/g,'&quot;')}" data-i="${i}" data-k="name" placeholder="Insira uma despesa">
+        ${sumVal?`<span class="xpSum ${row.cur.toLowerCase()}">${sumVal}</span>`:""}
+        <button class="fold" data-fold="${i}" title="${open?"Recolher despesa":"Expandir despesa"}" aria-label="${open?"Recolher despesa":"Expandir despesa"}" aria-expanded="${String(open)}">${open?"▴":"▾"}</button>
         ${(norm(row.name).includes("cartao")||norm(row.name).includes("credito"))?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato" aria-label="Ver detalhes do extrato">ⓘ</button>`:""}
         <button class="del" data-del="${i}" title="Excluir despesa" aria-label="Excluir despesa">×</button>
       </div>
@@ -810,6 +814,11 @@ function bind(){
     const ai=document.querySelector(`.amtbox input[data-i="${i}"][data-k="amt"]`);
     if(ai)ai.value=fmtAmt(rows[i].amt,rows[i].cur);
     calc();
+  });
+  document.querySelectorAll("[data-fold]").forEach(b=>b.onclick=e=>{
+    const i=+e.currentTarget.dataset.fold;
+    rows[i].open=!(rows[i].open===true);
+    renderRows();
   });
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=e=>{
     const i=+e.currentTarget.dataset.del;
@@ -849,8 +858,6 @@ function calc(){
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700);}
 
 /* ---- eventos ---- */
-const expensesToggle=$("#expensesToggle");
-if(expensesToggle)expensesToggle.onclick=()=>{expensesCollapsed=!expensesCollapsed;syncExpensesCollapse();};
 function markSv(){document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===sv[k]));});}
 document.querySelectorAll(".cseg").forEach(seg=>{const k=seg.dataset.sv;seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sv[k]=b.dataset.c;markSv();calc();});});
 $("#fxReset").onclick=()=>{
@@ -866,18 +873,19 @@ function showView(v){
 $("#goIrp").onclick=()=>showView("irp");
 $("#goDesp").onclick=()=>showView("desp");
 function addManualRow(){
-  expensesCollapsed=false;
   syncExpensesCollapse();
   const bad=rows.findIndex(r=>!(r.name||"").trim()||!(r.amt>0));
   if(bad>=0){
     toast("Preencha o nome e o valor da despesa atual antes de adicionar outra");
+    rows[bad].open=true;
+    renderRows();
     const card=[...$("#rows").children].find(c=>c.querySelector(`[data-i="${bad}"]`));
     if(card){card.scrollIntoView({behavior:"smooth",block:"center"});
       const inp=card.querySelector(!(rows[bad].name||"").trim()?".name":".amtbox input");
       if(inp)setTimeout(()=>inp.focus(),250);}
     return;
   }
-  rows.push({name:"",amt:0,cur:"PYG"});renderRows();
+  rows.push({name:"",amt:0,cur:"PYG",open:true});renderRows();
   window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
   setTimeout(()=>{const last=$("#rows").lastElementChild;const inp=last&&last.querySelector(".name");if(inp)inp.focus();},300);
 }
@@ -1087,9 +1095,8 @@ function applyToCard(){
   const label=(!sel.length||sel.length===months.length)?"extrato":sel.length<=2?sel.map(monthLabel).join(", "):sel.length+" meses";
   const name="Cartão · "+label;
   let i=rows.findIndex(r=>norm(r.name)===norm(name));
-  if(i>=0){rows[i].amt=val;rows[i].cur="PYG";}
-  else{rows.push({name,amt:val,cur:"PYG"});i=rows.length-1;}
-  expensesCollapsed=false;
+  if(i>=0){rows[i].amt=val;rows[i].cur="PYG";rows[i].open=false;}
+  else{rows.push({name,amt:val,cur:"PYG",open:false});i=rows.length-1;}
   renderRows();
   $("#topModal").classList.add("hidden");
   toast("✓ Aplicado: "+name);
