@@ -235,6 +235,7 @@
   #shareCard .stot{display:flex;justify-content:space-between;align-items:center;padding:11px 0}
   #shareCard .stot+.stot{border-top:1px solid var(--line-soft)}
   #shareCard .stot .lbl{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;font-weight:700}
+  #shareCard .stot .lbl .sub{display:block;margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:0;text-transform:none;color:var(--ink-faint);font-weight:600}
   #shareCard .stot .vl{font-family:'IBM Plex Mono',monospace;font-weight:700;font-variant-numeric:tabular-nums;font-size:.92rem}
   #shareCard .stot.diff.pos .vl{color:var(--accent)}
   #shareCard .stot.diff.neg .vl{color:var(--danger)}
@@ -908,11 +909,11 @@ function fillShareCard(){
   const TOT={USD:tU,PYG:tP,BRL:tB},SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl},d=SAL[sv.diff]-TOT[sv.diff];
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   $("#shareCard").innerHTML=
-    shareHead("","Contas Fixas <b>Paraguai</b>",dt)+
+    shareHead("","Resumo <b>Salário</b>",dt)+
     `<div class="sbody">${xp||'<p class="sempty">Sem despesas.</p>'}</div>`+
     `<div class="stotbox">
        <div class="stot"><span class="lbl">Total despesas</span><span class="vl">${fmt[sv.tot](TOT[sv.tot])}</span></div>
-       <div class="stot"><span class="lbl">Salário</span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
+       <div class="stot"><span class="lbl">Salário<span class="sub">(${fmt.USD(SAL.USD)})</span></span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
        <div class="stot diff big ${d<0?"neg":(d>0&&salUsd?"pos":"")}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>
      </div>`+
     shareFoot(r);
@@ -981,7 +982,7 @@ async function shareImage(fillFn,fname,title){
     }
   }catch(e){toast("Não foi possível gerar");}
 }
-$("#shareBtn").onclick=()=>shareImage(fillShareCard,"contas-paraguai.png","Contas Fixas Paraguai");
+$("#shareBtn").onclick=()=>shareImage(fillShareCard,"contas-paraguai.png","Resumo Salário");
 const isUF=t=>{const n=norm(t.desc);return n.includes("unimed")||n.includes("farmacia")||n.includes("raia")||n.includes("nissei");};
 const keyOf=t=>`${t.date}|${t.ref}|${t.val}|${t.desc}`;
 let acctSel=null,extraKeys=new Set();
