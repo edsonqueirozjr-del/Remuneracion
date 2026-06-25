@@ -199,9 +199,10 @@
   .xp.collapsed .entry,.xp.collapsed .chips{display:none}
   .xp .nameWrap{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
   .xp .name{flex:0 1 auto;width:auto;max-width:100%;border:0;background:transparent;color:var(--ink);font-size:.95rem;font-weight:600;outline:none;padding:3px 0;min-width:0}
-  .xp .xpSum{flex:none;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--num-font);font-size:1.14rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1}
+  .xp .xpSum{flex:none;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--num-font);font-size:1.14rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1;color:var(--ink);display:inline-flex;align-items:baseline;gap:5px}
   .xp:not(.collapsed) .xpSum{display:none}
-  .xp .xpSum.usd{color:var(--usd)} .xp .xpSum.pyg{color:var(--pyg)} .xp .xpSum.brl{color:var(--brl)}
+  .xp .xpSum .sym{font-weight:900}
+  .xp .xpSum.usd .sym{color:var(--usd)} .xp .xpSum.pyg .sym{color:var(--pyg)} .xp .xpSum.brl .sym{color:var(--brl)}
   .xp .fold{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:.86rem;line-height:1;cursor:pointer;padding:0}
   .xp .fold:active{border-color:var(--accent);color:var(--accent)}
   .xp .det{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink-faint);font-size:.82rem;line-height:1;cursor:pointer;padding:0}
@@ -216,9 +217,9 @@
   .seg button{border:0;background:transparent;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.72rem;padding:0 10px;cursor:pointer;transition:.12s}
   .seg button.on{color:#06251b;background:var(--accent)}
   .chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-  .chip{font-family:var(--num-font);font-size:.76rem;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:999px;padding:4px 9px;font-variant-numeric:tabular-nums;line-height:1}
-  .chip.usd{color:var(--usd)} .chip.pyg{color:var(--pyg)} .chip.brl{color:var(--brl)}
-  .chip .k{color:var(--ink-faint);font-size:.66em;margin-right:4px}
+  .chip{font-family:var(--num-font);font-size:.76rem;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:999px;padding:4px 9px;font-variant-numeric:tabular-nums;line-height:1;color:var(--ink)}
+  .chip .k{font-size:.78em;margin-right:4px;font-weight:900}
+  .chip.usd .k{color:var(--usd)} .chip.pyg .k{color:var(--pyg)} .chip.brl .k{color:var(--brl)}
 
   .addrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
   #extratoRow[hidden],#relatorioSec[hidden]{display:none}
@@ -462,6 +463,16 @@
     #acctModal .acctcard{max-width:840px}
     .acctcard{max-width:520px}
   }
+
+
+  /* Ajuste IRP: mesma fonte visual dos números da tela de Salário, mantendo as cores */
+  #irpMain .irpCurSeg button{font-size:clamp(.82rem,3.3vw,1rem);font-weight:800;letter-spacing:0}
+  #irpMain .irpBig .v{font-family:var(--num-font);font-size:clamp(1.08rem,4.8vw,1.14rem);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.05}
+  #irpMain .irow{font-family:var(--num-font);font-size:clamp(.84rem,3.45vw,.98rem);font-variant-numeric:tabular-nums;letter-spacing:0}
+  #irpMain .irow.irhead{font-family:inherit;font-size:.68rem;letter-spacing:.08em}
+  #irpMain .irow .ii,#irpMain .irow .ie,#irpMain .irow .in{font-weight:800;line-height:1.05}
+  #irpMain .irpHeroV,#irpMain .irpTax b{font-family:var(--num-font);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0}
+  #irpMain .irpExclRow .iev{font-family:var(--num-font);font-weight:700;font-variant-numeric:tabular-nums}
 
 </style>
 </head>
@@ -841,6 +852,7 @@ function renderRows(){
     const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${curLbl(cu)}</button>`).join("");
     const open=row.open===true;
     const sumVal=row.amt?fmt[row.cur](row.amt):"";
+    const sumNum=sumVal?sumVal.replace(/^[^\d-]+/,"").trim():"";
     const nameRaw=row.name||"";
     const nameSafe=nameRaw.replace(/"/g,'&quot;');
     const nameSize=Math.max(8,Math.min(22,(nameRaw.trim()?nameRaw.length+1:18)));
@@ -851,7 +863,7 @@ function renderRows(){
           <input class="name" size="${nameSize}" value="${nameSafe}" data-i="${i}" data-k="name" placeholder="Insira uma despesa">
           ${hasImportedExtratoRow(row)?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato importado" aria-label="Ver detalhes do extrato importado">ⓘ</button>`:""}
         </div>
-        ${sumVal?`<span class="xpSum ${row.cur.toLowerCase()}">${sumVal}</span>`:""}
+        ${sumVal?`<span class="xpSum ${row.cur.toLowerCase()}"><span class="sym">${curLbl(row.cur)}</span><span class="amount">${sumNum}</span></span>`:""}
         <button class="del" data-del="${i}" title="Excluir despesa" aria-label="Excluir despesa">×</button>
         <button class="fold" data-fold="${i}" title="${open?"Recolher despesa":"Expandir despesa"}" aria-label="${open?"Recolher despesa":"Expandir despesa"}" aria-expanded="${String(open)}">${open?"▴":"▾"}</button>
       </div>
