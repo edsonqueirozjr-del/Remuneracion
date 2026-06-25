@@ -74,10 +74,16 @@
   .pcard input::placeholder{color:var(--ink);opacity:1;font-size:.84rem}
   .salinfo{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);min-height:1.05em}
   #salCard{text-align:center}
-  #salCard .row{justify-content:center}
-  #salCard input{flex:0 1 150px;width:150px;text-align:center}
+  #salCard .row{justify-content:center;gap:4px}
+  #salCard input{flex:0 1 96px;width:96px;text-align:left}
+  #salCard input:placeholder-shown{flex-basis:150px;width:150px;text-align:center}
   #salCard input::placeholder{text-align:center}
   #salInfo{text-align:center}
+  .fxParams .pcard{text-align:center}
+  .fxParams .pcard label{text-align:center}
+  .fxParams .pcard .row{justify-content:center;gap:4px}
+  .fxParams .pcard input{flex:0 1 78px;width:78px;text-align:left;padding-left:0}
+  .fxParams .fxnote{text-align:center}
 
   /* ---- módulo IRP ---- */
   /* ---- módulo IRP (tamanhos padronizados) ---- */
@@ -174,7 +180,9 @@
   .xp.needname{border-color:var(--brl);box-shadow:0 0 0 1px var(--brl) inset}
   .xp.needname .name{color:var(--brl)}
   .xp.needname .name::placeholder{color:var(--brl);opacity:.85}
-  .xp .head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .xp .head{display:flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer}
+  .xp .head input,.xp .head button{cursor:auto}
+  .xp .head button{cursor:pointer}
   .xp.collapsed .head{margin-bottom:0}
   .xp.collapsed .entry,.xp.collapsed .chips{display:none}
   .xp .nameWrap{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
@@ -483,7 +491,7 @@
   </div>
 
   <div class="sec">Cotação</div>
-  <div class="params">
+  <div class="params fxParams">
     <div class="pcard"><label>Real</label><div class="row"><span class="tag" style="color:var(--brl)">R$</span>
       <input class="num" id="usdBrl" inputmode="decimal" value="5.05"></div></div>
     <div class="pcard"><label>Guarani</label><div class="row"><span class="tag" style="color:var(--pyg)">₲</span>
@@ -826,14 +834,14 @@ function renderRows(){
     const nameSize=Math.max(8,Math.min(22,(nameRaw.trim()?nameRaw.length+1:18)));
     const el=document.createElement("div");el.className="xp"+(nameRaw.trim()?"":" needname")+(open?"":" collapsed");
     el.innerHTML=`
-      <div class="head">
+      <div class="head" data-head-fold="${i}" title="${open?"Recolher despesa":"Expandir despesa"}">
         <div class="nameWrap">
           <input class="name" size="${nameSize}" value="${nameSafe}" data-i="${i}" data-k="name" placeholder="Insira uma despesa">
           ${hasImportedExtratoRow(row)?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato importado" aria-label="Ver detalhes do extrato importado">ⓘ</button>`:""}
         </div>
         ${sumVal?`<span class="xpSum ${row.cur.toLowerCase()}">${sumVal}</span>`:""}
-        <button class="fold" data-fold="${i}" title="${open?"Recolher despesa":"Expandir despesa"}" aria-label="${open?"Recolher despesa":"Expandir despesa"}" aria-expanded="${String(open)}">${open?"▴":"▾"}</button>
         <button class="del" data-del="${i}" title="Excluir despesa" aria-label="Excluir despesa">×</button>
+        <button class="fold" data-fold="${i}" title="${open?"Recolher despesa":"Expandir despesa"}" aria-label="${open?"Recolher despesa":"Expandir despesa"}" aria-expanded="${String(open)}">${open?"▴":"▾"}</button>
       </div>
       <div class="entry">
         <div class="amtbox"><input class="num" inputmode="numeric" value="${fmtAmt(row.amt,row.cur)}" data-i="${i}" data-k="amt"></div>
@@ -872,6 +880,14 @@ function bind(){
     const ai=document.querySelector(`.amtbox input[data-i="${i}"][data-k="amt"]`);
     if(ai)ai.value=fmtAmt(rows[i].amt,rows[i].cur);
     calc();
+  });
+  document.querySelectorAll("[data-head-fold]").forEach(h=>h.onclick=e=>{
+    if(e.target.closest("button,.seg"))return;
+    const card=e.currentTarget.closest(".xp");
+    if(card&&!card.classList.contains("collapsed")&&e.target.closest("input"))return;
+    const i=+e.currentTarget.dataset.headFold;
+    rows[i].open=!(rows[i].open===true);
+    renderRows();
   });
   document.querySelectorAll("[data-fold]").forEach(b=>b.onclick=e=>{
     const i=+e.currentTarget.dataset.fold;
@@ -972,7 +988,8 @@ function shareHead(icon,title,sub){
   const cs=getComputedStyle(document.documentElement);
   const panel=cs.getPropertyValue("--panel").trim(),bg=cs.getPropertyValue("--bg").trim();
   const badge=icon?`<div class="sbadge">${icon}</div>`:"";
-  return `<div class="shead" style="background:linear-gradient(135deg,${panel},${bg})">${badge}<div><p class="sct">${title}</p><p class="sdate">${sub}</p></div></div>`;
+  const subHtml=sub?`<p class="sdate">${sub}</p>`:"";
+  return `<div class="shead" style="background:linear-gradient(135deg,${panel},${bg})">${badge}<div><p class="sct">${title}</p>${subHtml}</div></div>`;
 }
 function shareFoot(r){
   const dt=new Date().toLocaleDateString("pt-BR");
@@ -987,7 +1004,7 @@ function fillShareCard(){
   const TOT={USD:tU,PYG:tP,BRL:tB},SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl},d=SAL[sv.diff]-TOT[sv.diff];
   const dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   $("#shareCard").innerHTML=
-    shareHead("","Resumo <b>Salário</b>",dt)+
+    shareHead("","Resumo <b>Salário</b>","")+
     `<div class="sbody">${xp||'<p class="sempty">Sem despesas.</p>'}</div>`+
     `<div class="stotbox">
        <div class="stot"><span class="lbl">Total despesas</span><span class="vl">${fmt[sv.tot](TOT[sv.tot])}</span></div>
