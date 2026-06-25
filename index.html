@@ -65,25 +65,36 @@
 
   .params{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .params .full{grid-column:1/-1}
-  .pcard{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:7px 10px}
+  .pcard{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:8px 10px}
   .pcard label{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:3px}
   .pcard .row{display:flex;align-items:center;gap:6px}
-  .pcard .tag{font-size:.72rem;font-weight:700}
+  .pcard .tag{font-size:.72rem;font-weight:700;line-height:1}
   .pcard input{width:100%;border:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;
     font-size:.92rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:1px 0}
   .pcard input::placeholder{color:var(--ink);opacity:1;font-size:.84rem}
   .salinfo{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);min-height:1.05em}
-  #salCard{text-align:center}
-  #salCard .row{justify-content:center;gap:4px}
-  #salCard input{flex:0 1 96px;width:96px;text-align:left}
-  #salCard input:placeholder-shown{flex-basis:150px;width:150px;text-align:center}
+
+  /* Salário e cotação: centralizados, mas com os símbolos próximos aos valores */
+  #salCard{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:82px;padding:13px 14px}
+  #salCard .row{display:inline-flex;align-items:baseline;justify-content:center;gap:6px;width:auto;margin:0 auto}
+  #salCard .tag{font-size:.88rem;font-weight:800}
+  #salCard input{flex:0 0 6.8ch;width:6.8ch;min-width:0;text-align:left;font-size:1.08rem;font-weight:700;line-height:1.15;padding:0}
+  #salCard input:placeholder-shown{flex-basis:15ch;width:15ch;text-align:center;font-size:.92rem;font-weight:600}
   #salCard input::placeholder{text-align:center}
-  #salInfo{text-align:center}
-  .fxParams .pcard{text-align:center}
-  .fxParams .pcard label{text-align:center}
-  .fxParams .pcard .row{justify-content:center;gap:4px}
-  .fxParams .pcard input{flex:0 1 78px;width:78px;text-align:left;padding-left:0}
-  .fxParams .fxnote{text-align:center}
+  #salInfo{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;text-align:center;white-space:nowrap}
+  #salInfo .sep{color:var(--ink-faint)}
+  #salInfo .salAlt.brl{color:var(--brl)}
+  #salInfo .salAlt.pyg{color:var(--pyg)}
+
+  .fxParams{gap:10px}
+  .fxParams .pcard{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:76px;padding:11px 12px}
+  .fxParams .pcard label{text-align:center;margin-bottom:7px;line-height:1}
+  .fxParams .pcard .row{display:inline-flex;align-items:baseline;justify-content:center;gap:5px;width:auto;margin:0 auto}
+  .fxParams .pcard .tag{font-size:.82rem;font-weight:800}
+  .fxParams .pcard input{flex:0 0 auto;width:6ch;text-align:left;padding:0;font-size:1.02rem;font-weight:700;line-height:1.15}
+  .fxParams #usdBrl{width:4.6ch}
+  .fxParams #usdPyg{width:5.8ch}
+  .fxParams .fxnote{text-align:center;margin-top:6px}
 
   /* ---- módulo IRP ---- */
   /* ---- módulo IRP (tamanhos padronizados) ---- */
@@ -933,7 +944,7 @@ function calc(){
   });
   const salUsd=toUSD(salNum(),salCur,r);
   const TOT={USD:tU,PYG:tP,BRL:tB}, SAL={USD:salUsd,PYG:salUsd*r.pyg,BRL:salUsd*r.brl};
-  const si=$("#salInfo");if(si)si.innerHTML=salUsd?`<span style="color:var(--brl)">${fmt.BRL(SAL.BRL)}</span> · <span style="color:var(--pyg)">${fmt.PYG(SAL.PYG)}</span>`:"";
+  const si=$("#salInfo");if(si)si.innerHTML=salUsd?`<span class="salAlt brl">${fmt.BRL(SAL.BRL)}</span><span class="sep">•</span><span class="salAlt pyg">${fmt.PYG(SAL.PYG)}</span>`:"";
   $("#rTot").textContent=fmt[sv.tot](TOT[sv.tot]);
   $("#rSal").textContent=fmt[sv.sal](SAL[sv.sal]);
   const d=SAL[sv.diff]-TOT[sv.diff];
