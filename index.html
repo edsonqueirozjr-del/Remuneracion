@@ -489,6 +489,40 @@
     #irpMain .irpMonthTable .irow{grid-template-columns:1fr 1.35fr 1.35fr 1.35fr;gap:18px}
   }
 
+
+  /* IRP · bloco único: totais, meses e resumo sem títulos externos */
+  #irpMain .irpUnifiedCard{padding:14px;overflow:hidden;margin-top:10px}
+  #irpMain .irpUnifiedHead{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+  #irpMain .irpPeriodBadge{align-self:flex-end;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim);border-radius:999px;padding:6px 11px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;line-height:1}
+  #irpMain .irpSummaryGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #irpMain .irpMetric{background:var(--panel-2);border:1px solid var(--line-soft);border-radius:12px;padding:10px 8px;text-align:center;min-width:0}
+  #irpMain .irpMetric .k{display:block;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:800;margin-bottom:5px;white-space:nowrap}
+  #irpMain .irpMetric .v{display:block;font-family:var(--num-font);font-size:1.14rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #irpMain .irpMetric .v.pos{color:var(--accent)}
+  #irpMain .irpMetric .v.neg{color:var(--danger)}
+  #irpMain .irpMetric .v.due{color:var(--danger)}
+  #irpMain .irpExclBtn{width:100%;border:1px dashed var(--line);background:transparent;color:var(--ink-dim);font-family:inherit;font-size:.82rem;font-weight:700;border-radius:11px;padding:10px;cursor:pointer;text-align:center}
+  #irpMain .irpExclBtn b{color:var(--ink)}
+  #irpMain .irpExclBtn .chev{display:inline-block;margin-left:4px;transition:transform .15s;color:var(--ink-faint)}
+  #irpMain .irpExclBtn.open .chev{transform:rotate(180deg)}
+  #irpMain .irpMonthList{display:flex;flex-direction:column;gap:9px;border-top:1px solid var(--line-soft);padding-top:12px}
+  #irpMain .irpMonthItem{background:var(--panel-2);border:1px solid var(--line-soft);border-radius:13px;padding:10px 12px}
+  #irpMain .irpMonthTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line-soft)}
+  #irpMain .irpMonthName{font-family:var(--num-font);font-size:1.02rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:0}
+  #irpMain .irpMonthTag{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:800}
+  #irpMain .irpMonthMetrics{display:flex;flex-direction:column;gap:7px}
+  #irpMain .irpMonthLine{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-width:0}
+  #irpMain .irpMonthLine span{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:800;white-space:nowrap}
+  #irpMain .irpMonthLine b{font-family:var(--num-font);font-size:1.14rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.05;white-space:nowrap;text-align:right;color:var(--ink)}
+  #irpMain .irpMonthLine b.pos{color:var(--accent)}
+  #irpMain .irpMonthLine b.neg{color:var(--danger)}
+  #irpMain .irpUnifiedCard .emptyx-s{text-align:center;padding:10px 0;color:var(--ink-faint)}
+  @media (min-width: 768px){
+    #irpMain .irpUnifiedCard{max-width:820px;margin-left:auto;margin-right:auto}
+    #irpMain .irpSummaryGrid{grid-template-columns:repeat(4,1fr)}
+    #irpMain .irpMonthList{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  }
+
 </style>
 </head>
 <body>
@@ -1576,32 +1610,33 @@ function renderIRP(){
   const months=[...new Set([...monthsSorted(irpData.ingresos.byMonth),...monthsSorted(irpData.egresos.byMonth)])]
     .sort((a,b)=>{const[ma,ya]=a.split("/"),[mb,yb]=b.split("/");return (ya+ma).localeCompare(yb+mb);});
   const fc=v=>fmtCur(v,irpCur);
-  let monthRows=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0;
-    return `<div class="irow"><span class="im">${m}</span><span class="ii">${fc(i)}</span><span class="ie">${fc(e)}</span><span class="in ${i-e>=0?'pos':'neg'}">${fc(i-e)}</span></div>`;}).join("");
-  body.innerHTML=`
-    <div class="sec">Ingressos × Egressos</div>
-    <div class="irpCard">
-      <div class="irpBig"><div><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
-        <div><span class="k">Egressos (Compras)</span><span class="v neg">${fc(eg)}</span></div></div>
-      ${((irpData.egresos.excl||0)>0)?`<div class="irpNote clickable" id="irpExclToggle">Compras que não imputam IRP: <b>${irpData.egresos.excl||0}</b><span class="chev">▾</span></div>
-      <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
-    </div>
-
-    <div class="sec">Por mês</div>
-    <div class="irpCard irpMonthCard">
-      <div class="irpMonthScroll">
-        <div class="irpMonthTable">
-          <div class="irow irhead"><span class="im">Mês</span><span class="ii">Ingressos</span><span class="ie">Egressos</span><span class="in">Neto</span></div>
-          ${monthRows||'<p class="emptyx-s" style="padding:8px">Sem períodos detectados.</p>'}
-        </div>
+  const periodLabel=`${months.length} ${months.length===1?"mês":"meses"}`;
+  const taxLabel=net>0?`Imposto · ${net<=50000000?"8%":net<=150000000?"9%":"10%"}`:"Imposto";
+  let monthRows=months.map(m=>{const i=irpData.ingresos.byMonth[m]||0,e=irpData.egresos.byMonth[m]||0,n=i-e;
+    return `<div class="irpMonthItem">
+      <div class="irpMonthTop"><span class="irpMonthName">${m}</span><span class="irpMonthTag">Mês</span></div>
+      <div class="irpMonthMetrics">
+        <div class="irpMonthLine"><span>Ingressos</span><b class="pos">${fc(i)}</b></div>
+        <div class="irpMonthLine"><span>Egressos</span><b class="neg">${fc(e)}</b></div>
+        <div class="irpMonthLine"><span>Neto</span><b class="${n>=0?'pos':'neg'}">${fc(n)}</b></div>
       </div>
-    </div>
-
-    <div class="sec"><span>Resumo <span class="secsub">· ${months.length} ${months.length===1?"mês":"meses"}</span></span></div>
-    <div class="irpHero">
-      <div class="irpHeroT">Neto</div>
-      <div class="irpHeroV ${netCls}">${fc(net)}</div>
-      <div class="irpTax"><span class="irpHeroT">Imposto${net>0?" · faixa "+(net<=50000000?"8%":net<=150000000?"9%":"10%"):""}</span><b class="${taxCls}">${fc(tax)}</b></div>
+    </div>`;}).join("");
+  body.innerHTML=`
+    <div class="irpCard irpUnifiedCard">
+      <div class="irpUnifiedHead">
+        <span class="irpPeriodBadge">${periodLabel}</span>
+        <div class="irpSummaryGrid">
+          <div class="irpMetric"><span class="k">Ingressos</span><span class="v pos">${fc(ing)}</span></div>
+          <div class="irpMetric"><span class="k">Egressos</span><span class="v neg">${fc(eg)}</span></div>
+          <div class="irpMetric"><span class="k">Neto</span><span class="v ${netCls}">${fc(net)}</span></div>
+          <div class="irpMetric"><span class="k">${taxLabel}</span><span class="v ${taxCls}">${fc(tax)}</span></div>
+        </div>
+        ${((irpData.egresos.excl||0)>0)?`<button type="button" class="irpExclBtn" id="irpExclToggle"><b>${irpData.egresos.excl||0}</b> compras não imputam IRP <span class="chev">▾</span></button>
+        <div class="irpExclDetail" id="irpExclDetail">${renderExclDetail(irpData)}</div>`:""}
+      </div>
+      <div class="irpMonthList">
+        ${monthRows||'<p class="emptyx-s">Sem períodos detectados.</p>'}
+      </div>
     </div>`;
   const exclToggle=$("#irpExclToggle");
   if(exclToggle)exclToggle.onclick=()=>{exclToggle.classList.toggle("open");$("#irpExclDetail").classList.toggle("open");};
