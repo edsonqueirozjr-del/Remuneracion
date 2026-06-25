@@ -73,6 +73,11 @@
     font-size:.92rem;font-weight:500;outline:none;font-variant-numeric:tabular-nums;padding:1px 0}
   .pcard input::placeholder{color:var(--ink);opacity:1;font-size:.84rem}
   .salinfo{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-dim);min-height:1.05em}
+  #salCard{text-align:center}
+  #salCard .row{justify-content:center}
+  #salCard input{flex:0 1 150px;width:150px;text-align:center}
+  #salCard input::placeholder{text-align:center}
+  #salInfo{text-align:center}
 
   /* ---- módulo IRP ---- */
   /* ---- módulo IRP (tamanhos padronizados) ---- */
@@ -854,7 +859,10 @@ function bind(){
       e.target.value=fmtAmt(n,cur);
       const l=e.target.value.length; try{e.target.setSelectionRange(l,l);}catch(_){}
     }else{rows[i][k]=e.target.value;
-      if(k==="name"){const card=e.target.closest(".xp");if(card)card.classList.toggle("needname",!e.target.value.trim());}
+      if(k==="name"){
+        const card=e.target.closest(".xp");if(card)card.classList.toggle("needname",!e.target.value.trim());
+        e.target.setAttribute("size",String(Math.max(8,Math.min(22,(e.target.value.trim()?e.target.value.length+1:18)))));
+      }
     }
     calc();
   });
@@ -899,7 +907,12 @@ function calc(){
   const r=rate();let tU=0,tP=0,tB=0;
   rows.forEach((row,i)=>{
     const u=toUSD(row.amt,row.cur,r),p=u*r.pyg,b=u*r.brl;tU+=u;tP+=p;tB+=b;
-    const set=(k,v)=>{const e=document.querySelector(`[data-c="${k}-${i}"]`);if(e)e.innerHTML=`<span class="k">${curLbl(k)}</span>${fmt[k](v).replace(/^[^\d-]+/,"")}`;};
+    const set=(k,v)=>{
+      const e=document.querySelector(`[data-c="${k}-${i}"]`);
+      if(!e)return;
+      e.hidden=(k===row.cur);
+      if(!e.hidden)e.innerHTML=`<span class="k">${curLbl(k)}</span>${fmt[k](v).replace(/^[^\d-]+/,"")}`;
+    };
     set("USD",u);set("PYG",p);set("BRL",b);
   });
   const salUsd=toUSD(salNum(),salCur,r);
