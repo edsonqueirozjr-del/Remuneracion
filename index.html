@@ -172,7 +172,8 @@
   .xp .head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
   .xp.collapsed .head{margin-bottom:0}
   .xp.collapsed .entry,.xp.collapsed .chips{display:none}
-  .xp .name{flex:1;border:0;background:transparent;color:var(--ink);font-size:.95rem;font-weight:600;outline:none;padding:3px 0;min-width:0}
+  .xp .nameWrap{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+  .xp .name{flex:0 1 auto;width:auto;max-width:100%;border:0;background:transparent;color:var(--ink);font-size:.95rem;font-weight:600;outline:none;padding:3px 0;min-width:0}
   .xp .xpSum{flex:none;max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:.84rem;font-weight:700;font-variant-numeric:tabular-nums}
   .xp:not(.collapsed) .xpSum{display:none}
   .xp .xpSum.usd{color:var(--usd)} .xp .xpSum.pyg{color:var(--pyg)} .xp .xpSum.brl{color:var(--brl)}
@@ -708,6 +709,7 @@ const fmt={
   BRL:v=>"R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}),
   PYG:v=>"₲ "+Math.round(v).toLocaleString("es-PY"),
 };
+const fmtUSDInt=v=>"U$ "+Math.round(v||0).toLocaleString("pt-BR");
 const CURS=["USD","PYG","BRL"];
 const curLbl=c=>c==="USD"?"U$":c==="BRL"?"R$":"₲";
 // máscara de digitação por moeda: USD/PYG inteiro com ponto de milhar; BRL com vírgula e 2 decimais
@@ -791,6 +793,11 @@ function updateExtratoVisibility(){
   const er=$("#extratoRow");if(er)er.hidden=!hasExtrato;
   const rs=$("#relatorioSec");if(rs)rs.hidden=!hasExtrato;
 }
+function hasImportedExtratoRow(row){
+  const hasExtrato=!!(imp&&Array.isArray(imp.txns)&&imp.txns.length);
+  const src=norm(row&&row.source||"");
+  return !!(hasExtrato&&row&&(row.importadoExtrato===true||row.fromExtrato===true||src==="extrato"));
+}
 function syncExpensesCollapse(){
   const panel=$("#expensesPanel");
   if(panel)panel.classList.remove("collapsed");
@@ -809,13 +816,18 @@ function renderRows(){
     const seg=CURS.map(cu=>`<button data-cur="${cu}" data-i="${i}" class="${row.cur===cu?"on":""}">${curLbl(cu)}</button>`).join("");
     const open=row.open===true;
     const sumVal=row.amt?fmt[row.cur](row.amt):"";
-    const el=document.createElement("div");el.className="xp"+((row.name||"").trim()?"":" needname")+(open?"":" collapsed");
+    const nameRaw=row.name||"";
+    const nameSafe=nameRaw.replace(/"/g,'&quot;');
+    const nameSize=Math.max(8,Math.min(22,(nameRaw.trim()?nameRaw.length+1:18)));
+    const el=document.createElement("div");el.className="xp"+(nameRaw.trim()?"":" needname")+(open?"":" collapsed");
     el.innerHTML=`
       <div class="head">
-        <input class="name" value="${(row.name||"").replace(/"/g,'&quot;')}" data-i="${i}" data-k="name" placeholder="Insira uma despesa">
+        <div class="nameWrap">
+          <input class="name" size="${nameSize}" value="${nameSafe}" data-i="${i}" data-k="name" placeholder="Insira uma despesa">
+          ${hasImportedExtratoRow(row)?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato importado" aria-label="Ver detalhes do extrato importado">ⓘ</button>`:""}
+        </div>
         ${sumVal?`<span class="xpSum ${row.cur.toLowerCase()}">${sumVal}</span>`:""}
         <button class="fold" data-fold="${i}" title="${open?"Recolher despesa":"Expandir despesa"}" aria-label="${open?"Recolher despesa":"Expandir despesa"}" aria-expanded="${String(open)}">${open?"▴":"▾"}</button>
-        ${(norm(row.name).includes("cartao")||norm(row.name).includes("credito"))?`<button class="det" data-det2="${i}" title="Ver detalhes do extrato" aria-label="Ver detalhes do extrato">ⓘ</button>`:""}
         <button class="del" data-del="${i}" title="Excluir despesa" aria-label="Excluir despesa">×</button>
       </div>
       <div class="entry">
@@ -863,18 +875,25 @@ function bind(){
     if(!confirm(`Tem certeza que deseja excluir a despesa${rows[i].name?` "${rows[i].name}"`:""}?`))return;
     rows.splice(i,1);renderRows();toast("Despesa excluída");});
   document.querySelectorAll("[data-det2]").forEach(b=>b.onclick=e=>{
-    const i=+e.currentTarget.dataset.det2;openTopForRow(rows[i].name);});
+    const i=+e.currentTarget.dataset.det2;openTopForRow(rows[i]);});
 }
 function labelToKey(lbl){
   const m=String(lbl).trim().match(/^(.+)\/(\d{4})$/);if(!m)return"";
   const idx=MESES.findIndex(x=>x.replace(/^\w/,c=>c.toUpperCase())===m[1].trim());
   return idx>=0?m[2]+"-"+String(idx+1).padStart(2,"0"):"";
 }
-function openTopForRow(name){
+function openTopForRow(row){
   if(!imp||!imp.txns||!imp.txns.length){toast("Importe um extrato primeiro");return;}
-  const after=String(name).split("·")[1]||"";
-  const key=labelToKey((after.split(",")[0]||"").trim());
-  openTop(key||null,true);
+  const months=topMonths();
+  const saved=Array.isArray(row&&row.extratoMonths)?row.extratoMonths.filter(k=>months.includes(k)):[];
+  const allOn=!saved.length||saved.length===months.length;
+  const pre=(!allOn&&saved.length===1)?saved[0]:null;
+  openTop(pre,true);
+  if(!allOn&&saved.length>1){
+    topSel=new Set(saved);
+    $("#topTitle").textContent="Detalhes · "+(saved.length<=2?saved.map(monthLabel).join(", "):saved.length+" meses");
+    mtabsRefresh();renderTopList();
+  }
 }
 function calc(){
   const r=rate();let tU=0,tP=0,tB=0;
@@ -959,7 +978,7 @@ function fillShareCard(){
     `<div class="sbody">${xp||'<p class="sempty">Sem despesas.</p>'}</div>`+
     `<div class="stotbox">
        <div class="stot"><span class="lbl">Total despesas</span><span class="vl">${fmt[sv.tot](TOT[sv.tot])}</span></div>
-       <div class="stot"><span class="lbl">Salário<span class="sub">(${fmt.USD(SAL.USD)})</span></span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
+       <div class="stot"><span class="lbl">Salário<span class="sub">(${fmtUSDInt(SAL.USD)})</span></span><span class="vl">${fmt[sv.sal](SAL[sv.sal])}</span></div>
        <div class="stot diff big ${d<0?"neg":(d>0&&salUsd?"pos":"")}"><span class="lbl">Diferença</span><span class="vl">${(d>=0?"":"− ")+fmt[sv.diff](Math.abs(d))}</span></div>
      </div>`+
     shareFoot(r);
@@ -1132,9 +1151,11 @@ function applyToCard(){
   const sel=topSel?[...topSel].sort():[];
   const label=(!sel.length||sel.length===months.length)?"extrato":sel.length<=2?sel.map(monthLabel).join(", "):sel.length+" meses";
   const name="Cartão · "+label;
+  const appliedMonths=(!sel.length||sel.length===months.length)?months:sel;
+  const extratoMeta={source:"extrato",importadoExtrato:true,extratoMonths:appliedMonths};
   let i=rows.findIndex(r=>norm(r.name)===norm(name));
-  if(i>=0){rows[i].amt=val;rows[i].cur="PYG";rows[i].open=false;}
-  else{rows.push({name,amt:val,cur:"PYG",open:false});i=rows.length-1;}
+  if(i>=0){Object.assign(rows[i],extratoMeta,{amt:val,cur:"PYG",open:false});}
+  else{rows.push(Object.assign({name,amt:val,cur:"PYG",open:false},extratoMeta));i=rows.length-1;}
   renderRows();
   $("#topModal").classList.add("hidden");
   toast("✓ Aplicado: "+name);
